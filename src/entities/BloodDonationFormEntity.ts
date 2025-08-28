@@ -1,11 +1,22 @@
-import type { CoordinateEntity } from "./CoordinateEntity";
+export type FontRule = { max: number; size: number, coord?: { top: number; left: number }; };
 
-export interface BloodDonationFormEntity {
-  bloodGroup: { value: string; coord: CoordinateEntity };
-  bloodType: { value: string; coord: CoordinateEntity };
-  fullName: { value: string; coord: CoordinateEntity };
-  phone: { value: string; coord: CoordinateEntity };
-  date: { value: string; coord: CoordinateEntity };
-  hospital: { value: string; coord: CoordinateEntity };
-  location: { value: string; coord: CoordinateEntity };
+export interface TextFieldBase {
+  value: string;
+  coord: { top: number; left: number };
 }
+
+export interface TextFieldWithDynamicFont extends TextFieldBase {
+  fontRules: FontRule[];
+  defaultFontSize: number;
+  minFontSize?: number;
+}
+
+export type BloodDonationFormEntity = {
+  bloodGroup: TextFieldBase;
+  bloodType: TextFieldBase;
+  fullName: TextFieldWithDynamicFont;
+  phone: TextFieldBase;
+  date: TextFieldBase;
+  hospital: TextFieldBase;
+  location: TextFieldWithDynamicFont;
+};

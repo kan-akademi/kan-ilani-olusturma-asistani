@@ -6,6 +6,8 @@ import "./BloodDonationForm.css";
 import { formatDateToTurkish, formatPhoneNumber } from "../utils/formUtils";
 import type { BloodDonationFormEntity } from "../entities/BloodDonationFormEntity";
 
+const TEXT_ITEM_DEFAULT_FONT_SIZE = 17;
+const TEXT_ITEM_MULTILINE_DEFAULT_FONT_SIZE = 16;
 const BLOOD_GROUP_LEFT_AB = 20;
 const BLOOD_GROUP_LEFT_DEFAULT = 47;
 
@@ -26,15 +28,48 @@ export default function BloodDonationForm() {
   const [formData, setFormData] = useState<BloodDonationFormEntity>({
     bloodGroup: { value: "", coord: defaultCoords.bloodGroup },
     bloodType: { value: "", coord: defaultCoords.bloodType },
-    fullName: { value: "", coord: defaultCoords.fullName },
+    fullName: {
+      value: "",
+      coord: defaultCoords.fullName,
+      defaultFontSize: TEXT_ITEM_DEFAULT_FONT_SIZE,
+      fontRules: [
+        { max: 15, size: 17, coord: { top: 256, left: 80 } },
+        { max: 25, size: 15, coord: { top: 258, left: 80 } },
+        { max: 40, size: 13, coord: { top: 260, left: 80 } },
+      ],
+      minFontSize: 13,
+    },
     phone: { value: "", coord: defaultCoords.phone },
     date: { value: "", coord: defaultCoords.date },
     hospital: { value: "", coord: defaultCoords.hospital },
-    location: { value: "", coord: defaultCoords.location },
+    location: {
+      value: "",
+      coord: defaultCoords.location,
+      defaultFontSize: TEXT_ITEM_MULTILINE_DEFAULT_FONT_SIZE,
+      fontRules: [
+        { max: 240, size: 16, coord: { top: 475, left: 10 } },
+        // { max: 90, size: 15, coord: { top: 473, left: 10 } },
+        { max: 520, size: 14, coord: { top: 471, left: 10 } },
+      ],
+      minFontSize: 14,
+    },
   });
 
   function getBloodGroupLeft(value: string) {
     return value.startsWith("AB") ? BLOOD_GROUP_LEFT_AB : BLOOD_GROUP_LEFT_DEFAULT;
+  }
+
+  function resolveFontSize(field: { value: string; fontRules: { max: number; size: number }[]; defaultFontSize: number; minFontSize?: number }) {
+    const len = field.value.length;
+    const match = field.fontRules.find(r => len <= r.max);
+    const size = match ? match.size : field.defaultFontSize;
+    return field.minFontSize ? Math.max(size, field.minFontSize) : size;
+  }
+
+  function resolveCoord(field: { value: string; fontRules: { max: number; coord?: { top: number; left: number } }[]; coord: { top: number; left: number } }) {
+    const len = field.value.length;
+    const match = field.fontRules.find(r => len <= r.max);
+    return match && match.coord ? match.coord : field.coord;
   }
 
   const handleChange = (
@@ -43,24 +78,21 @@ export default function BloodDonationForm() {
     >
   ) => {
     const { name, value } = e.target;
-
-    if (name === "bloodGroup") {
-      setFormData((prev) => ({
-        ...prev,
-        bloodGroup: {
-          value,
-          coord: {
-            ...prev.bloodGroup.coord,
-            left: getBloodGroupLeft(value),
+    setFormData(prev => {
+      if (name === "bloodGroup") {
+        return {
+          ...prev,
+          bloodGroup: {
+            value,
+            coord: { ...prev.bloodGroup.coord, left: getBloodGroupLeft(value) },
           },
-        },
-      }));
-    } else {
-      setFormData((prev) => ({
+        };
+      }
+      return {
         ...prev,
         [name]: { ...prev[name as keyof BloodDonationFormEntity], value },
-      }));
-    }
+      };
+    });
   };
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -247,8 +279,9 @@ export default function BloodDonationForm() {
         <div
           className="text-item"
           style={{
-            top: `${formData.fullName.coord.top}px`,
-            left: `${formData.fullName.coord.left}px`,
+            top: `${resolveCoord(formData.fullName).top}px`,
+            left: `${resolveCoord(formData.fullName).left}px`,
+            fontSize: `${resolveFontSize(formData.fullName)}px`,
           }}
         >
           {formData.fullName.value}
@@ -292,9 +325,10 @@ export default function BloodDonationForm() {
         <div
           className="text-item multiline"
           style={{
-            top: `${formData.location.coord.top}px`,
-            left: `${formData.location.coord.left}px`,
             width: "340px",
+            top: `${resolveCoord(formData.location).top}px`,
+            left: `${resolveCoord(formData.location).left}px`,
+            fontSize: `${resolveFontSize(formData.location)}px`,
           }}
         >
           {formData.location.value}

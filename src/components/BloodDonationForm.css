@@ -27,10 +27,7 @@ select {
 .image-wrapper {
   position: relative;
   width: 360px;
-  /* sabit genişlik */
   height: 640px;
-  /* sabit yükseklik */
-  /* border: 1px solid #ccc; */
   overflow: hidden;
 }
 
@@ -55,11 +52,11 @@ textarea {
   color: white;
   /* font-weight: bold; */
   font-size: 17px;
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+  /* text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7); */
 }
 
 .text-item.multiline {
-  font-size: 16px;
+  /* font-size: 16px; */
   white-space: pre-wrap;
   line-height: 1.1;
 }
