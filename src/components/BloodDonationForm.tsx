@@ -180,6 +180,7 @@ export default function BloodDonationForm() {
             type="text"
             name="fullName"
             autoComplete="off"
+            maxLength={39}
             value={formData.fullName.value}
             onChange={handleChange}
           />
@@ -218,6 +219,7 @@ export default function BloodDonationForm() {
           {t("location")}:
           <textarea
             name="location"
+            maxLength={330}
             value={formData.location.value}
             onChange={handleChange}
             rows={5}
