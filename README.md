@@ -55,11 +55,11 @@ Katkıda bulunmak için lütfen [CONTRIBUTING.md](.github/CONTRIBUTING.md) dosya
 
 ## Lisans
 
-Bu proje [MIT Lisansı](LICENSE) ile lisanslanmıştır.
+Bu proje [CC-BY-NC 4.0 + Ek Koşullar](LICENSE.md) ile lisanslanmıştır.
 
 ## İletişim
 
-Sorularınız veya önerileriniz için [GitHub Issues](https://github.com/sertunc/kan-akademi-ilan-formu/issues) üzerinden iletişime geçebilirsiniz.
+Sorularınız veya önerileriniz için [GitHub Issues](https://github.com/kan-akademi/kan-ilani-olusturma-asistani/issues) üzerinden iletişime geçebilirsiniz.
 
 ---
 Her katkınız bir can kurtarmaya yardımcı olabilir.
