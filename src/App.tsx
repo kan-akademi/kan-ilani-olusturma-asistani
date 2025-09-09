@@ -7,9 +7,10 @@ import LegalNotice from "./components/LegalNotice";
 import Copyright from "./components/Copyright";
 import { useTranslation } from "react-i18next";
 import "./i18n";
+import { Button, ButtonGroup } from "@mui/material";
 
 function App() {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [theme, setTheme] = useState<"light" | "dark">(
     window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
   );
@@ -39,8 +40,10 @@ function App() {
   return (
     <>
       <ThemeProvider theme={muiTheme} defaultMode="system">
-        <button onClick={() => i18n.changeLanguage("en")}>EN</button>
-        <button onClick={() => i18n.changeLanguage("tr")}>TR</button>
+        <ButtonGroup size="small" color="inherit" variant="text" aria-label={t("langButtonGroup")}>
+          <Button aria-label="Türkçe dilini seç" onClick={() => i18n.changeLanguage("tr")}>TR</Button>
+          <Button aria-label="Select English language" onClick={() => i18n.changeLanguage("en")}>EN</Button>
+        </ButtonGroup>
         <button className="theme-toggle-button" onClick={toggleTheme}>
           {theme === "light" ? "🌙" : "☀️"}
         </button>
