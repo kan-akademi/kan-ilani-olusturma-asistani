@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Logo from "./components/Logo";
 import PageHeader from "./components/PageHeader";
 import BloodDonationForm from "./components/BloodDonationForm";
@@ -26,18 +27,29 @@ function App() {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
   };
 
+  const muiTheme = createTheme({
+    palette: {
+      mode: theme,
+    },
+    typography: {
+      fontFamily: "Roboto, sans-serif",
+    },
+  });
+
   return (
     <>
-      <button onClick={() => i18n.changeLanguage("en")}>EN</button>
-      <button onClick={() => i18n.changeLanguage("tr")}>TR</button>
-      <button className="theme-toggle-button" onClick={toggleTheme}>
-        {theme === "light" ? "🌙" : "☀️"}
-      </button>
-      <Logo />
-      <PageHeader />
-      <BloodDonationForm />
-      <LegalNotice />
-      <Copyright />
+      <ThemeProvider theme={muiTheme} defaultMode="system">
+        <button onClick={() => i18n.changeLanguage("en")}>EN</button>
+        <button onClick={() => i18n.changeLanguage("tr")}>TR</button>
+        <button className="theme-toggle-button" onClick={toggleTheme}>
+          {theme === "light" ? "🌙" : "☀️"}
+        </button>
+        <Logo />
+        <PageHeader />
+        <BloodDonationForm />
+        <LegalNotice />
+        <Copyright />
+      </ThemeProvider>
     </>
   );
 }
