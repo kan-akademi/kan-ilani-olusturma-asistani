@@ -7,7 +7,11 @@ import LegalNotice from "./components/LegalNotice";
 import Copyright from "./components/Copyright";
 import { useTranslation } from "react-i18next";
 import "./i18n";
+import { trTR } from '@mui/material/locale';
 import { Button, ButtonGroup } from "@mui/material";
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import 'dayjs/locale/tr';
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -35,23 +39,26 @@ function App() {
     typography: {
       fontFamily: "Roboto, sans-serif",
     },
-  });
+  },
+    trTR);
 
   return (
     <>
       <ThemeProvider theme={muiTheme} defaultMode="system">
-        <ButtonGroup size="small" color="inherit" variant="text" aria-label={t("langButtonGroup")}>
-          <Button aria-label="Türkçe dilini seç" onClick={() => i18n.changeLanguage("tr")}>TR</Button>
-          <Button aria-label="Select English language" onClick={() => i18n.changeLanguage("en")}>EN</Button>
-        </ButtonGroup>
-        <button className="theme-toggle-button" onClick={toggleTheme}>
-          {theme === "light" ? "🌙" : "☀️"}
-        </button>
-        <Logo />
-        <PageHeader />
-        <BloodDonationForm />
-        <LegalNotice />
-        <Copyright />
+        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="tr">
+          <ButtonGroup size="small" color="inherit" variant="text" aria-label={t("langButtonGroup")}>
+            <Button aria-label="Türkçe dilini seç" onClick={() => i18n.changeLanguage("tr")}>TR</Button>
+            <Button aria-label="Select English language" onClick={() => i18n.changeLanguage("en")}>EN</Button>
+          </ButtonGroup>
+          <button className="theme-toggle-button" onClick={toggleTheme}>
+            {theme === "light" ? "🌙" : "☀️"}
+          </button>
+          <Logo />
+          <PageHeader />
+          <BloodDonationForm />
+          <LegalNotice />
+          <Copyright />
+        </LocalizationProvider>
       </ThemeProvider>
     </>
   );
