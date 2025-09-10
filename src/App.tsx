@@ -7,7 +7,7 @@ import LegalNotice from "./components/LegalNotice";
 import Copyright from "./components/Copyright";
 import { useTranslation } from "react-i18next";
 import "./i18n";
-import { trTR } from '@mui/material/locale';
+import { trTR } from '@mui/x-date-pickers/locales';
 import { Button, ButtonGroup } from "@mui/material";
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -39,8 +39,7 @@ function App() {
     typography: {
       fontFamily: "Roboto, sans-serif",
     },
-  },
-    trTR);
+  }, trTR, trTR);
 
   return (
     <>
