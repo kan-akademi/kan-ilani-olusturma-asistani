@@ -5,6 +5,7 @@ i18n.use(initReactI18next).init({
   resources: {
     tr: {
       translation: {
+        langButtonGroup: "Dil seçimi buton grubu, Türkçe veya İngilizce seçin",
         greeting: "Geçmiş olsun dileklerimizi iletiyoruz. Umarız en kısa sürede uygun kan bulunur ve sağlığınıza kavuşursunuz. Yanınızdayız!",
         close: "Kapat",
         headerTitle: "Kan İlanı Oluşturma Asistanı",
@@ -15,7 +16,7 @@ i18n.use(initReactI18next).init({
         bloodGroupType: "Kan Grubu Türü",
         bloodType: "Kan Türü",
         donationType: "Bağış Türü",
-        patientName: "Hasta Adı",
+        fullName: "Hasta Adı",
         phone: "Telefon",
         date: "Tarih",
         hospitalName: "Hastane Adı",
@@ -33,6 +34,7 @@ i18n.use(initReactI18next).init({
     },
     en: {
       translation: {
+        langButtonGroup: "Language selection button group, choose Turkish or English",
         greeting: "We wish you a speedy recovery. We hope suitable blood is found soon and you regain your health. We are with you!",
         close: "Close",
         headerTitle: "Blood Ad Creation Assistant",
@@ -43,7 +45,7 @@ i18n.use(initReactI18next).init({
         bloodGroupType: "Blood Group Type",
         bloodType: "Blood Type",
         donationType: "Donation Type",
-        patientName: "Patient Name",
+        fullName: "Patient Name",
         phone: "Phone",
         date: "Date",
         hospitalName: "Hospital Name",
