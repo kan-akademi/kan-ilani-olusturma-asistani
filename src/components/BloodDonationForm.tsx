@@ -30,7 +30,7 @@ export default function BloodDonationForm() {
     bloodType: { value: "", coord: defaultCoords.bloodType },
     fullName: { value: "", coord: defaultCoords.fullName },
     phone: { value: "", coord: defaultCoords.phone },
-    date: { value: new Date().toLocaleDateString("tr-TR"), coord: defaultCoords.date },
+    date: { value: new Date().toLocaleDateString("en-CA"), coord: defaultCoords.date },
     hospital: { value: "", coord: defaultCoords.hospital },
     location: { value: "", coord: defaultCoords.location },
   });
