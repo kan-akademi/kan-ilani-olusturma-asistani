@@ -7,8 +7,6 @@ import "./BloodDonationForm.css";
 import { formatDateToTurkish, formatPhoneNumber } from "../utils/formUtils";
 import type { BloodDonationFormEntity } from "../entities/BloodDonationFormEntity";
 import { Box, FormControl, InputLabel, MenuItem, Select, type SelectChangeEvent } from "@mui/material";
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import dayjs, { Dayjs } from 'dayjs';
 
 const BLOOD_GROUP_LEFT_AB = 20;
 const BLOOD_GROUP_LEFT_DEFAULT = 47;
@@ -32,7 +30,7 @@ export default function BloodDonationForm() {
     bloodType: { value: "", coord: defaultCoords.bloodType },
     fullName: { value: "", coord: defaultCoords.fullName },
     phone: { value: "", coord: defaultCoords.phone },
-    date: { value: dayjs(), coord: defaultCoords.date },
+    date: { value: new Date().toLocaleDateString("tr-TR"), coord: defaultCoords.date },
     hospital: { value: "", coord: defaultCoords.hospital },
     location: { value: "", coord: defaultCoords.location },
   });
@@ -62,15 +60,6 @@ export default function BloodDonationForm() {
     setFormData((prev) => ({
       ...prev,
       [name]: { ...prev[name as keyof BloodDonationFormEntity], value },
-    }));
-  };
-
-  const handleChangeDate = (newValue: Dayjs | null) => {
-    if (!newValue) return;
-
-    setFormData((prev) => ({
-      ...prev,
-      date: { ...prev.date, value: newValue },
     }));
   };
 
@@ -182,16 +171,13 @@ export default function BloodDonationForm() {
           onChange={handlePhoneChange}
         />
 
-        <DatePicker
-          name="date"
+        <LabeledTextField
+          type="date"
           label={t("date")}
+          name="date"
           value={formData.date.value}
-          onChange={handleChangeDate}
-          slotProps={{
-            textField: {
-              margin: "dense", size: "small", fullWidth: true
-            },
-          }} />
+          onChange={handleChange}
+        />
 
         <LabeledTextField
           label={t("hospitalName")}
