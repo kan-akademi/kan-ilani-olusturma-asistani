@@ -15,8 +15,8 @@ Bu proje, kan bağışı ihtiyacı olan hastalar için kolayca ilan oluşturulma
 
 1. Depoyu klonlayın:
    ```sh
-   git clone https://github.com/kan-akademi/kan-akademi-ilan-formu.git
-   cd kan-akademi-ilan-formu
+   git clone https://github.com/kan-akademi/kan-ilani-olusturma-asistani.git
+   cd kan-ilani-olusturma-asistani
    ```
 2. Bağımlılıkları yükleyin:
    ```sh
