@@ -4,7 +4,7 @@ export default function PageHeader() {
   const { t } = useTranslation();
   return (
     <div style={{ textAlign: "center" }}>
-      <h1>{t("headerTitle")}</h1>
+      <h2>{t("headerTitle")}</h2>
       <p>{t("headerDesc")}</p>
     </div>
   );
