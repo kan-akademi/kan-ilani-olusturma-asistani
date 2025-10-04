@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Logo from "./components/Logo";
 import PageHeader from "./components/PageHeader";
 import BloodDonationForm from "./components/BloodDonationForm";
@@ -6,9 +7,11 @@ import LegalNotice from "./components/LegalNotice";
 import Copyright from "./components/Copyright";
 import { useTranslation } from "react-i18next";
 import "./i18n";
+import { trTR } from '@mui/material/locale';
+import { Button, ButtonGroup } from "@mui/material";
 
 function App() {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [theme, setTheme] = useState<"light" | "dark">(
     window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
   );
@@ -26,18 +29,31 @@ function App() {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
   };
 
+  const muiTheme = createTheme({
+    palette: {
+      mode: theme,
+    },
+    typography: {
+      fontFamily: "Roboto, sans-serif",
+    },
+  }, trTR);
+
   return (
     <>
-      <button onClick={() => i18n.changeLanguage("en")}>EN</button>
-      <button onClick={() => i18n.changeLanguage("tr")}>TR</button>
-      <button className="theme-toggle-button" onClick={toggleTheme}>
-        {theme === "light" ? "🌙" : "☀️"}
-      </button>
-      <Logo />
-      <PageHeader />
-      <BloodDonationForm />
-      <LegalNotice />
-      <Copyright />
+      <ThemeProvider theme={muiTheme} defaultMode="system">
+          <ButtonGroup size="small" color="inherit" variant="text" aria-label={t("langButtonGroup")}>
+            <Button aria-label="Türkçe dilini seç" onClick={() => i18n.changeLanguage("tr")}>TR</Button>
+            <Button aria-label="Select English language" onClick={() => i18n.changeLanguage("en")}>EN</Button>
+          </ButtonGroup>
+          <button className="theme-toggle-button" onClick={toggleTheme}>
+            {theme === "light" ? "🌙" : "☀️"}
+          </button>
+          <Logo />
+          <PageHeader />
+          <BloodDonationForm />
+          <LegalNotice />
+          <Copyright />
+      </ThemeProvider>
     </>
   );
 }
