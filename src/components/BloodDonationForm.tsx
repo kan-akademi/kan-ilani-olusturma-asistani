@@ -3,10 +3,18 @@ import LabeledTextField from "./LabeledTextField";
 import Swal from "sweetalert2";
 import html2canvas from "html2canvas";
 import { useTranslation } from "react-i18next";
+import { QueryClient, useMutation } from "@tanstack/react-query";
 import "./BloodDonationForm.css";
 import { formatDateToTurkish, formatPhoneNumber } from "../utils/formUtils";
 import type { BloodDonationFormEntity } from "../entities/BloodDonationFormEntity";
-import { Box, FormControl, InputLabel, MenuItem, Select, type SelectChangeEvent } from "@mui/material";
+import {
+  Box,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  type SelectChangeEvent,
+} from "@mui/material";
 
 const BLOOD_GROUP_LEFT_AB = 20;
 const BLOOD_GROUP_LEFT_DEFAULT = 47;
@@ -22,6 +30,7 @@ const defaultCoords = {
 };
 
 export default function BloodDonationForm() {
+  const queryClient = new QueryClient();
   const { t, i18n } = useTranslation();
   const imageRef = useRef(null);
 
@@ -30,13 +39,18 @@ export default function BloodDonationForm() {
     bloodType: { value: "", coord: defaultCoords.bloodType },
     fullName: { value: "", coord: defaultCoords.fullName },
     phone: { value: "", coord: defaultCoords.phone },
-    date: { value: new Date().toLocaleDateString("en-CA"), coord: defaultCoords.date },
+    date: {
+      value: new Date().toLocaleDateString("en-CA"),
+      coord: defaultCoords.date,
+    },
     hospital: { value: "", coord: defaultCoords.hospital },
     location: { value: "", coord: defaultCoords.location },
   });
 
   function getBloodGroupLeft(value: string) {
-    return value.startsWith("AB") ? BLOOD_GROUP_LEFT_AB : BLOOD_GROUP_LEFT_DEFAULT;
+    return value.startsWith("AB")
+      ? BLOOD_GROUP_LEFT_AB
+      : BLOOD_GROUP_LEFT_DEFAULT;
   }
 
   const handleChangeBloodGroup = (e: SelectChangeEvent) => {
@@ -63,7 +77,9 @@ export default function BloodDonationForm() {
     }));
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
 
     setFormData((prev) => ({
@@ -111,7 +127,29 @@ export default function BloodDonationForm() {
       link.href = canvas.toDataURL("image/png");
       link.click();
     });
+
+    postCounterMutation.mutate("7");//TODO: change with real hash
   };
+
+  const postCounterMutation = useMutation({
+    mutationFn: async (hash: string) => {
+      const headers = new Headers();
+      headers.append("Content-Type", "application/json");
+      const raw = JSON.stringify({ hash: hash });
+      const requestOptions: RequestInit = {
+        body: raw,
+        method: "POST",
+        headers: headers,
+        redirect: "follow",
+      };
+      const res = await fetch(import.meta.env.VITE_COUNTER_API, requestOptions);
+      return res.json();
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      queryClient.setQueryData(["counter"], data);
+    },
+  });
 
   return (
     <div className="container">
@@ -135,7 +173,9 @@ export default function BloodDonationForm() {
             <MenuItem value="AB RH (-)">AB RH (-)</MenuItem>
             <MenuItem value="0 RH (+)">0 RH (+)</MenuItem>
             <MenuItem value="0 RH (-)">0 RH (-)</MenuItem>
-            <MenuItem value="Kan Grubu Fark Etmeksizin">{t("regardlessOfBloodType")}</MenuItem>
+            <MenuItem value="Kan Grubu Fark Etmeksizin">
+              {t("regardlessOfBloodType")}
+            </MenuItem>
           </Select>
         </FormControl>
 

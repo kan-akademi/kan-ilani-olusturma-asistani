@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import { Button, ButtonGroup, IconButton, Tooltip } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { Info } from "@mui/icons-material";
@@ -16,9 +17,17 @@ export default function TopBar({
 }: TopBarProps) {
   const { t } = useTranslation();
 
-  const handleInfoClick = () => {
-    // Information butonu için gerekli işlevsellik buraya eklenebilir
-    console.log("Information clicked");
+  const { data, isLoading, isError, refetch } = useQuery({
+    queryKey: ["counter"],
+    queryFn: async () => {
+      const res = await fetch(import.meta.env.VITE_COUNTER_API);
+      return res.json();
+    },
+  });
+
+  const handleInfoClick = async () => {
+    const result = await refetch();
+    console.log(result.data);//TODO: show in modal
   };
 
   return (
