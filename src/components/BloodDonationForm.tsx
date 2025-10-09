@@ -5,7 +5,12 @@ import html2canvas from "html2canvas";
 import { useTranslation } from "react-i18next";
 import { QueryClient, useMutation } from "@tanstack/react-query";
 import "./BloodDonationForm.css";
-import { formatDateToTurkish, formatPhoneNumber } from "../utils/formUtils";
+import {
+  formatDateToTurkish,
+  formatPhoneNumber,
+  hashData,
+} from "../utils/formUtils";
+import { COUNTER_QUERY_KEY } from "../common/constants";
 import type { BloodDonationFormEntity } from "../entities/BloodDonationFormEntity";
 import {
   Box,
@@ -96,7 +101,7 @@ export default function BloodDonationForm() {
     }));
   };
 
-  const downloadImage = () => {
+  const downloadImage = async () => {
     if (!imageRef.current) return;
 
     const allFieldsFilled = Object.values(formData).every(
@@ -121,35 +126,36 @@ export default function BloodDonationForm() {
       return;
     }
 
-    html2canvas(imageRef.current).then((canvas) => {
-      const link = document.createElement("a");
-      link.download = "kan-bagis-ilani-formu.png";
-      link.href = canvas.toDataURL("image/png");
-      link.click();
-    });
-
-    postCounterMutation.mutate("7");//TODO: change with real hash
+    const canvas = await html2canvas(imageRef.current);
+    const link = document.createElement("a");
+    link.download = "kan-bagis-ilani-formu.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
   };
 
   const postCounterMutation = useMutation({
     mutationFn: async (hash: string) => {
-      const headers = new Headers();
-      headers.append("Content-Type", "application/json");
-      const raw = JSON.stringify({ hash: hash });
-      const requestOptions: RequestInit = {
-        body: raw,
+      const res = await fetch(import.meta.env.VITE_COUNTER_API, {
+        body: JSON.stringify({ hash }),
         method: "POST",
-        headers: headers,
-        redirect: "follow",
-      };
-      const res = await fetch(import.meta.env.VITE_COUNTER_API, requestOptions);
+      });
       return res.json();
     },
     onSuccess: (data) => {
-      console.log(data);
-      queryClient.setQueryData(["counter"], data);
+      //console.log(data);
+      queryClient.setQueryData([COUNTER_QUERY_KEY], data);
     },
   });
+
+  const updateCounter = async () => {
+    const hash = hashData(formData);
+    await postCounterMutation.mutateAsync(hash);
+  };
+
+  const downloadImageAndUpdateCounter = async () => {
+    await downloadImage();
+    await updateCounter();
+  };
 
   return (
     <div className="container">
@@ -248,7 +254,7 @@ export default function BloodDonationForm() {
           }
           alt="Son Adım: İlanı Galerine Kaydet"
           className="download-image-button"
-          onClick={downloadImage}
+          onClick={downloadImageAndUpdateCounter}
         />
       </form>
 

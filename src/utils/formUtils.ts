@@ -1,3 +1,17 @@
+import type { BloodDonationFormEntity } from "../entities/BloodDonationFormEntity";
+
+export function hashData(data: BloodDonationFormEntity): string {
+  const str = Object.values(data)
+    .map((field) => field.value.trim().toLowerCase())
+    .join("|");
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash << 5) - hash + str.charCodeAt(i);
+    hash |= 0; // Convert to 32bit integer
+  }
+  return hash.toString();
+}
+
 export function formatDateToTurkish(dateString: string): string {
   if (!dateString) return "";
 

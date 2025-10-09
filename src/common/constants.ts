@@ -1,0 +1,1 @@
+export const COUNTER_QUERY_KEY = "counter";

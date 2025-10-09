@@ -3,6 +3,7 @@ import { Button, ButtonGroup, IconButton, Tooltip } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { Info } from "@mui/icons-material";
 import Logo from "./Logo";
+import { COUNTER_QUERY_KEY } from "../common/constants";
 
 interface TopBarProps {
   theme: "light" | "dark";
@@ -18,7 +19,7 @@ export default function TopBar({
   const { t } = useTranslation();
 
   const { data, isLoading, isError, refetch } = useQuery({
-    queryKey: ["counter"],
+    queryKey: [COUNTER_QUERY_KEY],
     queryFn: async () => {
       const res = await fetch(import.meta.env.VITE_COUNTER_API);
       return res.json();
