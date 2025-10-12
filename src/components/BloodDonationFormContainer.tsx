@@ -2,10 +2,8 @@ import { useRef, useState } from "react";
 import Swal from "sweetalert2";
 import html2canvas from "html2canvas";
 import { useTranslation } from "react-i18next";
-import { QueryClient, useMutation } from "@tanstack/react-query";
 import "./BloodDonationFormContainer.css";
 import { formatPhoneNumber, hashData } from "../utils/formUtils";
-import { COUNTER_QUERY_KEY } from "../common/constants";
 import type { BloodDonationFormEntity } from "../entities/BloodDonationFormEntity";
 import { type SelectChangeEvent } from "@mui/material";
 import BloodDonationFormInputs from "./BloodDonationFormInputs";
@@ -25,7 +23,6 @@ const defaultCoords = {
 };
 
 export default function BloodDonationFormContainer() {
-  const queryClient = new QueryClient();
   const { t } = useTranslation();
   const imageRef = useRef(null);
 
@@ -121,31 +118,17 @@ export default function BloodDonationFormContainer() {
       link.download = "kan-bagis-ilani-formu.png";
       link.href = canvas.toDataURL("image/png");
       link.click();
+
+      updateCounter();
     });
   };
 
-  const postCounterMutation = useMutation({
-    mutationFn: async (hash: string) => {
-      const res = await fetch(import.meta.env.VITE_COUNTER_API, {
-        body: JSON.stringify({ hash }),
-        method: "POST",
-      });
-      return res.json();
-    },
-    onSuccess: (data) => {
-      //console.log(data);
-      queryClient.setQueryData([COUNTER_QUERY_KEY], data);
-    },
-  });
-
-  const updateCounter = async () => {
+  const updateCounter = () => {
     const hash = hashData(formData);
-    await postCounterMutation.mutateAsync(hash);
-  };
-
-  const downloadImageAndUpdateCounter = () => {
-    downloadImage();
-    //await updateCounter();
+    fetch(import.meta.env.VITE_COUNTER_API, {
+      body: JSON.stringify({ hash }),
+      method: "POST",
+    });
   };
 
   return (
@@ -156,7 +139,7 @@ export default function BloodDonationFormContainer() {
         handleChangeBloodGroup={handleChangeBloodGroup}
         handleChangeBloodType={handleChangeBloodType}
         handlePhoneChange={handlePhoneChange}
-        downloadImageAndUpdateCounter={downloadImageAndUpdateCounter}
+        downloadImageAndUpdateCounter={downloadImage}
       />
 
       <BloodDonationForm imageRef={imageRef} formData={formData} />

@@ -6,7 +6,7 @@ import "./i18n";
 
 import TopBar from "./components/TopBar";
 import PageHeader from "./components/PageHeader";
-import BloodDonationForm from "./components/BloodDonationForm";
+import BloodDonationForm from "./components/BloodDonationFormContainer";
 import LegalNotice from "./components/LegalNotice";
 import Copyright from "./components/Copyright";
 

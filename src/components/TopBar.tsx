@@ -1,9 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
 import { Button, ButtonGroup, IconButton, Tooltip } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { Info } from "@mui/icons-material";
 import Logo from "./Logo";
-import { COUNTER_QUERY_KEY } from "../common/constants";
 
 interface TopBarProps {
   theme: "light" | "dark";
@@ -11,25 +9,10 @@ interface TopBarProps {
   changeLanguage: (lang: string) => void;
 }
 
-export default function TopBar({
-  theme,
-  toggleTheme,
-  changeLanguage,
-}: TopBarProps) {
+export default function TopBar(props: TopBarProps) {
   const { t } = useTranslation();
 
-  const { data, isLoading, isError, refetch } = useQuery({
-    queryKey: [COUNTER_QUERY_KEY],
-    queryFn: async () => {
-      const res = await fetch(import.meta.env.VITE_COUNTER_API);
-      return res.json();
-    },
-  });
-
-  const handleInfoClick = async () => {
-    const result = await refetch();
-    console.log(result.data);//TODO: show in modal
-  };
+  const handleInfoClick = async () => {};
 
   return (
     <>
@@ -43,23 +26,23 @@ export default function TopBar({
           <Button
             title="Türkçe dilini seç"
             aria-label="Türkçe dilini seç"
-            onClick={() => changeLanguage("tr")}
+            onClick={() => props.changeLanguage("tr")}
           >
             TR
           </Button>
           <Button
             title="Select English language"
             aria-label="Select English language"
-            onClick={() => changeLanguage("en")}
+            onClick={() => props.changeLanguage("en")}
           >
             EN
           </Button>
         </ButtonGroup>
-        <button className="theme-toggle-button" onClick={toggleTheme}>
-          {theme === "light" ? "🌙" : "☀️"}
+        <button className="theme-toggle-button" onClick={props.toggleTheme}>
+          {props.theme === "light" ? "🌙" : "☀️"}
         </button>
       </div>
-      <div style={{ position: "fixed", top: "7px", right: "6px" }}>
+      <div style={{ position: "fixed", top: "6px", right: "6px" }}>
         <Tooltip title="Bilgi">
           <IconButton
             onClick={handleInfoClick}
