@@ -74,6 +74,7 @@ export default function BloodDonationFormInputs(props: InputProps) {
       />
 
       <LabeledTextField
+        type="tel"
         label={t("phone")}
         name="phone"
         value={props.formData.phone.value}
