@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, IconButton, Tooltip } from "@mui/material";
+import { Button, ButtonGroup } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { Info } from "@mui/icons-material";
 import Logo from "./Logo";
@@ -16,51 +16,63 @@ export default function TopBar(props: TopBarProps) {
 
   return (
     <>
-      <ButtonGroup
-        size="small"
-        color="inherit"
-        variant="text"
-        aria-label={t("topBarButtonGroup")}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
       >
-        <Button
-          title={t("topBarTrButton")}
-          aria-label={t("topBarTrButton")}
-          onClick={() => props.changeLanguage("tr")}
+        <ButtonGroup
+          size="small"
+          color="inherit"
+          variant="text"
+          aria-label={t("topBarLeftButtonGroup")}
         >
-          TR
-        </Button>
-        <Button
-          title={t("topBarEnButton")}
-          aria-label={t("topBarEnButton")}
-          onClick={() => props.changeLanguage("en")}
+          <Button
+            title={t("topBarTrButton")}
+            aria-label={t("topBarTrButton")}
+            onClick={() => props.changeLanguage("tr")}
+          >
+            TR
+          </Button>
+          <Button
+            title={t("topBarEnButton")}
+            aria-label={t("topBarEnButton")}
+            onClick={() => props.changeLanguage("en")}
+          >
+            EN
+          </Button>
+          <Button
+            title={t("topBarThemeButton")}
+            aria-label={t("topBarThemeButton")}
+            onClick={() => props.toggleTheme()}
+          >
+            {props.theme === "light" ? "🌙" : "☀️"}
+          </Button>
+          <Button
+            title={t("topBarSoundButton")}
+            aria-label={t("topBarSoundButton")}
+            onClick={() => props.handleSpeakClick()}
+          >
+            🔊
+          </Button>
+        </ButtonGroup>
+
+        <ButtonGroup
+          size="small"
+          color="inherit"
+          variant="text"
+          aria-label={t("topBarRightButtonGroup")}
         >
-          EN
-        </Button>
-        <Button
-          title={t("topBarThemeButton")}
-          aria-label={t("topBarThemeButton")}
-          onClick={() => props.toggleTheme()}
-        >
-          {props.theme === "light" ? "🌙" : "☀️"}
-        </Button>
-        <Button
-          title={t("topBarSoundButton")}
-          aria-label={t("topBarSoundButton")}
-          onClick={() => props.handleSpeakClick()}
-        >
-          🔊
-        </Button>
-      </ButtonGroup>
-      <div style={{ position: "fixed", top: "3px", right: "6px" }}>
-        <Tooltip title="Bilgi">
-          <IconButton
+          <Button
+            title={t("topBarInfoButton")}
+            aria-label={t("topBarInfoButton")}
             onClick={props.handleInfoClick}
-            color="default"
-            aria-label="Uygulama hakkında bilgi"
           >
             <Info />
-          </IconButton>
-        </Tooltip>
+          </Button>
+        </ButtonGroup>
       </div>
       <Logo />
     </>
