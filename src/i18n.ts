@@ -5,7 +5,11 @@ i18n.use(initReactI18next).init({
   resources: {
     tr: {
       translation: {
-        langButtonGroup: "Dil seçimi buton grubu, Türkçe veya İngilizce seçin",
+        topBarButtonGroup: "Dil, tema ve ses seçimi buton grubu",
+        topBarTrButton: "Türkçe dilini seçme butonu",
+        topBarEnButton: "İngilizce dilini seçme butonu",
+        topBarThemeButton: "Tema açma kapama butonu",
+        topBarSoundButton: "Sesli okuma butonu",
         greeting: "Geçmiş olsun dileklerimizi iletiyoruz. Umarız en kısa sürede uygun kan bulunur ve sağlığınıza kavuşursunuz. Yanınızdayız!",
         close: "Kapat",
         headerTitle: "Kan İlanı Oluşturma Asistanı",
@@ -34,7 +38,11 @@ i18n.use(initReactI18next).init({
     },
     en: {
       translation: {
-        langButtonGroup: "Language selection button group, choose Turkish or English",
+        topBarButtonGroup: "Language, theme, and sound selection button group",
+        topBarTrButton: "Turkish language selection button",
+        topBarEnButton: "English language selection button",
+        topBarThemeButton: "Theme toggle button",
+        topBarSoundButton: "Sound reading button",
         greeting: "We wish you a speedy recovery. We hope suitable blood is found soon and you regain your health. We are with you!",
         close: "Close",
         headerTitle: "Blood Ad Creation Assistant",
