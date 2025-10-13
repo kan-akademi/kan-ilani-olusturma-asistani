@@ -63,10 +63,8 @@ function App() {
   };
 
   const handleSpeakClick = () => {
-    const audioFile =
-      navigator.language === "tr-TR"
-        ? "page-content-audio-tr.mp3"
-        : "page-content-audio-en.mp3";
+    const lang = navigator.language.startsWith("tr") ? "tr" : "en";
+    const audioFile = lang === "tr" ? "page-content-audio-tr.mp3" : "page-content-audio-en.mp3";
     const audio = new Audio(audioFile);
     audio.play();
   };
