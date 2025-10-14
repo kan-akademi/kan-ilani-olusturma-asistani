@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useTranslation } from "react-i18next";
 import { trTR } from "@mui/material/locale";
@@ -13,6 +13,8 @@ import Copyright from "./components/Copyright";
 
 function App() {
   const { t, i18n } = useTranslation();
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
   const [theme, setTheme] = useState<"light" | "dark">(
     window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
   );
@@ -51,7 +53,7 @@ function App() {
             <img class="logo" src="kan-akademi-logo.png" alt="Kan Akademi Logo" />
             <div>Bu site aracılığıyla bugüne kadar toplam</div>
             <div class="main-title">${data} kan ilanı</div>
-            <div>hazırlanarak ${data} kişinin yaşama tutunmasına katkı sağlandı.</div>
+            <div>hazırlanarak ${data} kişinin yaşama tutunmasına<br />katkı sağlandı.</div>
           </div>
         </body>
         </html>
@@ -63,10 +65,15 @@ function App() {
   };
 
   const handleSpeakClick = () => {
-    const lang = navigator.language.startsWith("tr") ? "tr" : "en";
+    const lang = i18n.language.startsWith("tr") ? "tr" : "en";
     const audioFile = lang === "tr" ? "page-content-audio-tr.mp3" : "page-content-audio-en.mp3";
-    const audio = new Audio(audioFile);
-    audio.play();
+
+    if (audioRef.current && !audioRef.current.paused) {
+      return;
+    }
+
+    audioRef.current = new Audio(audioFile);
+    audioRef.current.play();
   };
 
   const muiTheme = createTheme(
