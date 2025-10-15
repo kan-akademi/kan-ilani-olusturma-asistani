@@ -53,7 +53,7 @@ function App() {
             <img class="logo" src="kan-akademi-logo.png" alt="Kan Akademi Logo" />
             <div>Bu site aracılığıyla bugüne kadar toplam</div>
             <div class="main-title">${data} kan ilanı</div>
-            <div>hazırlanarak ${data} kişinin yaşama tutunmasına<br />katkı sağlandı.</div>
+            <div>hazırlanarak ${data} kişinin yaşama tutunmasına katkı sağlandı.</div>
           </div>
         </body>
         </html>
