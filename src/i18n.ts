@@ -35,7 +35,10 @@ i18n.use(initReactI18next).init({
         granulocyte: "Granülosit",
         plasma: "Plazma",
         stemCell: "Kök Hücre",
-        regardlessOfBloodType: "Kan Grubu Fark Etmeksizin"
+        regardlessOfBloodType: "Kan Grubu Fark Etmeksizin",
+        infoSiteTotal: "Bu site aracılığıyla bugüne kadar toplam",
+        infoMainTitle: "{{count}} kan ilanı",
+        infoHelpedPeople: "hazırlanarak {{count}} kişinin yaşama tutunmasına katkı sağlandı.",
       },
     },
     en: {
@@ -70,7 +73,10 @@ i18n.use(initReactI18next).init({
         granulocyte: "Granulocyte",
         plasma: "Plasma",
         stemCell: "Stem Cell",
-        regardlessOfBloodType: "Regardless of Blood Type"
+        regardlessOfBloodType: "Regardless of Blood Type",
+        infoSiteTotal: "Through this site, a total of",
+        infoMainTitle: "{{count}} blood ads",
+        infoHelpedPeople: "have been prepared, contributing to {{count}} people clinging to life.",
       },
     },
   },
