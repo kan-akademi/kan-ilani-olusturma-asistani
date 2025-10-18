@@ -35,7 +35,7 @@ function App() {
   const handleInfoClick = async () => {
     const res = await fetch(import.meta.env.VITE_COUNTER_API);
     const json = await res.json();
-    const count = json.counter?.toLocaleString("tr-TR") || 0;
+    const count = Number(json.counter ?? 0).toLocaleString(i18n.language);
     Swal.fire({
       html: `
         <!DOCTYPE html>
