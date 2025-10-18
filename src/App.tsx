@@ -35,7 +35,7 @@ function App() {
   const handleInfoClick = async () => {
     const res = await fetch(import.meta.env.VITE_COUNTER_API);
     const json = await res.json();
-    const data = json.counter?.toLocaleString("tr-TR") || 0;
+    const count = json.counter?.toLocaleString("tr-TR") || 0;
     Swal.fire({
       html: `
         <!DOCTYPE html>
@@ -51,9 +51,9 @@ function App() {
         <body>
           <div class="containerr">
             <img class="logo" src="kan-akademi-logo.png" alt="Kan Akademi Logo" />
-            <div>Bu site aracılığıyla bugüne kadar toplam</div>
-            <div class="main-title">${data} kan ilanı</div>
-            <div>hazırlanarak ${data} kişinin yaşama tutunmasına katkı sağlandı.</div>
+            <div>${t("infoSiteTotal")}</div>
+            <div class="main-title">${t("infoMainTitle", { count })}</div>
+            <div>${t("infoHelpedPeople", { count })}</div>
           </div>
         </body>
         </html>
