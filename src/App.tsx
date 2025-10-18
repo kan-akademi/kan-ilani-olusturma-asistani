@@ -52,8 +52,8 @@ function App() {
           <div class="containerr">
             <img class="logo" src="kan-akademi-logo.png" alt="Kan Akademi Logo" />
             <div>${t("infoSiteTotal")}</div>
-            <div class="main-title">${t("infoMainTitle", { count })}</div>
-            <div>${t("infoHelpedPeople", { count })}</div>
+            <div class="main-title">${t("infoMainTitle", { count } as any)}</div>
+            <div>${t("infoHelpedPeople", { count } as any)}</div>
           </div>
         </body>
         </html>
