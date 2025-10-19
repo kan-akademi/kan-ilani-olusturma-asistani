@@ -17,7 +17,9 @@ interface InputProps {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleChangeBloodGroup: (e: SelectChangeEvent) => void;
   handleChangeBloodType: (e: SelectChangeEvent<string[]>) => void;
+  handleChangeFullName: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handlePhoneChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleChangeLocation: (e: React.ChangeEvent<HTMLInputElement>) => void;
   downloadImageAndUpdateCounter: () => void;
 }
 
@@ -96,8 +98,9 @@ export default function BloodDonationFormInputs(props: InputProps) {
       <LabeledTextField
         label={t("fullName")}
         name="fullName"
+        slotProps={{ htmlInput: { maxLength: 39 } }}
         value={props.formData.fullName.value}
-        onChange={props.handleChange}
+        onChange={props.handleChangeFullName}
       />
 
       <LabeledTextField
@@ -128,8 +131,9 @@ export default function BloodDonationFormInputs(props: InputProps) {
       <LabeledTextField
         label={t("location")}
         name="location"
+        slotProps={{ htmlInput: { maxLength: 330 } }}
         value={props.formData.location.value}
-        onChange={props.handleChange}
+        onChange={props.handleChangeLocation}
         multiline
         rows={5}
       />

@@ -12,6 +12,7 @@ import BloodDonationForm from "./BloodDonationForm";
 const BLOOD_GROUP_LEFT_AB = 20;
 const BLOOD_GROUP_LEFT_DEFAULT = 47;
 const TEXT_ITEM_DEFAULT_FONT_SIZE = 17;
+const TEXT_ITEM_MULTILINE_DEFAULT_FONT_SIZE = 16;
 
 const defaultCoords = {
   bloodGroup: { top: 83, left: BLOOD_GROUP_LEFT_DEFAULT },
@@ -30,14 +31,14 @@ export default function BloodDonationFormContainer() {
   const [formData, setFormData] = useState<BloodDonationFormEntity>({
     bloodGroup: { value: "", coord: defaultCoords.bloodGroup },
     bloodType: { value: [], coord: defaultCoords.bloodType, fontSize: TEXT_ITEM_DEFAULT_FONT_SIZE },
-    fullName: { value: "", coord: defaultCoords.fullName },
+    fullName: { value: "", coord: defaultCoords.fullName, fontSize: TEXT_ITEM_DEFAULT_FONT_SIZE },
     phone: { value: "", coord: defaultCoords.phone },
     date: {
       value: new Date().toLocaleDateString("en-CA"),
       coord: defaultCoords.date,
     },
     hospital: { value: "", coord: defaultCoords.hospital },
-    location: { value: "", coord: defaultCoords.location },
+    location: { value: "", coord: defaultCoords.location, fontSize: TEXT_ITEM_MULTILINE_DEFAULT_FONT_SIZE },
   });
 
   function getBloodGroupLeft(value: string) {
@@ -81,11 +82,54 @@ export default function BloodDonationFormContainer() {
     }));
   };
 
+  const handleChangeFullName = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+
+    let fontSize = TEXT_ITEM_DEFAULT_FONT_SIZE; 
+    let coordTop = defaultCoords.fullName.top; 
+    
+    if (value.length >= 35) {
+      fontSize = 13;
+      coordTop = 260;
+    } else if (value.length >= 25) {
+      fontSize = 15;
+      coordTop = 258;
+    } else {
+      fontSize = TEXT_ITEM_DEFAULT_FONT_SIZE;
+      coordTop = defaultCoords.fullName.top;
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: { ...prev[name as keyof BloodDonationFormEntity], value, fontSize, coord: { ...prev[name as keyof BloodDonationFormEntity].coord, top: coordTop } },
+    }));
+  };
+
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatPhoneNumber(e.target.value);
     setFormData((prev) => ({
       ...prev,
       phone: { ...prev.phone, value: formatted },
+    }));
+  };
+
+  const handleChangeLocation = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+
+    let fontSize = TEXT_ITEM_MULTILINE_DEFAULT_FONT_SIZE; 
+    let coordTop = defaultCoords.location.top; 
+    
+    if (value.length >= 260) {
+      fontSize = 14;
+      coordTop = 471;
+    } else {
+      fontSize = TEXT_ITEM_MULTILINE_DEFAULT_FONT_SIZE;
+      coordTop = defaultCoords.location.top;
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: { ...prev[name as keyof BloodDonationFormEntity], value, fontSize, coord: { ...prev[name as keyof BloodDonationFormEntity].coord, top: coordTop } },
     }));
   };
 
@@ -150,7 +194,9 @@ export default function BloodDonationFormContainer() {
         handleChange={handleChange}
         handleChangeBloodGroup={handleChangeBloodGroup}
         handleChangeBloodType={handleChangeBloodType}
+        handleChangeFullName={handleChangeFullName}
         handlePhoneChange={handlePhoneChange}
+        handleChangeLocation={handleChangeLocation}
         downloadImageAndUpdateCounter={downloadImage}
       />
 

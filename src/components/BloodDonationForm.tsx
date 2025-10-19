@@ -57,6 +57,7 @@ export default function BloodDonationForm(props: FormProps) {
           style={{
             top: `${props.formData.fullName.coord.top}px`,
             left: `${props.formData.fullName.coord.left}px`,
+            fontSize: `${props.formData.fullName.fontSize}px`,
           }}
         >
           {props.formData.fullName.value}
@@ -102,6 +103,7 @@ export default function BloodDonationForm(props: FormProps) {
           style={{
             top: `${props.formData.location.coord.top}px`,
             left: `${props.formData.location.coord.left}px`,
+            fontSize: `${props.formData.location.fontSize}px`,
             width: "340px",
           }}
         >
