@@ -45,7 +45,9 @@ export default function BloodDonationForm(props: FormProps) {
             left: `${props.formData.bloodType.coord.left}px`,
           }}
         >
-          {props.formData.bloodType.value}
+          {Array.isArray(props.formData.bloodType.value)
+            ? props.formData.bloodType.value.join(", ")
+            : String(props.formData.bloodType.value)}
         </div>
 
         {/* AD SOYAD */}

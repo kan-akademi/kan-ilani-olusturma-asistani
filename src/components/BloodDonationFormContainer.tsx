@@ -14,7 +14,7 @@ const BLOOD_GROUP_LEFT_DEFAULT = 47;
 
 const defaultCoords = {
   bloodGroup: { top: 83, left: BLOOD_GROUP_LEFT_DEFAULT },
-  bloodType: { top: 212, left: 135 },
+  bloodType: { top: 212, left: 85 },
   fullName: { top: 256, left: 80 },
   phone: { top: 302, left: 65 },
   date: { top: 346, left: 50 },
@@ -28,7 +28,7 @@ export default function BloodDonationFormContainer() {
 
   const [formData, setFormData] = useState<BloodDonationFormEntity>({
     bloodGroup: { value: "", coord: defaultCoords.bloodGroup },
-    bloodType: { value: "", coord: defaultCoords.bloodType },
+    bloodType: { value: [], coord: defaultCoords.bloodType },
     fullName: { value: "", coord: defaultCoords.fullName },
     phone: { value: "", coord: defaultCoords.phone },
     date: {
@@ -60,7 +60,7 @@ export default function BloodDonationFormContainer() {
     }));
   };
 
-  const handleChangeBloodType = (e: SelectChangeEvent) => {
+  const handleChangeBloodType = (e: SelectChangeEvent<string[]>) => {
     const { name, value } = e.target;
 
     setFormData((prev) => ({
@@ -69,9 +69,7 @@ export default function BloodDonationFormContainer() {
     }));
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
 
     setFormData((prev) => ({
@@ -91,9 +89,12 @@ export default function BloodDonationFormContainer() {
   const downloadImage = () => {
     if (!imageRef.current) return;
 
-    const allFieldsFilled = Object.values(formData).every(
-      (field) => field.value.trim() !== ""
-    );
+    const allFieldsFilled = Object.values(formData).every((field: any) => {
+      const val = field.value;
+      if (Array.isArray(val)) return val.length > 0;
+      if (typeof val === "string") return val.trim() !== "";
+      return val != null;
+    });
 
     if (!allFieldsFilled) {
       Swal.fire({
