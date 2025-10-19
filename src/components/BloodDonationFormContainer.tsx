@@ -92,7 +92,7 @@ export default function BloodDonationFormContainer() {
   const downloadImage = () => {
     if (!imageRef.current) return;
 
-    const allFieldsFilled = Object.values(formData).every((field: any) => {
+    const allFieldsFilled = Object.values(formData).every((field: BloodDonationFormEntity[keyof BloodDonationFormEntity]) => {
       const val = field.value;
       if (Array.isArray(val)) return val.length > 0;
       if (typeof val === "string") return val.trim() !== "";
