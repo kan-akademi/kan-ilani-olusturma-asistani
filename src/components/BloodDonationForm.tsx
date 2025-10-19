@@ -43,6 +43,7 @@ export default function BloodDonationForm(props: FormProps) {
           style={{
             top: `${props.formData.bloodType.coord.top}px`,
             left: `${props.formData.bloodType.coord.left}px`,
+            fontSize:`${props.formData.bloodType.fontSize}px`,
           }}
         >
           {Array.isArray(props.formData.bloodType.value)

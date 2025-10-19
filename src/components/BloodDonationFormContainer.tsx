@@ -11,6 +11,7 @@ import BloodDonationForm from "./BloodDonationForm";
 
 const BLOOD_GROUP_LEFT_AB = 20;
 const BLOOD_GROUP_LEFT_DEFAULT = 47;
+const TEXT_ITEM_DEFAULT_FONT_SIZE = 17;
 
 const defaultCoords = {
   bloodGroup: { top: 83, left: BLOOD_GROUP_LEFT_DEFAULT },
@@ -28,7 +29,7 @@ export default function BloodDonationFormContainer() {
 
   const [formData, setFormData] = useState<BloodDonationFormEntity>({
     bloodGroup: { value: "", coord: defaultCoords.bloodGroup },
-    bloodType: { value: [], coord: defaultCoords.bloodType },
+    bloodType: { value: [], coord: defaultCoords.bloodType, fontSize: TEXT_ITEM_DEFAULT_FONT_SIZE },
     fullName: { value: "", coord: defaultCoords.fullName },
     phone: { value: "", coord: defaultCoords.phone },
     date: {
@@ -62,10 +63,12 @@ export default function BloodDonationFormContainer() {
 
   const handleChangeBloodType = (e: SelectChangeEvent<string[]>) => {
     const { name, value } = e.target;
+    const fontSize = value.length > 3 ? 15 : TEXT_ITEM_DEFAULT_FONT_SIZE;
+    const coordTop = value.length > 3 ? 203 : defaultCoords.bloodType.top;
 
     setFormData((prev) => ({
       ...prev,
-      [name]: { ...prev[name as keyof BloodDonationFormEntity], value },
+      [name]: { ...prev[name as keyof BloodDonationFormEntity], value, fontSize, coord: { ...prev[name as keyof BloodDonationFormEntity].coord, top: coordTop } },
     }));
   };
 
@@ -125,6 +128,14 @@ export default function BloodDonationFormContainer() {
   };
 
   const updateCounter = () => {
+    const href = typeof window !== "undefined" ? window.location.href : "";
+    const path = typeof window !== "undefined" ? window.location.pathname : "";
+
+    // Eğer URL "localhost" veya "/test" içeriyorsa isteği gönderme
+    if (href.includes("localhost") || href.includes("/test") || path.includes("/test")) {
+      return;
+    }
+    
     const hash = hashData(formData);
     fetch(import.meta.env.VITE_COUNTER_API, {
       body: JSON.stringify({ hash }),
