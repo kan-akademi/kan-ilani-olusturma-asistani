@@ -30,15 +30,27 @@ export default function BloodDonationFormContainer() {
 
   const [formData, setFormData] = useState<BloodDonationFormEntity>({
     bloodGroup: { value: "", coord: defaultCoords.bloodGroup },
-    bloodType: { value: [], coord: defaultCoords.bloodType, fontSize: TEXT_ITEM_DEFAULT_FONT_SIZE },
-    fullName: { value: "", coord: defaultCoords.fullName, fontSize: TEXT_ITEM_DEFAULT_FONT_SIZE },
+    bloodType: {
+      value: [],
+      coord: defaultCoords.bloodType,
+      fontSize: TEXT_ITEM_DEFAULT_FONT_SIZE,
+    },
+    fullName: {
+      value: "",
+      coord: defaultCoords.fullName,
+      fontSize: TEXT_ITEM_DEFAULT_FONT_SIZE,
+    },
     phone: { value: "", coord: defaultCoords.phone },
     date: {
       value: new Date().toLocaleDateString("en-CA"),
       coord: defaultCoords.date,
     },
     hospital: { value: "", coord: defaultCoords.hospital },
-    location: { value: "", coord: defaultCoords.location, fontSize: TEXT_ITEM_MULTILINE_DEFAULT_FONT_SIZE },
+    location: {
+      value: "",
+      coord: defaultCoords.location,
+      fontSize: TEXT_ITEM_MULTILINE_DEFAULT_FONT_SIZE,
+    },
   });
 
   function getBloodGroupLeft(value: string) {
@@ -69,11 +81,21 @@ export default function BloodDonationFormContainer() {
 
     setFormData((prev) => ({
       ...prev,
-      [name]: { ...prev[name as keyof BloodDonationFormEntity], value, fontSize, coord: { ...prev[name as keyof BloodDonationFormEntity].coord, top: coordTop } },
+      [name]: {
+        ...prev[name as keyof BloodDonationFormEntity],
+        value,
+        fontSize,
+        coord: {
+          ...prev[name as keyof BloodDonationFormEntity].coord,
+          top: coordTop,
+        },
+      },
     }));
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
 
     setFormData((prev) => ({
@@ -82,12 +104,14 @@ export default function BloodDonationFormContainer() {
     }));
   };
 
-  const handleChangeFullName = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChangeFullName = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
 
-    let fontSize = TEXT_ITEM_DEFAULT_FONT_SIZE; 
-    let coordTop = defaultCoords.fullName.top; 
-    
+    let fontSize = TEXT_ITEM_DEFAULT_FONT_SIZE;
+    let coordTop = defaultCoords.fullName.top;
+
     if (value.length >= 35) {
       fontSize = 13;
       coordTop = 260;
@@ -101,7 +125,15 @@ export default function BloodDonationFormContainer() {
 
     setFormData((prev) => ({
       ...prev,
-      [name]: { ...prev[name as keyof BloodDonationFormEntity], value, fontSize, coord: { ...prev[name as keyof BloodDonationFormEntity].coord, top: coordTop } },
+      [name]: {
+        ...prev[name as keyof BloodDonationFormEntity],
+        value,
+        fontSize,
+        coord: {
+          ...prev[name as keyof BloodDonationFormEntity].coord,
+          top: coordTop,
+        },
+      },
     }));
   };
 
@@ -113,12 +145,14 @@ export default function BloodDonationFormContainer() {
     }));
   };
 
-  const handleChangeLocation = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChangeLocation = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
 
-    let fontSize = TEXT_ITEM_MULTILINE_DEFAULT_FONT_SIZE; 
-    let coordTop = defaultCoords.location.top; 
-    
+    let fontSize = TEXT_ITEM_MULTILINE_DEFAULT_FONT_SIZE;
+    let coordTop = defaultCoords.location.top;
+
     if (value.length >= 260) {
       fontSize = 14;
       coordTop = 471;
@@ -129,7 +163,15 @@ export default function BloodDonationFormContainer() {
 
     setFormData((prev) => ({
       ...prev,
-      [name]: { ...prev[name as keyof BloodDonationFormEntity], value, fontSize, coord: { ...prev[name as keyof BloodDonationFormEntity].coord, top: coordTop } },
+      [name]: {
+        ...prev[name as keyof BloodDonationFormEntity],
+        value,
+        fontSize,
+        coord: {
+          ...prev[name as keyof BloodDonationFormEntity].coord,
+          top: coordTop,
+        },
+      },
     }));
   };
 
@@ -150,8 +192,13 @@ export default function BloodDonationFormContainer() {
 
     Object.entries(formData).forEach(([key, field]) => {
       const val = (field as BloodDonationFormEntity[keyof BloodDonationFormEntity]).value as any;
-      const filled = Array.isArray(val) ? val.length > 0 : typeof val === "string" ? val.trim() !== "" : val != null;
-      if (!filled) missingFields.push(fieldLabels[key as keyof BloodDonationFormEntity] ?? key);
+      const filled = Array.isArray(val)
+        ? val.length > 0
+        : typeof val === "string"
+        ? val.trim() !== ""
+        : val != null;
+      if (!filled)
+        missingFields.push(fieldLabels[key as keyof BloodDonationFormEntity] ?? key);
     });
 
     if (missingFields.length > 0) {
@@ -161,7 +208,10 @@ export default function BloodDonationFormContainer() {
       Swal.fire({
         icon: "warning",
         confirmButtonText: t("close"),
-        html: `${t("fillAllFields").replace(/\n/g, "<br /><br />").replace("{{missingFields}}", missingFields.join(", ")).replace("{{noun}}", noun)}`,
+        html: `${t("fillAllFields")
+          .replace(/\n/g, "<br /><br />")
+          .replace("{{missingFields}}", missingFields.join(", "))
+          .replace("{{noun}}", noun)}`,
       });
       return;
     }
@@ -190,10 +240,14 @@ export default function BloodDonationFormContainer() {
     const path = typeof window !== "undefined" ? window.location.pathname : "";
 
     // Eğer URL "localhost" veya "/test" içeriyorsa isteği gönderme
-    if (href.includes("localhost") || href.includes("/test") || path.includes("/test")) {
+    if (
+      href.includes("localhost") ||
+      href.includes("/test") ||
+      path.includes("/test")
+    ) {
       return;
     }
-    
+
     const hash = hashData(formData);
     fetch(import.meta.env.VITE_COUNTER_API, {
       body: JSON.stringify({ hash }),

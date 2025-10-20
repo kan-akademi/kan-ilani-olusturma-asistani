@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import LabeledTextField from "./LabeledTextField";
 import {
@@ -9,6 +10,7 @@ import {
   type SelectChangeEvent,
   Checkbox,
   ListItemText,
+  FormHelperText,
 } from "@mui/material";
 import type { BloodDonationFormEntity } from "../entities/BloodDonationFormEntity";
 
@@ -25,6 +27,7 @@ interface InputProps {
 
 export default function BloodDonationFormInputs(props: InputProps) {
   const { t, i18n } = useTranslation();
+  const [showErrors, setShowErrors] = useState(false);
 
   const selectedBloodTypes = Array.isArray(props.formData.bloodType.value)
     ? props.formData.bloodType.value
@@ -32,9 +35,47 @@ export default function BloodDonationFormInputs(props: InputProps) {
     ? [props.formData.bloodType.value]
     : [];
 
+  const isEmpty = (val: any) => {
+    if (val === null || val === undefined) return true;
+    if (Array.isArray(val)) return val.length === 0;
+    if (typeof val === "string") return val.trim().length === 0;
+    return !val;
+  };
+
+  const bloodGroupError = showErrors && isEmpty(props.formData.bloodGroup.value);
+  const bloodTypeError = showErrors && selectedBloodTypes.length === 0;
+  const fullNameError = showErrors && isEmpty(props.formData.fullName.value);
+  const phoneError = showErrors && isEmpty(props.formData.phone.value);
+  const dateError = showErrors && isEmpty(props.formData.date.value);
+  const hospitalError = showErrors && isEmpty(props.formData.hospital.value);
+  const locationError = showErrors && isEmpty(props.formData.location.value);
+
+  const validate = () => {
+    return (
+      !isEmpty(props.formData.bloodGroup.value) &&
+      selectedBloodTypes.length > 0 &&
+      !isEmpty(props.formData.fullName.value) &&
+      !isEmpty(props.formData.phone.value) &&
+      !isEmpty(props.formData.date.value) &&
+      !isEmpty(props.formData.hospital.value) &&
+      !isEmpty(props.formData.location.value)
+    );
+  };
+
+  const handleDownloadClick = () => {
+    setShowErrors(true);
+    validate();
+    props.downloadImageAndUpdateCounter();
+  };
+
   return (
     <form className="form">
-      <FormControl fullWidth margin="dense" size="small">
+      <FormControl
+        fullWidth
+        margin="dense"
+        size="small"
+        error={bloodGroupError}
+      >
         <InputLabel id="blood-group-label">{t("bloodGroup")}</InputLabel>
         <Select
           labelId="blood-group-label"
@@ -56,9 +97,10 @@ export default function BloodDonationFormInputs(props: InputProps) {
             {t("regardlessOfBloodType")}
           </MenuItem>
         </Select>
+        {bloodGroupError && <FormHelperText>{t("requiredText")}</FormHelperText>}
       </FormControl>
 
-      <FormControl fullWidth margin="dense" size="small">
+      <FormControl fullWidth margin="dense" size="small" error={bloodTypeError}>
         <InputLabel id="blood-type-label">{t("bloodType")}</InputLabel>
         <Select
           multiple
@@ -93,6 +135,7 @@ export default function BloodDonationFormInputs(props: InputProps) {
             <ListItemText primary={t("stemCell")} />
           </MenuItem>
         </Select>
+        {bloodTypeError && <FormHelperText>{t("requiredText")}</FormHelperText>}
       </FormControl>
 
       <LabeledTextField
@@ -101,6 +144,8 @@ export default function BloodDonationFormInputs(props: InputProps) {
         slotProps={{ htmlInput: { maxLength: 39 } }}
         value={props.formData.fullName.value}
         onChange={props.handleChangeFullName}
+        error={fullNameError}
+        helperText={fullNameError ? t("requiredText") : ""}
       />
 
       <LabeledTextField
@@ -109,6 +154,8 @@ export default function BloodDonationFormInputs(props: InputProps) {
         name="phone"
         value={props.formData.phone.value}
         onChange={props.handlePhoneChange}
+        error={phoneError}
+        helperText={phoneError ? t("requiredText") : ""}
       />
 
       <LabeledTextField
@@ -117,6 +164,8 @@ export default function BloodDonationFormInputs(props: InputProps) {
         name="date"
         value={props.formData.date.value}
         onChange={props.handleChange}
+        error={dateError}
+        helperText={dateError ? t("requiredText") : ""}
       />
 
       <LabeledTextField
@@ -126,6 +175,8 @@ export default function BloodDonationFormInputs(props: InputProps) {
         onChange={props.handleChange}
         multiline
         rows={2}
+        error={hospitalError}
+        helperText={hospitalError ? t("requiredText") : ""}
       />
 
       <LabeledTextField
@@ -136,6 +187,8 @@ export default function BloodDonationFormInputs(props: InputProps) {
         onChange={props.handleChangeLocation}
         multiline
         rows={5}
+        error={locationError}
+        helperText={locationError ? t("requiredText") : ""}
       />
 
       <Box sx={{ mb: 2 }} />
@@ -147,9 +200,9 @@ export default function BloodDonationFormInputs(props: InputProps) {
             ? "download-button-tr.jpg"
             : "download-button-en.jpg"
         }
-        alt="Son Adım: İlanı Galerine Kaydet"
+        alt={t("downloadButtonAlt")}
         className="download-image-button"
-        onClick={props.downloadImageAndUpdateCounter}
+        onClick={handleDownloadClick}
       />
     </form>
   );
