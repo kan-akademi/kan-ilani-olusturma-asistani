@@ -1,9 +1,21 @@
 import type { BloodDonationFormEntity } from "../entities/BloodDonationFormEntity";
 
 export function hashData(data: BloodDonationFormEntity): string {
-  const str = Object.values(data)
-    .map((field) => field.value.trim().toLowerCase())
-    .join("|");
+  const values = Object.values(data).map((field: any) => {
+    const val = field?.value;
+    if (Array.isArray(val)) {      
+      return val.map((v: any) => (typeof v === "string" ? v.trim() : String(v))).join(",");
+    }
+    if (typeof val === "string") {
+      return val.trim();
+    }
+    if (val == null) {
+      return "";
+    }
+    return String(val);
+  });
+
+  const str = values.join("|");
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
     hash = (hash << 5) - hash + str.charCodeAt(i);
