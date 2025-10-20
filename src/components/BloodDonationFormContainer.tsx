@@ -191,7 +191,7 @@ export default function BloodDonationFormContainer() {
     const missingFields: string[] = [];
 
     Object.entries(formData).forEach(([key, field]) => {
-      const val = (field as BloodDonationFormEntity[keyof BloodDonationFormEntity]).value as any;
+      const val = (field as { value: string | string[] }).value;
       const filled = Array.isArray(val)
         ? val.length > 0
         : typeof val === "string"
