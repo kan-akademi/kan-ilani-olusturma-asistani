@@ -7,13 +7,17 @@ interface FormProps {
   formData: BloodDonationFormEntity;
 }
 
+const ASSET_VERSION = "20251020";
+
 export default function BloodDonationForm(props: FormProps) {
+  const imageUrl = `kan-akademi-ilan-template-1.jpg?v=${ASSET_VERSION}`;
+
   return (
     <>
       {/* GÖRSEL + YAZILAR */}
       <div className="image-wrapper" ref={props.imageRef}>
         <img
-          src="kan-akademi-ilan-template-1.jpg"
+          src={imageUrl}
           alt="Template"
           className="background-image"
         />
@@ -43,9 +47,12 @@ export default function BloodDonationForm(props: FormProps) {
           style={{
             top: `${props.formData.bloodType.coord.top}px`,
             left: `${props.formData.bloodType.coord.left}px`,
+            fontSize: `${props.formData.bloodType.fontSize}px`,
           }}
         >
-          {props.formData.bloodType.value}
+          {Array.isArray(props.formData.bloodType.value)
+            ? props.formData.bloodType.value.join(", ")
+            : String(props.formData.bloodType.value)}
         </div>
 
         {/* AD SOYAD */}
@@ -54,6 +61,7 @@ export default function BloodDonationForm(props: FormProps) {
           style={{
             top: `${props.formData.fullName.coord.top}px`,
             left: `${props.formData.fullName.coord.left}px`,
+            fontSize: `${props.formData.fullName.fontSize}px`,
           }}
         >
           {props.formData.fullName.value}
@@ -99,6 +107,7 @@ export default function BloodDonationForm(props: FormProps) {
           style={{
             top: `${props.formData.location.coord.top}px`,
             left: `${props.formData.location.coord.left}px`,
+            fontSize: `${props.formData.location.fontSize}px`,
             width: "340px",
           }}
         >

@@ -7,6 +7,8 @@ import {
   MenuItem,
   Select,
   type SelectChangeEvent,
+  Checkbox,
+  ListItemText,
 } from "@mui/material";
 import type { BloodDonationFormEntity } from "../entities/BloodDonationFormEntity";
 
@@ -14,13 +16,21 @@ interface InputProps {
   formData: BloodDonationFormEntity;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleChangeBloodGroup: (e: SelectChangeEvent) => void;
-  handleChangeBloodType: (e: SelectChangeEvent) => void;
+  handleChangeBloodType: (e: SelectChangeEvent<string[]>) => void;
+  handleChangeFullName: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handlePhoneChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleChangeLocation: (e: React.ChangeEvent<HTMLInputElement>) => void;
   downloadImageAndUpdateCounter: () => void;
 }
 
 export default function BloodDonationFormInputs(props: InputProps) {
   const { t, i18n } = useTranslation();
+
+  const selectedBloodTypes = Array.isArray(props.formData.bloodType.value)
+    ? props.formData.bloodType.value
+    : props.formData.bloodType.value
+    ? [props.formData.bloodType.value]
+    : [];
 
   return (
     <form className="form">
@@ -51,26 +61,46 @@ export default function BloodDonationFormInputs(props: InputProps) {
       <FormControl fullWidth margin="dense" size="small">
         <InputLabel id="blood-type-label">{t("bloodType")}</InputLabel>
         <Select
-          labelId="blood-type-label"
+          multiple
           name="bloodType"
+          labelId="blood-type-label"
           label={t("bloodType")}
           aria-label={t("bloodType")}
-          value={props.formData.bloodType.value}
+          value={selectedBloodTypes}
           onChange={props.handleChangeBloodType}
+          renderValue={(selected) =>
+            Array.isArray(selected) ? selected.join(", ") : String(selected)
+          }
         >
-          <MenuItem value="Kırmızı Kan">{t("redBlood")}</MenuItem>
-          <MenuItem value="Trombosit">{t("platelet")}</MenuItem>
-          <MenuItem value="Granülosit">{t("granulocyte")}</MenuItem>
-          <MenuItem value="Plazma">{t("plasma")}</MenuItem>
-          <MenuItem value="Kök Hücre">{t("stemCell")}</MenuItem>
+          <MenuItem value="Kırmızı Kan">
+            <Checkbox checked={selectedBloodTypes.indexOf("Kırmızı Kan") > -1} />
+            <ListItemText primary={t("redBlood")} />
+          </MenuItem>
+          <MenuItem value="Trombosit">
+            <Checkbox checked={selectedBloodTypes.indexOf("Trombosit") > -1} />
+            <ListItemText primary={t("platelet")} />
+          </MenuItem>
+          <MenuItem value="Granülosit">
+            <Checkbox checked={selectedBloodTypes.indexOf("Granülosit") > -1} />
+            <ListItemText primary={t("granulocyte")} />
+          </MenuItem>
+          <MenuItem value="Plazma">
+            <Checkbox checked={selectedBloodTypes.indexOf("Plazma") > -1} />
+            <ListItemText primary={t("plasma")} />
+          </MenuItem>
+          <MenuItem value="Kök Hücre">
+            <Checkbox checked={selectedBloodTypes.indexOf("Kök Hücre") > -1} />
+            <ListItemText primary={t("stemCell")} />
+          </MenuItem>
         </Select>
       </FormControl>
 
       <LabeledTextField
         label={t("fullName")}
         name="fullName"
+        slotProps={{ htmlInput: { maxLength: 39 } }}
         value={props.formData.fullName.value}
-        onChange={props.handleChange}
+        onChange={props.handleChangeFullName}
       />
 
       <LabeledTextField
@@ -101,8 +131,9 @@ export default function BloodDonationFormInputs(props: InputProps) {
       <LabeledTextField
         label={t("location")}
         name="location"
+        slotProps={{ htmlInput: { maxLength: 330 } }}
         value={props.formData.location.value}
-        onChange={props.handleChange}
+        onChange={props.handleChangeLocation}
         multiline
         rows={5}
       />
