@@ -136,18 +136,32 @@ export default function BloodDonationFormContainer() {
   const downloadImage = () => {
     if (!imageRef.current) return;
 
-    const allFieldsFilled = Object.values(formData).every((field: BloodDonationFormEntity[keyof BloodDonationFormEntity]) => {
-      const val = field.value;
-      if (Array.isArray(val)) return val.length > 0;
-      if (typeof val === "string") return val.trim() !== "";
-      return val != null;
+    const fieldLabels: Record<keyof BloodDonationFormEntity, string> = {
+      bloodGroup: t("bloodGroup"),
+      bloodType: t("bloodType"),
+      fullName: t("fullName"),
+      phone: t("phone"),
+      date: t("date"),
+      hospital: t("hospitalName"),
+      location: t("location"),
+    };
+
+    const missingFields: string[] = [];
+
+    Object.entries(formData).forEach(([key, field]) => {
+      const val = (field as BloodDonationFormEntity[keyof BloodDonationFormEntity]).value as any;
+      const filled = Array.isArray(val) ? val.length > 0 : typeof val === "string" ? val.trim() !== "" : val != null;
+      if (!filled) missingFields.push(fieldLabels[key as keyof BloodDonationFormEntity] ?? key);
     });
 
-    if (!allFieldsFilled) {
+    if (missingFields.length > 0) {
+      const nounKey = missingFields.length === 1 ? "fillAllFieldsSingleNoun" : "fillAllFieldsMultipleNoun";
+      const noun = t(nounKey);
+
       Swal.fire({
         icon: "warning",
         confirmButtonText: t("close"),
-        html: t("fillAllFields").replace(/\n/g, "<br />"),
+        html: `${t("fillAllFields").replace(/\n/g, "<br /><br />").replace("{{missingFields}}", missingFields.join(", ")).replace("{{noun}}", noun)}`,
       });
       return;
     }
