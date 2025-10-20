@@ -7,13 +7,17 @@ interface FormProps {
   formData: BloodDonationFormEntity;
 }
 
+const ASSET_VERSION = "20251020";
+
 export default function BloodDonationForm(props: FormProps) {
+  const imageUrl = `kan-akademi-ilan-template-1.jpg?v=${ASSET_VERSION}`;
+
   return (
     <>
       {/* GÖRSEL + YAZILAR */}
       <div className="image-wrapper" ref={props.imageRef}>
         <img
-          src="kan-akademi-ilan-template-1.jpg"
+          src={imageUrl}
           alt="Template"
           className="background-image"
         />
