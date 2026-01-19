@@ -5,6 +5,7 @@ import Logo from "./Logo";
 
 interface TopBarProps {
   theme: "light" | "dark";
+  isPlaying: boolean;
   toggleTheme: () => void;
   handleInfoClick: () => void;
   changeLanguage: (lang: string) => void;
@@ -55,7 +56,7 @@ export default function TopBar(props: TopBarProps) {
             aria-label={t("topBarSoundButton")}
             onClick={() => props.handleSpeakClick()}
           >
-            🔊
+            {props.isPlaying ? "⏸️" : "🔊"}
           </Button>
         </ButtonGroup>
 
