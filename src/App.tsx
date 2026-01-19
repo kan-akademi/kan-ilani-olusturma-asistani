@@ -18,6 +18,7 @@ function App() {
   const [theme, setTheme] = useState<"light" | "dark">(
     window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
   );
+  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
     const userLanguage = navigator.language;
@@ -68,12 +69,18 @@ function App() {
     const lang = i18n.language.startsWith("tr") ? "tr" : "en";
     const audioFile = lang === "tr" ? "page-content-audio-tr.mp3" : "page-content-audio-en.mp3";
 
-    if (audioRef.current && !audioRef.current.paused) {
-      return;
+    if (audioRef.current) {
+      if (!audioRef.current.paused) {
+        audioRef.current.pause();
+        setIsPlaying(false);
+        return;
+      }
     }
 
     audioRef.current = new Audio(audioFile);
+    audioRef.current.onended = () => setIsPlaying(false);
     audioRef.current.play();
+    setIsPlaying(true);
   };
 
   const muiTheme = createTheme(
@@ -96,6 +103,7 @@ function App() {
         handleInfoClick={handleInfoClick}
         changeLanguage={(lang) => i18n.changeLanguage(lang)}
         handleSpeakClick={handleSpeakClick}
+        isPlaying={isPlaying}
       />
       <PageHeader />
       <BloodDonationForm />
