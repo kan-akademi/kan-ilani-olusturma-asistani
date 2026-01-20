@@ -1,6 +1,7 @@
 import type { CoordinateEntity } from "./CoordinateEntity";
 
 export interface BloodDonationFormEntity {
+  templateInfo: { id: string; path: string; coord: CoordinateEntity};
   bloodGroup: { value: string; coord: CoordinateEntity };
   bloodType: { value: string[]; coord: CoordinateEntity; fontSize: number };
   fullName: { value: string; coord: CoordinateEntity; fontSize: number };

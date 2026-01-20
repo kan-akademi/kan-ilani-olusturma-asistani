@@ -27,8 +27,10 @@ const defaultCoords = {
 export default function BloodDonationFormContainer() {
   const { t } = useTranslation();
   const imageRef = useRef(null);
+  const ASSET_VERSION = "20251020";
 
   const [formData, setFormData] = useState<BloodDonationFormEntity>({
+    templateInfo: { id: "1", path: `kan-akademi-ilan-template-1.jpg?v=${ASSET_VERSION}`, coord: { top: 0, left: 0 } },
     bloodGroup: { value: "", coord: defaultCoords.bloodGroup },
     bloodType: {
       value: [],
@@ -179,6 +181,7 @@ export default function BloodDonationFormContainer() {
     if (!imageRef.current) return;
 
     const fieldLabels: Record<keyof BloodDonationFormEntity, string> = {
+      templateInfo: t("template"),
       bloodGroup: t("bloodGroup"),
       bloodType: t("bloodType"),
       fullName: t("fullName"),
@@ -191,6 +194,7 @@ export default function BloodDonationFormContainer() {
     const missingFields: string[] = [];
 
     Object.entries(formData).forEach(([key, field]) => {
+      if (key === "templateInfo") return; //TODO: fix elagantly
       const val = (field as { value: string | string[] }).value;
       const filled = Array.isArray(val)
         ? val.length > 0
