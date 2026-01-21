@@ -1,13 +1,15 @@
 import { type RefObject } from "react";
 import { formatDateToTurkish } from "../utils/formUtils";
-import type { BloodDonationFormEntity } from "../entities/BloodDonationFormEntity";
+import type { DonationInfo } from "../entities/DonationInfo";
+import type { DonationTemplateInfo } from "../entities/DonationTemplateInfo";
 
-interface FormProps {
+interface IProps {
   imageRef: RefObject<null>;
-  formData: BloodDonationFormEntity;
+  donationInfo: DonationInfo;
+  donationTemplateInfo: DonationTemplateInfo;
 }
 
-export default function BloodDonationForm(props: FormProps) {
+export default function BloodDonationForm(props: IProps) {
   return (
     <>
       {/* GÖRSEL + YAZILAR */}
@@ -15,19 +17,19 @@ export default function BloodDonationForm(props: FormProps) {
         <img
           alt="Template"
           className="background-image"
-          src={props.formData.templateInfo.path}
+          src={props.donationTemplateInfo.templatePath}
         />
 
         {/* KAN GRUBU */}
-        {props.formData.bloodGroup.value !== "Kan Grubu Fark Etmeksizin" ? (
+        {props.donationInfo.bloodGroup !== "Kan Grubu Fark Etmeksizin" ? (
           <div
             className="text-item blood-group"
             style={{
-              top: `${props.formData.bloodGroup.coord.top}px`,
-              left: `${props.formData.bloodGroup.coord.left}px`,
+              top: `${props.donationTemplateInfo.bloodGroup.coord.top}px`,
+              left: `${props.donationTemplateInfo.bloodGroup.coord.left}px`,
             }}
           >
-            {props.formData.bloodGroup.value}
+            {props.donationInfo.bloodGroup}
           </div>
         ) : (
           <div className="text-item blood-group regardless-blood-group">
@@ -41,73 +43,73 @@ export default function BloodDonationForm(props: FormProps) {
         <div
           className="text-item"
           style={{
-            top: `${props.formData.bloodType.coord.top}px`,
-            left: `${props.formData.bloodType.coord.left}px`,
-            fontSize: `${props.formData.bloodType.fontSize}px`,
+            top: `${props.donationTemplateInfo.bloodType.coord.top}px`,
+            left: `${props.donationTemplateInfo.bloodType.coord.left}px`,
+            fontSize: `${props.donationTemplateInfo.bloodType.fontSize}px`,
           }}
         >
-          {Array.isArray(props.formData.bloodType.value)
-            ? props.formData.bloodType.value.join(", ")
-            : String(props.formData.bloodType.value)}
+          {Array.isArray(props.donationInfo.bloodType)
+            ? props.donationInfo.bloodType.join(", ")
+            : String(props.donationInfo.bloodType)}
         </div>
 
         {/* AD SOYAD */}
         <div
           className="text-item"
           style={{
-            top: `${props.formData.fullName.coord.top}px`,
-            left: `${props.formData.fullName.coord.left}px`,
-            fontSize: `${props.formData.fullName.fontSize}px`,
+            top: `${props.donationTemplateInfo.fullName.coord.top}px`,
+            left: `${props.donationTemplateInfo.fullName.coord.left}px`,
+            fontSize: `${props.donationTemplateInfo.fullName.fontSize}px`,
           }}
         >
-          {props.formData.fullName.value}
+          {props.donationInfo.fullName}
         </div>
 
         {/* TELEFON */}
         <div
           className="text-item"
           style={{
-            top: `${props.formData.phone.coord.top}px`,
-            left: `${props.formData.phone.coord.left}px`,
+            top: `${props.donationTemplateInfo.phone.coord.top}px`,
+            left: `${props.donationTemplateInfo.phone.coord.left}px`,
           }}
         >
-          {props.formData.phone.value}
+          {props.donationInfo.phone}
         </div>
 
         {/* TARİH */}
         <div
           className="text-item"
           style={{
-            top: `${props.formData.date.coord.top}px`,
-            left: `${props.formData.date.coord.left}px`,
+            top: `${props.donationTemplateInfo.date.coord.top}px`,
+            left: `${props.donationTemplateInfo.date.coord.left}px`,
           }}
         >
-          {formatDateToTurkish(props.formData.date.value.toString())}
+          {formatDateToTurkish(props.donationInfo.date.toString())}
         </div>
 
         {/* HASTANE */}
         <div
           className="text-item multiline"
           style={{
-            top: `${props.formData.hospital.coord.top}px`,
-            left: `${props.formData.hospital.coord.left}px`,
+            top: `${props.donationTemplateInfo.hospital.coord.top}px`,
+            left: `${props.donationTemplateInfo.hospital.coord.left}px`,
             width: "305px",
           }}
         >
-          {props.formData.hospital.value}
+          {props.donationInfo.hospital}
         </div>
 
         {/* YER */}
         <div
           className="text-item multiline"
           style={{
-            top: `${props.formData.location.coord.top}px`,
-            left: `${props.formData.location.coord.left}px`,
-            fontSize: `${props.formData.location.fontSize}px`,
+            top: `${props.donationTemplateInfo.location.coord.top}px`,
+            left: `${props.donationTemplateInfo.location.coord.left}px`,
+            fontSize: `${props.donationTemplateInfo.location.fontSize}px`,
             width: "340px",
           }}
         >
-          {props.formData.location.value}
+          {props.donationInfo.location}
         </div>
       </div>
     </>

@@ -12,16 +12,12 @@ import {
   ListItemText,
   FormHelperText,
 } from "@mui/material";
-import type { BloodDonationFormEntity } from "../entities/BloodDonationFormEntity";
+import type { DonationInfo } from "../entities/DonationInfo";
 
 interface InputProps {
-  formData: BloodDonationFormEntity;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleChangeBloodGroup: (e: SelectChangeEvent) => void;
-  handleChangeBloodType: (e: SelectChangeEvent<string[]>) => void;
-  handleChangeFullName: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handlePhoneChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleChangeLocation: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  donationInfo: DonationInfo;
+  handleDonationInfoChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent | SelectChangeEvent<string[]>) => void;
+  handleDonationInfoPhoneChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   downloadImageAndUpdateCounter: () => void;
 }
 
@@ -29,11 +25,7 @@ export default function BloodDonationFormInputs(props: InputProps) {
   const { t, i18n } = useTranslation();
   const [showErrors, setShowErrors] = useState(false);
 
-  const selectedBloodTypes = Array.isArray(props.formData.bloodType.value)
-    ? props.formData.bloodType.value
-    : props.formData.bloodType.value
-    ? [props.formData.bloodType.value]
-    : [];
+  const selectedBloodTypes = Array.isArray(props.donationInfo.bloodType) ? props.donationInfo.bloodType : props.donationInfo.bloodType ? [props.donationInfo.bloodType] : [];
 
   const isEmpty = (val: any) => {
     if (val === null || val === undefined) return true;
@@ -42,23 +34,23 @@ export default function BloodDonationFormInputs(props: InputProps) {
     return !val;
   };
 
-  const bloodGroupError = showErrors && isEmpty(props.formData.bloodGroup.value);
+  const bloodGroupError = showErrors && isEmpty(props.donationInfo.bloodGroup);
   const bloodTypeError = showErrors && selectedBloodTypes.length === 0;
-  const fullNameError = showErrors && isEmpty(props.formData.fullName.value);
-  const phoneError = showErrors && isEmpty(props.formData.phone.value);
-  const dateError = showErrors && isEmpty(props.formData.date.value);
-  const hospitalError = showErrors && isEmpty(props.formData.hospital.value);
-  const locationError = showErrors && isEmpty(props.formData.location.value);
+  const fullNameError = showErrors && isEmpty(props.donationInfo.fullName);
+  const phoneError = showErrors && isEmpty(props.donationInfo.phone);
+  const dateError = showErrors && isEmpty(props.donationInfo.date);
+  const hospitalError = showErrors && isEmpty(props.donationInfo.hospital);
+  const locationError = showErrors && isEmpty(props.donationInfo.location);
 
   const validate = () => {
     return (
-      !isEmpty(props.formData.bloodGroup.value) &&
+      !isEmpty(props.donationInfo.bloodGroup) &&
       selectedBloodTypes.length > 0 &&
-      !isEmpty(props.formData.fullName.value) &&
-      !isEmpty(props.formData.phone.value) &&
-      !isEmpty(props.formData.date.value) &&
-      !isEmpty(props.formData.hospital.value) &&
-      !isEmpty(props.formData.location.value)
+      !isEmpty(props.donationInfo.fullName) &&
+      !isEmpty(props.donationInfo.phone) &&
+      !isEmpty(props.donationInfo.date) &&
+      !isEmpty(props.donationInfo.hospital) &&
+      !isEmpty(props.donationInfo.location)
     );
   };
 
@@ -82,8 +74,8 @@ export default function BloodDonationFormInputs(props: InputProps) {
           name="bloodGroup"
           label={t("bloodGroup")}
           aria-label={t("bloodGroup")}
-          value={props.formData.bloodGroup.value}
-          onChange={props.handleChangeBloodGroup}
+          value={props.donationInfo.bloodGroup}
+          onChange={props.handleDonationInfoChange}
         >
           <MenuItem value="A RH (+)">A RH (+)</MenuItem>
           <MenuItem value="A RH (-)">A RH (-)</MenuItem>
@@ -109,7 +101,7 @@ export default function BloodDonationFormInputs(props: InputProps) {
           label={t("bloodType")}
           aria-label={t("bloodType")}
           value={selectedBloodTypes}
-          onChange={props.handleChangeBloodType}
+          onChange={props.handleDonationInfoChange}
           renderValue={(selected) =>
             Array.isArray(selected) ? selected.join(", ") : String(selected)
           }
@@ -142,8 +134,8 @@ export default function BloodDonationFormInputs(props: InputProps) {
         label={t("fullName")}
         name="fullName"
         slotProps={{ htmlInput: { maxLength: 39 } }}
-        value={props.formData.fullName.value}
-        onChange={props.handleChangeFullName}
+        value={props.donationInfo.fullName}
+        onChange={props.handleDonationInfoChange}
         error={fullNameError}
         helperText={fullNameError ? t("requiredText") : ""}
       />
@@ -152,8 +144,8 @@ export default function BloodDonationFormInputs(props: InputProps) {
         type="tel"
         label={t("phone")}
         name="phone"
-        value={props.formData.phone.value}
-        onChange={props.handlePhoneChange}
+        value={props.donationInfo.phone}
+        onChange={props.handleDonationInfoPhoneChange}
         error={phoneError}
         helperText={phoneError ? t("requiredText") : ""}
       />
@@ -162,8 +154,8 @@ export default function BloodDonationFormInputs(props: InputProps) {
         type="date"
         label={t("date")}
         name="date"
-        value={props.formData.date.value}
-        onChange={props.handleChange}
+        value={props.donationInfo.date}
+        onChange={props.handleDonationInfoChange}
         error={dateError}
         helperText={dateError ? t("requiredText") : ""}
       />
@@ -171,8 +163,8 @@ export default function BloodDonationFormInputs(props: InputProps) {
       <LabeledTextField
         label={t("hospitalName")}
         name="hospital"
-        value={props.formData.hospital.value}
-        onChange={props.handleChange}
+        value={props.donationInfo.hospital}
+        onChange={props.handleDonationInfoChange}
         multiline
         rows={2}
         error={hospitalError}
@@ -183,8 +175,8 @@ export default function BloodDonationFormInputs(props: InputProps) {
         label={t("location")}
         name="location"
         slotProps={{ htmlInput: { maxLength: 330 } }}
-        value={props.formData.location.value}
-        onChange={props.handleChangeLocation}
+        value={props.donationInfo.location}
+        onChange={props.handleDonationInfoChange}
         multiline
         rows={5}
         error={locationError}
