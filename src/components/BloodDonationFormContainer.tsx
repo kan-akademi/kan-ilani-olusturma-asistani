@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import html2canvas from "html2canvas";
 import { useTranslation } from "react-i18next";
@@ -14,7 +14,7 @@ export default function BloodDonationFormContainer() {
   const { t } = useTranslation();
   const imageRef = useRef(null);
 
-  const [selectedTemplate, setSelectedTemplate] = useState<number>(0);
+  const [selectedTemplateIndex, setSelectedTemplateIndex] = useState<number>(0);
   const [donationInfo, setDonationInfo] = useState<DonationInfo>(initialDonationInfo);
   const [donationTemplateInfo, setDonationTemplateInfo] = useState<DonationTemplateInfo[]>(initialDonationTemplateInfo);
 
@@ -36,8 +36,29 @@ export default function BloodDonationFormContainer() {
   };
 
   const handleTemplateChange = (index: number) => {
-    setSelectedTemplate(index);
+    setSelectedTemplateIndex(index);
   };
+
+  useEffect(() => {
+    console.log(selectedTemplateIndex)
+    setDonationTemplateInfo((prev) => {
+      let updated = [...prev];
+
+      if (donationInfo.bloodGroup === "0 RH (+)") {
+        
+        updated[selectedTemplateIndex] = {
+          ...updated[selectedTemplateIndex], date: {
+            ...updated[selectedTemplateIndex].date, coord: {
+              left: 15, top: 15
+            }
+          }
+        }
+
+      }
+
+      return updated;
+    });
+  }, [donationInfo, selectedTemplateIndex]);
 
   const downloadImage = () => {
     if (!imageRef.current) return;
@@ -123,7 +144,7 @@ export default function BloodDonationFormContainer() {
     <div className="container">
       <BloodDonationFormInputs
         donationInfo={donationInfo!!}
-        selectedTemplate={selectedTemplate}
+        selectedTemplate={selectedTemplateIndex}
         handleDonationInfoChange={handleDonationInfoChange}
         handleDonationInfoPhoneChange={handleDonationInfoPhoneChange}
         downloadImageAndUpdateCounter={downloadImage}
@@ -133,7 +154,7 @@ export default function BloodDonationFormContainer() {
       <BloodDonationForm
         imageRef={imageRef}
         donationInfo={donationInfo}
-        donationTemplateInfo={donationTemplateInfo[0]} />
+        donationTemplateInfo={donationTemplateInfo[selectedTemplateIndex]} />
     </div>
   );
 }

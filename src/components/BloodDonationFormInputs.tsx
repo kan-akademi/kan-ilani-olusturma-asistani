@@ -13,6 +13,7 @@ import {
   FormHelperText,
 } from "@mui/material";
 import type { DonationInfo } from "../entities/DonationInfo";
+import { initialDonationTemplateInfo } from "../entities/DonationTemplateInfo";
 
 interface InputProps {
   donationInfo: DonationInfo;
@@ -201,11 +202,11 @@ export default function BloodDonationFormInputs(props: InputProps) {
 
       {/* TEMPLATE SEÇİMİ */}
       <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mt: 2, }}>
-        {[0, 1, 2, 3].map((idx) => (
+        {initialDonationTemplateInfo.map((_, index) => (
           <Box
-            key={idx}
-            title={`Template ${idx + 1}`}
-            onClick={() => props.handleTemplateChange(idx)}
+            key={index}
+            title={`Template ${index + 1}`}
+            onClick={() => props.handleTemplateChange(index)}
             sx={{
               width: 48,
               height: 48,
@@ -215,8 +216,8 @@ export default function BloodDonationFormInputs(props: InputProps) {
                 "linear-gradient(135deg, #43cea2, #185a9d)",
                 "linear-gradient(135deg, #f7971e, #ffd200)",
                 "linear-gradient(135deg, #e96443, #904e95)",
-              ][idx],
-              border: props.selectedTemplate === idx ? "3px solid #ffffff" : "3px solid #222",
+              ][index],
+              border: props.selectedTemplate === index ? "3px solid #ffffff" : "3px solid #222",
               //boxShadow: props.selectedTemplate === idx ? "0 0 4px #aaa" : "0 0 8px #222",
               cursor: "pointer",
               display: "flex",
