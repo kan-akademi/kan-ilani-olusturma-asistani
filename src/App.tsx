@@ -7,7 +7,7 @@ import "./i18n";
 
 import TopBar from "./components/TopBar";
 import PageHeader from "./components/PageHeader";
-import BloodDonationForm from "./components/BloodDonationFormContainer";
+import BloodDonationFormContainer from "./components/BloodDonationFormContainer";
 import LegalNotice from "./components/LegalNotice";
 import Copyright from "./components/Copyright";
 
@@ -106,7 +106,7 @@ function App() {
         isPlaying={isPlaying}
       />
       <PageHeader />
-      <BloodDonationForm />
+      <BloodDonationFormContainer />
       <LegalNotice />
       <Copyright />
     </ThemeProvider>

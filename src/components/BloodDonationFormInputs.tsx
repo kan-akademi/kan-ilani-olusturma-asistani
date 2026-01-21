@@ -16,9 +16,11 @@ import type { DonationInfo } from "../entities/DonationInfo";
 
 interface InputProps {
   donationInfo: DonationInfo;
+  selectedTemplate: number;
   handleDonationInfoChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent | SelectChangeEvent<string[]>) => void;
   handleDonationInfoPhoneChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   downloadImageAndUpdateCounter: () => void;
+  handleTemplateChange: (index: number) => void;
 }
 
 export default function BloodDonationFormInputs(props: InputProps) {
@@ -196,6 +198,34 @@ export default function BloodDonationFormInputs(props: InputProps) {
         className="download-image-button"
         onClick={handleDownloadClick}
       />
+
+      {/* TEMPLATE SEÇİMİ */}
+      <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mt: 2, }}>
+        {[0, 1, 2, 3].map((idx) => (
+          <Box
+            key={idx}
+            title={`Template ${idx + 1}`}
+            onClick={() => props.handleTemplateChange(idx)}
+            sx={{
+              width: 48,
+              height: 48,
+              borderRadius: "50%",
+              background: [
+                "linear-gradient(135deg, #ff5858, #f09819)",
+                "linear-gradient(135deg, #43cea2, #185a9d)",
+                "linear-gradient(135deg, #f7971e, #ffd200)",
+                "linear-gradient(135deg, #e96443, #904e95)",
+              ][idx],
+              border: props.selectedTemplate === idx ? "3px solid #ffffff" : "3px solid #222",
+              //boxShadow: props.selectedTemplate === idx ? "0 0 4px #aaa" : "0 0 8px #222",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              //transition: "border 0.2s, box-shadow 0.2s",
+            }} />
+        ))}
+      </Box>
     </form>
   );
 }

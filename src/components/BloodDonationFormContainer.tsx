@@ -14,6 +14,7 @@ export default function BloodDonationFormContainer() {
   const { t } = useTranslation();
   const imageRef = useRef(null);
 
+  const [selectedTemplate, setSelectedTemplate] = useState<number>(0);
   const [donationInfo, setDonationInfo] = useState<DonationInfo>(initialDonationInfo);
   const [donationTemplateInfo, setDonationTemplateInfo] = useState<DonationTemplateInfo[]>(initialDonationTemplateInfo);
 
@@ -32,6 +33,10 @@ export default function BloodDonationFormContainer() {
       ...prev,
       phone: formatted,
     }));
+  };
+
+  const handleTemplateChange = (index: number) => {
+    setSelectedTemplate(index);
   };
 
   const downloadImage = () => {
@@ -118,9 +123,11 @@ export default function BloodDonationFormContainer() {
     <div className="container">
       <BloodDonationFormInputs
         donationInfo={donationInfo!!}
+        selectedTemplate={selectedTemplate}
         handleDonationInfoChange={handleDonationInfoChange}
         handleDonationInfoPhoneChange={handleDonationInfoPhoneChange}
         downloadImageAndUpdateCounter={downloadImage}
+        handleTemplateChange={handleTemplateChange}
       />
 
       <BloodDonationForm
