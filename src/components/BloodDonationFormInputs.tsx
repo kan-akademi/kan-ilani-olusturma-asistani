@@ -202,23 +202,18 @@ export default function BloodDonationFormInputs(props: InputProps) {
 
       {/* TEMPLATE SEÇİMİ */}
       <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mt: 2, }}>
-        {initialDonationTemplateInfo.map((_, index) => (
+        {initialDonationTemplateInfo.map((template, index) => (
           <Box
             key={index}
             title={`Template ${index + 1}`}
             onClick={() => props.handleTemplateChange(index)}
             sx={{
-              width: 48,
-              height: 48,
+              width: 46,
+              height: 46,
               borderRadius: "50%",
-              background: [
-                "linear-gradient(135deg, #ff5858, #f09819)",
-                "linear-gradient(135deg, #43cea2, #185a9d)",
-                "linear-gradient(135deg, #f7971e, #ffd200)",
-                "linear-gradient(135deg, #e96443, #904e95)",
-              ][index],
+              background: template.templateSelectorColor,
               border: props.selectedTemplate === index ? "3px solid #ffffff" : "3px solid #222",
-              //boxShadow: props.selectedTemplate === idx ? "0 0 4px #aaa" : "0 0 8px #222",
+              boxShadow: props.selectedTemplate === index ? "0 0 8px #aaa" : "0 0 4px #222",
               cursor: "pointer",
               display: "flex",
               alignItems: "center",
