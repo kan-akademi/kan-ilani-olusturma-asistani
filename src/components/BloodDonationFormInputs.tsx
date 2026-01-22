@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTheme } from "@mui/material/styles";
 import { useTranslation } from "react-i18next";
 import LabeledTextField from "./LabeledTextField";
 import {
@@ -25,6 +26,7 @@ interface InputProps {
 }
 
 export default function BloodDonationFormInputs(props: InputProps) {
+  const theme = useTheme();
   const { t, i18n } = useTranslation();
   const [showErrors, setShowErrors] = useState(false);
 
@@ -201,26 +203,33 @@ export default function BloodDonationFormInputs(props: InputProps) {
       />
 
       {/* TEMPLATE SEÇİMİ */}
-      <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mt: 2, }}>
-        {initialDonationTemplateInfo.map((template, index) => (
-          <Box
-            key={index}
-            title={`Template ${index + 1}`}
-            onClick={() => props.handleTemplateChange(index)}
-            sx={{
-              width: 46,
-              height: 46,
-              borderRadius: "50%",
-              background: template.templateSelectorColor,
-              border: props.selectedTemplate === index ? "3px solid #ffffff" : "3px solid #222",
-              boxShadow: props.selectedTemplate === index ? "0 0 8px #aaa" : "0 0 4px #222",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              //transition: "border 0.2s, box-shadow 0.2s",
-            }} />
-        ))}
+      <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mt: 2 }}>
+        {initialDonationTemplateInfo.map((template, index) => {
+          const isSelected = props.selectedTemplate === index;
+          const isDark = theme.palette.mode === "dark";
+          const borderColor = isSelected ? (isDark ? "#fff" : "#222") : (isDark ? "#444" : "#ccc");
+          //const boxShadowColor = isSelected ? (isDark ? "#888" : "#aaa") : (isDark ? "#222" : "#ddd");
+          return (
+            <Box
+              key={index}
+              title={`Template ${index + 1}`}
+              onClick={() => props.handleTemplateChange(index)}
+              sx={{
+                width: 46,
+                height: 46,
+                borderRadius: "50%",
+                background: template.templateSelectorColor,
+                border: `3px solid ${borderColor}`,
+                //boxShadow: isSelected ? `0 0 8px ${boxShadowColor}` : `0 0 4px ${boxShadowColor}`,
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                //transition: "border 0.2s, box-shadow 0.2s",
+              }}
+            />
+          );
+        })}
       </Box>
     </form>
   );

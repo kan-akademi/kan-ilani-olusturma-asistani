@@ -41,7 +41,21 @@ export default function BloodDonationFormContainer() {
   };
 
   useEffect(() => {
-    
+    setDonationTemplateInfo((draft) => {
+      const currentTemplate = draft[selectedTemplateIndex];
+      
+      const originalBloodGroupLeft = initialDonationTemplateInfo[selectedTemplateIndex].bloodGroup.coord.left;
+
+      if (donationInfo.bloodGroup.startsWith("AB")) {
+        currentTemplate.bloodGroup.coord.left = currentTemplate.bloodGroup.leftForAB;
+      } else {
+        currentTemplate.bloodGroup.coord.left = originalBloodGroupLeft;
+      }
+
+      const fontSize = value.length > 3 ? 15 : TEXT_ITEM_DEFAULT_FONT_SIZE;
+      const coordTop = value.length > 3 ? 203 : defaultCoords.bloodType.top;
+
+    });
   }, [donationInfo, selectedTemplateIndex]);
 
   const downloadImage = () => {
