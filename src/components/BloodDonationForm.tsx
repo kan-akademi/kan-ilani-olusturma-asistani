@@ -27,6 +27,8 @@ export default function BloodDonationForm(props: IProps) {
             style={{
               top: `${props.donationTemplateInfo.bloodGroup.coord.top}px`,
               left: `${props.donationTemplateInfo.bloodGroup.coord.left}px`,
+              fontSize: `${props.donationTemplateInfo.bloodGroup.font.size}px`,
+              color: props.donationTemplateInfo.bloodGroup.font.color,
             }}
           >
             {props.donationInfo.bloodGroup}
@@ -45,7 +47,8 @@ export default function BloodDonationForm(props: IProps) {
           style={{
             top: `${props.donationTemplateInfo.bloodType.coord.top}px`,
             left: `${props.donationTemplateInfo.bloodType.coord.left}px`,
-            fontSize: `${props.donationTemplateInfo.bloodType.fontSize}px`,
+            fontSize: `${props.donationTemplateInfo.bloodType.font.size}px`,
+            color: props.donationTemplateInfo.bloodType.font.color,
           }}
         >
           {Array.isArray(props.donationInfo.bloodType)
@@ -59,7 +62,8 @@ export default function BloodDonationForm(props: IProps) {
           style={{
             top: `${props.donationTemplateInfo.fullName.coord.top}px`,
             left: `${props.donationTemplateInfo.fullName.coord.left}px`,
-            fontSize: `${props.donationTemplateInfo.fullName.fontSize}px`,
+            fontSize: `${props.donationTemplateInfo.fullName.font.size}px`,
+            color: props.donationTemplateInfo.fullName.font.color,
           }}
         >
           {props.donationInfo.fullName}
@@ -71,6 +75,8 @@ export default function BloodDonationForm(props: IProps) {
           style={{
             top: `${props.donationTemplateInfo.phone.coord.top}px`,
             left: `${props.donationTemplateInfo.phone.coord.left}px`,
+            fontSize: `${props.donationTemplateInfo.phone.font.size}px`,
+            color: props.donationTemplateInfo.phone.font.color,
           }}
         >
           {props.donationInfo.phone}
@@ -82,6 +88,8 @@ export default function BloodDonationForm(props: IProps) {
           style={{
             top: `${props.donationTemplateInfo.date.coord.top}px`,
             left: `${props.donationTemplateInfo.date.coord.left}px`,
+            fontSize: `${props.donationTemplateInfo.date.font.size}px`,
+            color: props.donationTemplateInfo.date.font.color,
           }}
         >
           {formatDateToTurkish(props.donationInfo.date.toString())}
@@ -93,6 +101,8 @@ export default function BloodDonationForm(props: IProps) {
           style={{
             top: `${props.donationTemplateInfo.hospital.coord.top}px`,
             left: `${props.donationTemplateInfo.hospital.coord.left}px`,
+            fontSize: `${props.donationTemplateInfo.hospital.font.size}px`,
+            color: props.donationTemplateInfo.hospital.font.color,
             width: "305px",
           }}
         >
@@ -105,7 +115,8 @@ export default function BloodDonationForm(props: IProps) {
           style={{
             top: `${props.donationTemplateInfo.location.coord.top}px`,
             left: `${props.donationTemplateInfo.location.coord.left}px`,
-            fontSize: `${props.donationTemplateInfo.location.fontSize}px`,
+            fontSize: `${props.donationTemplateInfo.location.font.size}px`,
+            color: props.donationTemplateInfo.location.font.color,
             width: "340px",
           }}
         >

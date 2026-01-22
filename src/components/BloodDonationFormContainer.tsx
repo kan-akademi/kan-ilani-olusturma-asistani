@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from "react";
+import { useImmer } from "use-immer";
 import Swal from "sweetalert2";
 import html2canvas from "html2canvas";
 import { useTranslation } from "react-i18next";
@@ -16,7 +17,7 @@ export default function BloodDonationFormContainer() {
 
   const [selectedTemplateIndex, setSelectedTemplateIndex] = useState<number>(0);
   const [donationInfo, setDonationInfo] = useState<DonationInfo>(initialDonationInfo);
-  const [donationTemplateInfo, setDonationTemplateInfo] = useState<DonationTemplateInfo[]>(initialDonationTemplateInfo);
+  const [donationTemplateInfo, setDonationTemplateInfo] = useImmer<DonationTemplateInfo[]>(initialDonationTemplateInfo);
 
   const handleDonationInfoChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent | SelectChangeEvent<string[]>) => {
     const { name, value } = e.target;
@@ -40,24 +41,7 @@ export default function BloodDonationFormContainer() {
   };
 
   useEffect(() => {
-    console.log(selectedTemplateIndex)
-    setDonationTemplateInfo((prev) => {
-      let updated = [...prev];
-
-      if (donationInfo.bloodGroup === "0 RH (+)") {
-        
-        updated[selectedTemplateIndex] = {
-          ...updated[selectedTemplateIndex], date: {
-            ...updated[selectedTemplateIndex].date, coord: {
-              left: 15, top: 15
-            }
-          }
-        }
-
-      }
-
-      return updated;
-    });
+    
   }, [donationInfo, selectedTemplateIndex]);
 
   const downloadImage = () => {
