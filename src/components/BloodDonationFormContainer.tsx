@@ -1,23 +1,23 @@
-import { useRef, useState, useEffect } from "react";
-import { useImmer } from "use-immer";
+import { useRef, useState } from "react";
 import Swal from "sweetalert2";
 import html2canvas from "html2canvas";
 import { useTranslation } from "react-i18next";
 import "./BloodDonationFormContainer.css";
 import { formatPhoneNumber, hashData } from "../utils/formUtils";
 import { type DonationInfo, initialDonationInfo } from "../entities/DonationInfo";
-import { type DonationTemplateInfo, initialDonationTemplateInfo } from "../entities/DonationTemplateInfo";
 import { type SelectChangeEvent } from "@mui/material";
 import BloodDonationFormInputs from "./BloodDonationFormInputs";
-import BloodDonationForm from "./BloodDonationForm";
+import { getTemplateByIndex } from "../templates";
 
 export default function BloodDonationFormContainer() {
   const { t } = useTranslation();
-  const imageRef = useRef(null);
+  const imageRef = useRef<HTMLDivElement | null>(null);
 
   const [selectedTemplateIndex, setSelectedTemplateIndex] = useState<number>(0);
   const [donationInfo, setDonationInfo] = useState<DonationInfo>(initialDonationInfo);
-  const [donationTemplateInfo, setDonationTemplateInfo] = useImmer<DonationTemplateInfo[]>(initialDonationTemplateInfo);
+
+  const selectedTemplate = getTemplateByIndex(selectedTemplateIndex);
+  const TemplateComponent = selectedTemplate?.Component;
 
   const handleDonationInfoChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent | SelectChangeEvent<string[]>) => {
     const { name, value } = e.target;
@@ -39,24 +39,6 @@ export default function BloodDonationFormContainer() {
   const handleTemplateChange = (index: number) => {
     setSelectedTemplateIndex(index);
   };
-
-  useEffect(() => {
-    setDonationTemplateInfo((draft) => {
-      const currentTemplate = draft[selectedTemplateIndex];
-      
-      const originalBloodGroupLeft = initialDonationTemplateInfo[selectedTemplateIndex].bloodGroup.coord.left;
-
-      if (donationInfo.bloodGroup.startsWith("AB")) {
-        currentTemplate.bloodGroup.coord.left = currentTemplate.bloodGroup.leftForAB;
-      } else {
-        currentTemplate.bloodGroup.coord.left = originalBloodGroupLeft;
-      }
-
-      const fontSize = value.length > 3 ? 15 : TEXT_ITEM_DEFAULT_FONT_SIZE;
-      const coordTop = value.length > 3 ? 203 : defaultCoords.bloodType.top;
-
-    });
-  }, [donationInfo, selectedTemplateIndex]);
 
   const downloadImage = () => {
     if (!imageRef.current) return;
@@ -149,10 +131,12 @@ export default function BloodDonationFormContainer() {
         handleTemplateChange={handleTemplateChange}
       />
 
-      <BloodDonationForm
-        imageRef={imageRef}
-        donationInfo={donationInfo}
-        donationTemplateInfo={donationTemplateInfo[selectedTemplateIndex]} />
+      {TemplateComponent && (
+        <TemplateComponent
+          imageRef={imageRef}
+          donationInfo={donationInfo}
+        />
+      )}
     </div>
   );
 }

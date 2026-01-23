@@ -1,11 +1,11 @@
 export interface DonationInfo {
-    bloodGroup: string;
-    bloodType: string[]
-    fullName: string;
-    phone: string;
-    date: string;
-    hospital: string;
-    location: string;
+  bloodGroup: string;
+  bloodType: string[]
+  fullName: string;
+  phone: string;
+  date: string;
+  hospital: string;
+  location: string;
 }
 
 export const initialDonationInfo: DonationInfo = {
