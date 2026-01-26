@@ -168,6 +168,7 @@ export default function BloodDonationFormInputs(props: InputProps) {
       <LabeledTextField
         label={t("hospitalName")}
         name="hospital"
+        slotProps={{ htmlInput: { maxLength: 84 } }}
         value={props.donationInfo.hospital}
         onChange={props.handleDonationInfoChange}
         multiline

@@ -24,7 +24,7 @@ export function Template2Component(props: TemplateProps) {
     const originalBloodTypeFontSize = useRef(config.styles.bloodType.font.size);
 
     if (donationInfo.bloodType.length > 3) {
-        config.styles.bloodType.coord.top = 203;
+        config.styles.bloodType.coord.top = 150;
         config.styles.bloodType.font.size = 15;
     } else {
         config.styles.bloodType.coord.top = originalBloodTypeTop.current;
@@ -36,10 +36,10 @@ export function Template2Component(props: TemplateProps) {
     const originalFullNameFontSize = useRef(config.styles.fullName.font.size);
 
     if (donationInfo.fullName.length >= 35) {
-        config.styles.fullName.coord.top = 260;
+        config.styles.fullName.coord.top = 297;
         config.styles.fullName.font.size = 13;
     } else if (donationInfo.fullName.length >= 25) {
-        config.styles.fullName.coord.top = 258;
+        config.styles.fullName.coord.top = 283;
         config.styles.fullName.font.size = 15;
     } else {
         config.styles.fullName.coord.top = originalFullNameTop.current;
@@ -51,7 +51,7 @@ export function Template2Component(props: TemplateProps) {
     const originalLocationFontSize = useRef(config.styles.location.font.size);
 
     if (donationInfo.location.length >= 260) {
-        config.styles.location.coord.top = 471;
+        config.styles.location.coord.top = 425;
         config.styles.location.font.size = 14;
     } else {
         config.styles.location.coord.top = originalLocationTop.current;
