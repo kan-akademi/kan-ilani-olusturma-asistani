@@ -112,7 +112,7 @@ export function BaseTemplateComponent({ donationInfo, imageRef, config }: BaseTe
                     left: `${styles.hospital.coord.left}px`,
                     fontSize: `${styles.hospital.font.size}px`,
                     color: styles.hospital.font.color,
-                    width: "305px",
+                    width: `${styles.hospital.width ?? 305}px`,
                 }}
             >
                 {donationInfo.hospital}
@@ -126,7 +126,7 @@ export function BaseTemplateComponent({ donationInfo, imageRef, config }: BaseTe
                     left: `${styles.location.coord.left}px`,
                     fontSize: `${styles.location.font.size}px`,
                     color: styles.location.font.color,
-                    width: "340px",
+                    width: `${styles.location.width ?? 340}px`,
                 }}
             >
                 {donationInfo.location}

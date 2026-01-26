@@ -13,7 +13,7 @@ export const config: TemplateConfig = {
         fullName: { coord: { top: 256, left: 80 }, font: { size: 17, color: "#fff" } },
         phone: { coord: { top: 302, left: 65 }, font: { size: 17, color: "#fff" } },
         date: { coord: { top: 346, left: 50 }, font: { size: 17, color: "#fff" } },
-        hospital: { coord: { top: 408, left: 10 }, font: { size: 16, color: "#fff" } },
-        location: { coord: { top: 475, left: 10 }, font: { size: 16, color: "#fff" } },
+        hospital: { width: 305, coord: { top: 408, left: 10 }, font: { size: 16, color: "#fff" } },
+        location: { width: 340, coord: { top: 475, left: 10 }, font: { size: 16, color: "#fff" } },
     },
 };

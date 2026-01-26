@@ -55,8 +55,7 @@ export default function BloodDonationFormContainer() {
 
     const missingFields: string[] = [];
 
-    Object.entries(donationInfo ?? {}).forEach(([key, field]) => {
-      const val = (field as { value: string | string[] }).value;
+    Object.entries(donationInfo).forEach(([key, val]) => {
       const filled = Array.isArray(val)
         ? val.length > 0
         : typeof val === "string"
@@ -81,7 +80,7 @@ export default function BloodDonationFormContainer() {
       return;
     }
 
-    if (donationInfo!!.phone!!.length < 11) {
+    if (donationInfo.phone.length < 11) {
       Swal.fire({
         icon: "warning",
         confirmButtonText: t("close"),
@@ -113,7 +112,7 @@ export default function BloodDonationFormContainer() {
       return;
     }
 
-    const hash = hashData(donationInfo!!);
+    const hash = hashData(donationInfo);
     fetch(import.meta.env.VITE_COUNTER_API, {
       body: JSON.stringify({ hash }),
       method: "POST",
@@ -123,7 +122,7 @@ export default function BloodDonationFormContainer() {
   return (
     <div className="container">
       <BloodDonationFormInputs
-        donationInfo={donationInfo!!}
+        donationInfo={donationInfo}
         selectedTemplate={selectedTemplateIndex}
         handleDonationInfoChange={handleDonationInfoChange}
         handleDonationInfoPhoneChange={handleDonationInfoPhoneChange}

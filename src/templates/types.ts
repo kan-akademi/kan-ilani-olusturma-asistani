@@ -13,6 +13,7 @@ export interface FontEntity {
 }
 
 export interface FieldStyle {
+    width?: number;
     coord: CoordinateEntity;
     font: FontEntity;
 }
