@@ -1,10 +1,12 @@
 import type { TemplateConfig } from "../types";
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 
 const ASSET_VERSION = "20251020";
 
 export const config: TemplateConfig = {
   id: "5",
   selectorColor: "#ffc24a",
+  selectorIcon: AutoAwesomeIcon,
   templatePath: `kan-akademi-ilan-template-5.png?v=${ASSET_VERSION}`,
   styles: {
     bloodGroup: { coord: { top: 83, left: 47 }, font: { size: 78, color: "#ffc24a" } },

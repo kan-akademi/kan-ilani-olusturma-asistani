@@ -1,10 +1,12 @@
 import type { TemplateConfig } from "../types";
+import WaterDropIcon from '@mui/icons-material/WaterDrop';
 
 const ASSET_VERSION = "20251020";
 
 export const config: TemplateConfig = {
   id: "6",
   selectorColor: "#da2f47",
+  selectorIcon: WaterDropIcon,
   templatePath: `kan-akademi-ilan-template-6.png?v=${ASSET_VERSION}`,
   styles: {
     bloodGroup: { coord: { top: 83, left: 47 }, font: { size: 78, color: "#da2f47" } },

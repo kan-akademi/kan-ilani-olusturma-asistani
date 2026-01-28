@@ -1,10 +1,12 @@
 import type { TemplateConfig } from "../types";
+import LocalFloristIcon from '@mui/icons-material/LocalFlorist';
 
 const ASSET_VERSION = "20251020";
 
 export const config: TemplateConfig = {
   id: "3",
   selectorColor: "#89e8e0",
+  selectorIcon: LocalFloristIcon,
   templatePath: `kan-akademi-ilan-template-3.png?v=${ASSET_VERSION}`,
   styles: {
     bloodGroup: { coord: { top: 70, left: 80 }, font: { size: 70, color: "#89e8e0" } },

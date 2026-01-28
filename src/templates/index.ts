@@ -49,6 +49,7 @@ export function getTemplateList(): TemplateListItem[] {
     return templates.map((t) => ({
         id: t.config.id,
         selectorColor: t.config.selectorColor,
+        selectorIcon: t.config.selectorIcon,
     }));
 }
 

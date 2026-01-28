@@ -1,10 +1,12 @@
 import type { TemplateConfig } from "../types";
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 const ASSET_VERSION = "20251020";
 
 export const config: TemplateConfig = {
     id: "2",
     selectorColor: "#ff454f",
+    selectorIcon: FavoriteIcon,
     templatePath: `kan-akademi-ilan-template-2.png?v=${ASSET_VERSION}`,
     styles: {
         bloodGroup: { coord: { top: 60, left: 47 }, font: { size: 78, color: "#ff4550" } },

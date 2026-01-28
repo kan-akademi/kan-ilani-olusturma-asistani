@@ -23,6 +23,7 @@ export interface TemplateConfig {
     id: string;
     templatePath: string;
     selectorColor: string;
+    selectorIcon: React.ComponentType<any>;
     styles: {
         bloodGroup: FieldStyle;
         regardlessBloodGroup: FieldStyle;
@@ -51,4 +52,5 @@ export interface TemplateModule {
 export interface TemplateListItem {
     id: string;
     selectorColor: string;
+    selectorIcon: React.ComponentType<any>;
 }
