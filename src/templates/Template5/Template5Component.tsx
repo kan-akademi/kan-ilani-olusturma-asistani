@@ -55,7 +55,7 @@ export function Template5Component(props: TemplateProps) {
     const originalLocationFontSize = useRef(config.styles.location.font.size);
 
     if (donationInfo.location.length >= 240) {
-        config.styles.location.coord.top = 475;
+        config.styles.location.coord.top = 508;
         config.styles.location.font.size = 14;
     } else {
         config.styles.location.coord.top = originalLocationTop.current;
