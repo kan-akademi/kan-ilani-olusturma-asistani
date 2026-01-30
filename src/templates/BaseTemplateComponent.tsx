@@ -72,6 +72,7 @@ export function BaseTemplateComponent({ donationInfo, imageRef, config }: BaseTe
                     top: `${styles.fullName.coord.top}px`,
                     left: `${styles.fullName.coord.left}px`,
                     fontSize: `${styles.fullName.font.size}px`,
+                    ...(styles.fullName.width && { width: `${styles.fullName.width}px` }),
                     color: styles.fullName.font.color,
                 }}
             >
