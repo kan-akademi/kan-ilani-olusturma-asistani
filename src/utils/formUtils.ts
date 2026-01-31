@@ -1,6 +1,6 @@
-import type { BloodDonationFormEntity } from "../entities/BloodDonationFormEntity";
+import type { DonationInfo } from "../entities/DonationInfo";
 
-export function hashData(data: BloodDonationFormEntity): string {
+export function hashData(data: DonationInfo): string {
   const values = Object.values(data).map((field: any) => {
     const val = field?.value;
     if (Array.isArray(val)) {      
