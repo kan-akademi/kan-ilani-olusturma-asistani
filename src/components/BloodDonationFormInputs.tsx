@@ -228,7 +228,7 @@ export default function BloodDonationFormInputs(props: InputProps) {
                 //transition: "border 0.2s, box-shadow 0.2s",
               }}
             >
-              <template.selectorIcon />
+              {index + 1}
             </Box>
           );
         })}
