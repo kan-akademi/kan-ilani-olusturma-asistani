@@ -10,8 +10,8 @@ export const config: TemplateConfig = {
     styles: {
         bloodGroup: { coord: { top: 60, left: 47 }, font: { size: 78, color: "#ff4550" } },
         regardlessBloodGroup: { coord: { top: 68, left: 60 }, font: { size: 35, color: "#ff4550" } },
-        bloodType: { coord: { top: 176, left: 83 }, font: { size: 17, color: "#000000" } },
-        fullName: { coord: { top: 282, left: 78 }, font: { size: 17, color: "#000000" } },
+        bloodType: { coord: { top: 176, left: 85 }, font: { size: 17, color: "#000000" } },
+        fullName: { coord: { top: 281, left: 78 }, font: { size: 17, color: "#000000" } },
         phone: { coord: { top: 245, left: 65 }, font: { size: 17, color: "#000000" } },
         date: { coord: { top: 211, left: 48 }, font: { size: 17, color: "#000000" } },
         hospital: { coord: { top: 340, left: 6 }, font: { size: 16, color: "#000000" } },
