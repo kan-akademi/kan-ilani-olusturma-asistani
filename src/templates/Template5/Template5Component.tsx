@@ -43,7 +43,7 @@ export function Template5Component(props: TemplateProps) {
 
     if (donationInfo.bloodGroup.startsWith("AB")) {
         localConfig.styles.bloodGroup.font.size = 75;
-        localConfig.styles.bloodGroup.coord.left = 31;
+        localConfig.styles.bloodGroup.coord.left = 27;
     } else {
         localConfig.styles.bloodGroup.coord.left = originalBloodGroupLeft.current;
         localConfig.styles.bloodGroup.font.size = originalBloodGroupFontSize.current;
@@ -55,7 +55,9 @@ export function Template5Component(props: TemplateProps) {
     const originalBloodTypeFontSize = useRef(localConfig.styles.bloodType.font.size);
 
     if (donationInfo.bloodType.length > 3) {
-        localConfig.styles.bloodType.coord.top = 179;
+        localConfig.styles.bloodType.coord.top = 205;
+        localConfig.styles.bloodType.font.size = 15;
+    } else if (donationInfo.bloodType.length > 2) {
         localConfig.styles.bloodType.font.size = 15;
     } else {
         localConfig.styles.bloodType.coord.top = originalBloodTypeTop.current;
