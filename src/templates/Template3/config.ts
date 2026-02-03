@@ -8,8 +8,8 @@ export const config: TemplateConfig = {
   selectorIcon: LocalFloristIcon,
   templatePath: `kan-akademi-ilan-template-3.png?v=${ASSET_VERSION}`,
   styles: {
-    bloodGroup: { coord: { top: 70, left: 80 }, font: { size: 70, color: "#ff4550" } },
-    regardlessBloodGroup: { coord: { top: 75, left: 70 }, font: { size: 37, color: "#ff4550" } },
+    bloodGroup: { coord: { top: 70, left: 40 }, font: { size: 78, color: "#ff4550" } },
+    regardlessBloodGroup: { coord: { top: 75, left: 55 }, font: { size: 37, color: "#ff4550" } },
     bloodType: { coord: { top: 181, left: 88 }, font: { size: 17, color: "#000000" } },
     fullName: { coord: { top: 365, left: 31 }, font: { size: 17, color: "#000000" } },
     phone: { coord: { top: 272, left: 70 }, font: { size: 17, color: "#000000" } },

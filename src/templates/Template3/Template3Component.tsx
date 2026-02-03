@@ -41,8 +41,8 @@ export function Template3Component(props: TemplateProps) {
     const originalBloodGroupFontSize = useRef(localConfig.styles.bloodGroup.font.size);
 
     if (donationInfo.bloodGroup.startsWith("AB")) {
-        localConfig.styles.bloodGroup.font.size = 65;
-        localConfig.styles.bloodGroup.coord.left = 70;
+        localConfig.styles.bloodGroup.font.size = 75;
+        localConfig.styles.bloodGroup.coord.left = 20;
     } else {
         localConfig.styles.bloodGroup.coord.left = originalBloodGroupLeft.current;
         localConfig.styles.bloodGroup.font.size = originalBloodGroupFontSize.current;
