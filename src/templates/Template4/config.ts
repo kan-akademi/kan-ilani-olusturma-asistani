@@ -15,6 +15,6 @@ export const config: TemplateConfig = {
     phone: { coord: { top: 290, left: 82 }, font: { size: 17, color: "#000000" } },
     date: { coord: { top: 254, left: 65 }, font: { size: 17, color: "#000000" } },
     hospital: { coord: { top: 385, left: 25 }, font: { size: 16, color: "#000000" } },
-    location: { coord: { top: 475, left: 25 }, font: { size: 16, color: "#000000" } },
+    location: { width: 325, coord: { top: 475, left: 25 }, font: { size: 16, color: "#000000" } },
   },
 };

@@ -189,6 +189,42 @@ export default function BloodDonationFormInputs(props: InputProps) {
         helperText={locationError ? t("requiredText") : ""}
       />
 
+      {/* TEMPLATE SEÇİMİ */}
+      <FormControl fullWidth margin="dense" size="small">
+        <div style={{ fontSize: "1rem", fontWeight: "400", color: theme.palette.mode === "dark" ? "#ffffffb3" : "#555" }}>
+          {t("templateSelection")}
+        </div>
+        <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mt: 1, }}>
+          {getTemplateList().map((template, index) => {
+            const isSelected = props.selectedTemplate === index;
+            const isDark = theme.palette.mode === "dark";
+            const borderColor = isSelected ? (isDark ? "#fff" : "#222") : (isDark ? "#444" : "#ccc");
+            return (
+              <Box
+                key={template.id}
+                title={`Template ${index + 1}`}
+                onClick={() => props.handleTemplateChange(index)}
+                sx={{
+                  width: 46,
+                  height: 46,
+                  borderRadius: "50%",
+                  background: template.selectorColor,
+                  border: `3px solid ${borderColor}`,
+                  //boxShadow: isSelected ? `0 0 8px ${boxShadowColor}` : `0 0 4px ${boxShadowColor}`,
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  //transition: "border 0.2s, box-shadow 0.2s",
+                }}
+              >
+                {index + 1}
+              </Box>
+            );
+          })}
+        </Box>
+      </FormControl>
+
       <Box sx={{ mb: 2 }} />
 
       {/* İNDİRME BUTONU */}
@@ -202,37 +238,6 @@ export default function BloodDonationFormInputs(props: InputProps) {
         className="download-image-button"
         onClick={handleDownloadClick}
       />
-
-      {/* TEMPLATE SEÇİMİ */}
-      <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mt: 2 }}>
-        {getTemplateList().map((template, index) => {
-          const isSelected = props.selectedTemplate === index;
-          const isDark = theme.palette.mode === "dark";
-          const borderColor = isSelected ? (isDark ? "#fff" : "#222") : (isDark ? "#444" : "#ccc");
-          return (
-            <Box
-              key={template.id}
-              title={`Template ${index + 1}`}
-              onClick={() => props.handleTemplateChange(index)}
-              sx={{
-                width: 46,
-                height: 46,
-                borderRadius: "50%",
-                background: template.selectorColor,
-                border: `3px solid ${borderColor}`,
-                //boxShadow: isSelected ? `0 0 8px ${boxShadowColor}` : `0 0 4px ${boxShadowColor}`,
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                //transition: "border 0.2s, box-shadow 0.2s",
-              }}
-            >
-              {index + 1}
-            </Box>
-          );
-        })}
-      </Box>
     </form>
   );
 }
