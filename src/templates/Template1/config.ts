@@ -1,7 +1,6 @@
+import { ASSET_VERSION } from "../assetVersion";
 import type { TemplateConfig } from "../types";
 import StarIcon from '@mui/icons-material/Star';
-
-const ASSET_VERSION = "20251020";
 
 export const config: TemplateConfig = {
     id: "1",
