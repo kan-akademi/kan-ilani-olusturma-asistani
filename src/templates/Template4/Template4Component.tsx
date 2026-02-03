@@ -9,7 +9,6 @@ import { config } from "./config";
 export function Template4Component(props: TemplateProps) {
     const { donationInfo } = props;
 
-    // Her render için config'in lokal bir kopyasını oluştur
     const localConfig = {
         ...config,
         styles: {
@@ -57,7 +56,7 @@ export function Template4Component(props: TemplateProps) {
     const originalBloodTypeFontSize = useRef(localConfig.styles.bloodType.font.size);
 
     if (donationInfo.bloodType.length > 3) {
-        localConfig.styles.bloodType.coord.top = 218;
+        localConfig.styles.bloodType.coord.top = 211;
         localConfig.styles.bloodType.font.size = 15;
     } else {
         localConfig.styles.bloodType.coord.top = originalBloodTypeTop.current;

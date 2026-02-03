@@ -9,53 +9,80 @@ import { config } from "./config";
 export function Template6Component(props: TemplateProps) {
     const { donationInfo } = props;
 
+    const localConfig = {
+        ...config,
+        styles: {
+            ...config.styles,
+            bloodGroup: {
+                ...config.styles.bloodGroup,
+                coord: { ...config.styles.bloodGroup.coord },
+                font: { ...config.styles.bloodGroup.font },
+            },
+            bloodType: {
+                ...config.styles.bloodType,
+                coord: { ...config.styles.bloodType.coord },
+                font: { ...config.styles.bloodType.font },
+            },
+            fullName: {
+                ...config.styles.fullName,
+                coord: { ...config.styles.fullName.coord },
+                font: { ...config.styles.fullName.font },
+            },
+            location: {
+                ...config.styles.location,
+                coord: { ...config.styles.location.coord },
+                font: { ...config.styles.location.font },
+            },
+        },
+    };
+
     // Dinamik olarak kan grubu konumunu ayarla
-    const originalBloodGroupLeft = useRef(config.styles.bloodGroup.coord.left);
+    const originalBloodGroupLeft = useRef(localConfig.styles.bloodGroup.coord.left);
 
     if (donationInfo.bloodGroup.startsWith("AB")) {
-        config.styles.bloodGroup.coord.left = 20;
+        localConfig.styles.bloodGroup.coord.left = 20;
     } else {
-        config.styles.bloodGroup.coord.left = originalBloodGroupLeft.current;
+        localConfig.styles.bloodGroup.coord.left = originalBloodGroupLeft.current;
     }
 
     // Dinamik olarak kan tipi font boyutunu ve konumunu ayarla
-    const originalBloodTypeTop = useRef(config.styles.bloodType.coord.top);
-    const originalBloodTypeFontSize = useRef(config.styles.bloodType.font.size);
+    const originalBloodTypeTop = useRef(localConfig.styles.bloodType.coord.top);
+    const originalBloodTypeFontSize = useRef(localConfig.styles.bloodType.font.size);
 
     if (donationInfo.bloodType.length > 3) {
-        config.styles.bloodType.coord.top = 197;
-        config.styles.bloodType.font.size = 15;
+        localConfig.styles.bloodType.coord.top = 197;
+        localConfig.styles.bloodType.font.size = 15;
     } else {
-        config.styles.bloodType.coord.top = originalBloodTypeTop.current;
-        config.styles.bloodType.font.size = originalBloodTypeFontSize.current;
+        localConfig.styles.bloodType.coord.top = originalBloodTypeTop.current;
+        localConfig.styles.bloodType.font.size = originalBloodTypeFontSize.current;
     }
 
     // Dinamik olarak isim font boyutunu ve konumunu ayarla
-    const originalFullNameTop = useRef(config.styles.fullName.coord.top);
-    const originalFullNameFontSize = useRef(config.styles.fullName.font.size);
+    const originalFullNameTop = useRef(localConfig.styles.fullName.coord.top);
+    const originalFullNameFontSize = useRef(localConfig.styles.fullName.font.size);
 
     if (donationInfo.fullName.length >= 35) {
-        config.styles.fullName.coord.top = 328;
-        config.styles.fullName.font.size = 13;
+        localConfig.styles.fullName.coord.top = 328;
+        localConfig.styles.fullName.font.size = 13;
     } else if (donationInfo.fullName.length >= 25) {
-        config.styles.fullName.coord.top = 327;
-        config.styles.fullName.font.size = 15;
+        localConfig.styles.fullName.coord.top = 327;
+        localConfig.styles.fullName.font.size = 15;
     } else {
-        config.styles.fullName.coord.top = originalFullNameTop.current;
-        config.styles.fullName.font.size = originalFullNameFontSize.current;
+        localConfig.styles.fullName.coord.top = originalFullNameTop.current;
+        localConfig.styles.fullName.font.size = originalFullNameFontSize.current;
     }
 
     // Dinamik olarak lokasyon konumunu ayarla
-    const originalLocationTop = useRef(config.styles.location.coord.top);
-    const originalLocationFontSize = useRef(config.styles.location.font.size);
+    const originalLocationTop = useRef(localConfig.styles.location.coord.top);
+    const originalLocationFontSize = useRef(localConfig.styles.location.font.size);
 
     if (donationInfo.location.length >= 260) {
-        config.styles.location.coord.top = 450;
-        config.styles.location.font.size = 14;
+        localConfig.styles.location.coord.top = 450;
+        localConfig.styles.location.font.size = 14;
     } else {
-        config.styles.location.coord.top = originalLocationTop.current;
-        config.styles.location.font.size = originalLocationFontSize.current;
+        localConfig.styles.location.coord.top = originalLocationTop.current;
+        localConfig.styles.location.font.size = originalLocationFontSize.current;
     }
 
-    return <BaseTemplateComponent {...props} config={config} />;
+    return <BaseTemplateComponent {...props} config={localConfig} />;
 }
