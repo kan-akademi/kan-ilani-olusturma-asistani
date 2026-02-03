@@ -15,11 +15,11 @@ import { Template6 } from "./Template6";
 
 // Tüm template'ler sıralı array olarak (index bazlı erişim için)
 export const templates: TemplateModule[] = [
-    Template2,
+    Template6,
     Template3,
     Template4,
     Template5,
-    Template6,
+    Template2,
     Template1,
 ];
 
