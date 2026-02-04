@@ -1,6 +1,6 @@
 const Logo = () => (
   <img
-    src="kan-akademi-logo.png"
+    src="./assets/images/kan-akademi-logo.png"
     alt="Kan Akademi Logo"
     style={{
       width: "30px",

@@ -6,7 +6,7 @@ export const config: TemplateConfig = {
     id: "2",
     selectorColor: "#ff454f",
     selectorIcon: FavoriteIcon,
-    templatePath: `kan-akademi-ilan-template-2.png?v=${ASSET_VERSION}`,
+    templatePath: `./assets/templates/kan-akademi-ilan-template-2.png?v=${ASSET_VERSION}`,
     styles: {
         bloodGroup: { coord: { top: 60, left: 47 }, font: { size: 78, color: "#ff4550" } },
         regardlessBloodGroup: { coord: { top: 68, left: 60 }, font: { size: 35, color: "#ff4550" } },

@@ -231,8 +231,8 @@ export default function BloodDonationFormInputs(props: InputProps) {
       <img
         src={
           i18n.language === "tr"
-            ? "download-button-tr.jpg"
-            : "download-button-en.jpg"
+            ? "./assets/images/download-button-tr.jpg"
+            : "./assets/images/download-button-en.jpg"
         }
         alt={t("downloadButtonAlt")}
         className="download-image-button"
