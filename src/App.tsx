@@ -7,7 +7,7 @@ import "./i18n";
 
 import TopBar from "./components/TopBar";
 import PageHeader from "./components/PageHeader";
-import BloodDonationForm from "./components/BloodDonationFormContainer";
+import BloodDonationFormContainer from "./components/BloodDonationFormContainer";
 import LegalNotice from "./components/LegalNotice";
 import Copyright from "./components/Copyright";
 
@@ -51,7 +51,7 @@ function App() {
         </head>
         <body>
           <div class="containerr">
-            <img class="logo" src="kan-akademi-logo.png" alt="Kan Akademi Logo" />
+            <img class="logo" src="./assets/images/kan-akademi-logo.png" alt="Kan Akademi Logo" />
             <div>${t("infoSiteTotal")}</div>
             <div class="main-title">${t("infoMainTitle", { count } as any)}</div>
             <div>${t("infoHelpedPeople", { count } as any)}</div>
@@ -67,7 +67,7 @@ function App() {
 
   const handleSpeakClick = () => {
     const lang = i18n.language.startsWith("tr") ? "tr" : "en";
-    const audioFile = lang === "tr" ? "page-content-audio-tr.mp3" : "page-content-audio-en.mp3";
+    const audioFile = lang === "tr" ? "./assets/audios/page-content-audio-tr.mp3" : "./assets/audios/page-content-audio-en.mp3";
 
     if (audioRef.current) {
       if (!audioRef.current.paused) {
@@ -106,7 +106,7 @@ function App() {
         isPlaying={isPlaying}
       />
       <PageHeader />
-      <BloodDonationForm />
+      <BloodDonationFormContainer />
       <LegalNotice />
       <Copyright />
     </ThemeProvider>
