@@ -12,6 +12,7 @@ import {
   Checkbox,
   ListItemText,
   FormHelperText,
+  FormControlLabel,
 } from "@mui/material";
 import type { DonationInfo } from "../entities/DonationInfo";
 import { getTemplateList } from "../templates";
@@ -21,6 +22,7 @@ interface InputProps {
   selectedTemplate: number;
   handleDonationInfoChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent | SelectChangeEvent<string[]>) => void;
   handleDonationInfoPhoneChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleDonationRegularNeedChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   downloadImageAndUpdateCounter: () => void;
   handleTemplateChange: (index: number) => void;
 }
@@ -155,15 +157,29 @@ export default function BloodDonationFormInputs(props: InputProps) {
         helperText={phoneError ? t("requiredText") : ""}
       />
 
-      <LabeledTextField
-        type="date"
-        label={t("date")}
-        name="date"
-        value={props.donationInfo.date}
-        onChange={props.handleDonationInfoChange}
-        error={dateError}
-        helperText={dateError ? t("requiredText") : ""}
-      />
+      <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+        <Box sx={{ flex: 1 }}>
+          <LabeledTextField
+            type="date"
+            label={t("date")}
+            name="date"
+            value={props.donationInfo.date}
+            onChange={props.handleDonationInfoChange}
+            error={dateError}
+            helperText={dateError ? t("requiredText") : ""}
+          />
+        </Box>
+
+        <FormControlLabel
+          label={t("regularNeedDate")}
+          control={
+            <Checkbox
+              checked={props.donationInfo.isRegularNeed}
+              onChange={props.handleDonationRegularNeedChange}
+            />
+          }
+        />
+      </Box>
 
       <LabeledTextField
         label={t("hospitalName")}

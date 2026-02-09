@@ -4,6 +4,8 @@ export interface DonationInfo {
   fullName: string;
   phone: string;
   date: string;
+  dateRegularNeed: string;
+  isRegularNeed: boolean;
   hospital: string;
   location: string;
 }
@@ -14,6 +16,8 @@ export const initialDonationInfo: DonationInfo = {
   fullName: "",
   phone: "",
   date: new Date().toLocaleDateString("en-CA"),
+  dateRegularNeed: "",
+  isRegularNeed: false,
   hospital: "",
   location: "",
 };

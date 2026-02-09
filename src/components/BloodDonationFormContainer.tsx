@@ -1,9 +1,10 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import i18n from "../i18n";
 import Swal from "sweetalert2";
 import html2canvas from "html2canvas";
 import { useTranslation } from "react-i18next";
 import "./BloodDonationFormContainer.css";
-import { formatPhoneNumber, hashData } from "../utils/formUtils";
+import { formatDateToTurkish, formatPhoneNumber, hashData } from "../utils/formUtils";
 import { type DonationInfo, initialDonationInfo } from "../entities/DonationInfo";
 import { type SelectChangeEvent } from "@mui/material";
 import BloodDonationFormInputs from "./BloodDonationFormInputs";
@@ -36,6 +37,31 @@ export default function BloodDonationFormContainer() {
     }));
   };
 
+  useEffect(() => {
+    if (donationInfo.isRegularNeed) {
+      setDonationInfo((prev) => ({
+        ...prev,
+        dateRegularNeed: buildRegularNeedDateString(prev.date),
+      }));
+    }
+  }, [i18n.language]);
+
+  const handleDonationRegularNeedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const checked = e.target.checked;
+
+    setDonationInfo((prev) => ({
+      ...prev,
+      isRegularNeed: checked,
+      dateRegularNeed: buildRegularNeedDateString(prev.date),
+    }));
+  };
+
+  const buildRegularNeedDateString = (dateValue: string) => {
+    const formattedDate = formatDateToTurkish(dateValue);
+    const splitedFormattedDate = formattedDate.split(" ");
+    return `${splitedFormattedDate[1]} ${splitedFormattedDate[2]} (${t("regularNeedDate")})`;
+  };
+
   const handleTemplateChange = (index: number) => {
     setSelectedTemplateIndex(index);
   };
@@ -43,7 +69,7 @@ export default function BloodDonationFormContainer() {
   const downloadImage = () => {
     if (!imageRef.current) return;
 
-    const fieldLabels: Record<keyof DonationInfo, string> = {
+    const fieldLabels: Record<keyof Omit<DonationInfo, "isRegularNeed" | "dateRegularNeed">, string> = {
       bloodGroup: t("bloodGroup"),
       bloodType: t("bloodType"),
       fullName: t("fullName"),
@@ -55,14 +81,14 @@ export default function BloodDonationFormContainer() {
 
     const missingFields: string[] = [];
 
-    Object.entries(donationInfo).forEach(([key, val]) => {
+    (Object.keys(fieldLabels) as Array<keyof typeof fieldLabels>).forEach((key) => {
+      const val = donationInfo[key];
       const filled = Array.isArray(val)
         ? val.length > 0
         : typeof val === "string"
           ? val.trim() !== ""
           : val != null;
-      if (!filled)
-        missingFields.push(fieldLabels[key as keyof DonationInfo] ?? key);
+      if (!filled) missingFields.push(fieldLabels[key]);
     });
 
     if (missingFields.length > 0) {
@@ -126,6 +152,7 @@ export default function BloodDonationFormContainer() {
         selectedTemplate={selectedTemplateIndex}
         handleDonationInfoChange={handleDonationInfoChange}
         handleDonationInfoPhoneChange={handleDonationInfoPhoneChange}
+        handleDonationRegularNeedChange={handleDonationRegularNeedChange}
         downloadImageAndUpdateCounter={downloadImage}
         handleTemplateChange={handleTemplateChange}
       />
