@@ -102,9 +102,7 @@ export function BaseTemplateComponent({ donationInfo, imageRef, config }: BaseTe
                     color: styles.date.font.color,
                 }}
             >
-                {donationInfo.isRegularNeed
-                    ? donationInfo.dateRegularNeed
-                    : formatDateToTurkish(donationInfo.date.toString())}
+                {donationInfo.dateFormated}
             </div>
 
             {/* HASTANE */}

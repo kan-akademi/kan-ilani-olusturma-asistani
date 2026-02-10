@@ -41,24 +41,38 @@ export default function BloodDonationFormContainer() {
     if (donationInfo.isRegularNeed) {
       setDonationInfo((prev) => ({
         ...prev,
-        dateRegularNeed: buildRegularNeedDateString(prev.date),
+        dateFormated: buildRegularNeedDateString(formatDateToTurkish(prev.date)),
+      }));
+    }
+    else {
+      setDonationInfo((prev) => ({
+        ...prev,
+        dateFormated: formatDateToTurkish(prev.date),
       }));
     }
   }, [i18n.language]);
 
-  const handleDonationRegularNeedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const checked = e.target.checked;
+  const handleDonationInfoDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
 
-    setDonationInfo((prev) => ({
-      ...prev,
-      isRegularNeed: checked,
-      dateRegularNeed: buildRegularNeedDateString(prev.date),
-    }));
+    if (type === "checkbox") {
+      setDonationInfo((prev) => ({
+        ...prev,
+        isRegularNeed: checked,
+        dateFormated: checked ? buildRegularNeedDateString(formatDateToTurkish(prev.date)) : formatDateToTurkish(prev.date),
+      }));
+    } else if (name === "date") {
+      const formattedDate = formatDateToTurkish(value);
+      setDonationInfo((prev) => ({
+        ...prev,
+        date: value,
+        dateFormated: prev.isRegularNeed ? buildRegularNeedDateString(formattedDate) : formattedDate,
+      }));
+    }
   };
 
   const buildRegularNeedDateString = (dateValue: string) => {
-    const formattedDate = formatDateToTurkish(dateValue);
-    const splitedFormattedDate = formattedDate.split(" ");
+    const splitedFormattedDate = dateValue.split(" ");
     return `${splitedFormattedDate[1]} ${splitedFormattedDate[2]} (${t("regularNeedDate")})`;
   };
 
@@ -69,7 +83,7 @@ export default function BloodDonationFormContainer() {
   const downloadImage = () => {
     if (!imageRef.current) return;
 
-    const fieldLabels: Record<keyof Omit<DonationInfo, "isRegularNeed" | "dateRegularNeed">, string> = {
+    const fieldLabels: Record<keyof Omit<DonationInfo, "isRegularNeed" | "dateFormated">, string> = {
       bloodGroup: t("bloodGroup"),
       bloodType: t("bloodType"),
       fullName: t("fullName"),
@@ -152,7 +166,7 @@ export default function BloodDonationFormContainer() {
         selectedTemplate={selectedTemplateIndex}
         handleDonationInfoChange={handleDonationInfoChange}
         handleDonationInfoPhoneChange={handleDonationInfoPhoneChange}
-        handleDonationRegularNeedChange={handleDonationRegularNeedChange}
+        handleDonationInfoDateChange={handleDonationInfoDateChange}
         downloadImageAndUpdateCounter={downloadImage}
         handleTemplateChange={handleTemplateChange}
       />

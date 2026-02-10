@@ -22,7 +22,7 @@ interface InputProps {
   selectedTemplate: number;
   handleDonationInfoChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent | SelectChangeEvent<string[]>) => void;
   handleDonationInfoPhoneChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleDonationRegularNeedChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleDonationInfoDateChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   downloadImageAndUpdateCounter: () => void;
   handleTemplateChange: (index: number) => void;
 }
@@ -161,21 +161,22 @@ export default function BloodDonationFormInputs(props: InputProps) {
         <Box sx={{ flex: 1 }}>
           <LabeledTextField
             type="date"
-            label={t("date")}
             name="date"
+            label={t("date")}
             value={props.donationInfo.date}
-            onChange={props.handleDonationInfoChange}
+            onChange={props.handleDonationInfoDateChange}
             error={dateError}
             helperText={dateError ? t("requiredText") : ""}
           />
         </Box>
 
         <FormControlLabel
+          name="regularNeedDate"
           label={t("regularNeedDate")}
           control={
             <Checkbox
               checked={props.donationInfo.isRegularNeed}
-              onChange={props.handleDonationRegularNeedChange}
+              onChange={props.handleDonationInfoDateChange}
             />
           }
         />
