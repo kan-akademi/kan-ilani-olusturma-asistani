@@ -1,5 +1,4 @@
 import type { TemplateProps, TemplateConfig } from "./types";
-import { formatDateToTurkish } from "../utils/formUtils";
 
 interface BaseTemplateProps extends TemplateProps {
     config: TemplateConfig;
