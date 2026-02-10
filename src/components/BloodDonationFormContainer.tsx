@@ -40,13 +40,13 @@ export default function BloodDonationFormContainer() {
     if (donationInfo.isRegularNeed) {
       setDonationInfo((prev) => ({
         ...prev,
-        dateFormated: buildRegularNeedDateString(formatDateToTurkish(prev.date)),
+        dateFormatted: buildRegularNeedDateString(formatDateToTurkish(prev.date)),
       }));
     }
     else {
       setDonationInfo((prev) => ({
         ...prev,
-        dateFormated: formatDateToTurkish(prev.date),
+        dateFormatted: formatDateToTurkish(prev.date),
       }));
     }
   }, [i18n.language]);
@@ -58,14 +58,14 @@ export default function BloodDonationFormContainer() {
       setDonationInfo((prev) => ({
         ...prev,
         isRegularNeed: checked,
-        dateFormated: checked ? buildRegularNeedDateString(formatDateToTurkish(prev.date)) : formatDateToTurkish(prev.date),
+        dateFormatted: checked ? buildRegularNeedDateString(formatDateToTurkish(prev.date)) : formatDateToTurkish(prev.date),
       }));
     } else if (name === "date") {
       const formattedDate = formatDateToTurkish(value);
       setDonationInfo((prev) => ({
         ...prev,
         date: value,
-        dateFormated: prev.isRegularNeed ? buildRegularNeedDateString(formattedDate) : formattedDate,
+        dateFormatted: prev.isRegularNeed ? buildRegularNeedDateString(formattedDate) : formattedDate,
       }));
     }
   };
@@ -82,7 +82,7 @@ export default function BloodDonationFormContainer() {
   const downloadImage = () => {
     if (!imageRef.current) return;
 
-    const fieldLabels: Record<keyof Omit<DonationInfo, "isRegularNeed" | "dateFormated">, string> = {
+    const fieldLabels: Record<keyof Omit<DonationInfo, "isRegularNeed" | "dateFormatted">, string> = {
       bloodGroup: t("bloodGroup"),
       bloodType: t("bloodType"),
       fullName: t("fullName"),

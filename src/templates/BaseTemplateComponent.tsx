@@ -101,7 +101,7 @@ export function BaseTemplateComponent({ donationInfo, imageRef, config }: BaseTe
                     color: styles.date.font.color,
                 }}
             >
-                {donationInfo.dateFormated}
+                {donationInfo.dateFormatted}
             </div>
 
             {/* HASTANE */}
