@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import i18n from "../i18n";
 import Swal from "sweetalert2";
 import html2canvas from "html2canvas";
 import { useTranslation } from "react-i18next";
@@ -11,7 +10,7 @@ import BloodDonationFormInputs from "./BloodDonationFormInputs";
 import { getTemplateByIndex } from "../templates";
 
 export default function BloodDonationFormContainer() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const imageRef = useRef<HTMLDivElement | null>(null);
 
   const [selectedTemplateIndex, setSelectedTemplateIndex] = useState<number>(0);
