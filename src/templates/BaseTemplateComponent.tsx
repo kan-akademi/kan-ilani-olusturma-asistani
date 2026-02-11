@@ -1,5 +1,4 @@
 import type { TemplateProps, TemplateConfig } from "./types";
-import { formatDateToTurkish } from "../utils/formUtils";
 
 interface BaseTemplateProps extends TemplateProps {
     config: TemplateConfig;
@@ -102,7 +101,7 @@ export function BaseTemplateComponent({ donationInfo, imageRef, config }: BaseTe
                     color: styles.date.font.color,
                 }}
             >
-                {formatDateToTurkish(donationInfo.date.toString())}
+                {donationInfo.dateFormatted}
             </div>
 
             {/* HASTANE */}

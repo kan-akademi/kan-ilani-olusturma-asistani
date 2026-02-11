@@ -12,7 +12,12 @@ import {
   Checkbox,
   ListItemText,
   FormHelperText,
+  FormControlLabel,
+  ButtonGroup,
+  Button,
 } from "@mui/material";
+import { Info } from "@mui/icons-material";
+import Swal from "sweetalert2";
 import type { DonationInfo } from "../entities/DonationInfo";
 import { getTemplateList } from "../templates";
 
@@ -21,6 +26,7 @@ interface InputProps {
   selectedTemplate: number;
   handleDonationInfoChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent | SelectChangeEvent<string[]>) => void;
   handleDonationInfoPhoneChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleDonationInfoDateChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   downloadImageAndUpdateCounter: () => void;
   handleTemplateChange: (index: number) => void;
 }
@@ -63,6 +69,34 @@ export default function BloodDonationFormInputs(props: InputProps) {
     setShowErrors(true);
     validate();
     props.downloadImageAndUpdateCounter();
+  };
+
+  const handleInfoClick = () => {
+    Swal.fire({
+      html: `
+          <!DOCTYPE html>
+          <html lang="tr">
+          <head>
+              <meta charset="UTF-8">
+              <style>                
+                  .logo { width: 80px; margin-bottom: 20px; }
+                  .containerr { background-color: #eeebe3; text-align: center; }
+                  .main-title { font-size: 2em; font-weight: bold; margin: 10px 0; }
+              </style>
+          </head>
+          <body>
+            <div class="containerr">
+              <img class="logo" src="./assets/images/kan-akademi-logo.png" alt="Kan Akademi Logo" />
+              <div class="main-title">${t("regularNeedInfoTitle")}</div>
+              <div>${t("regularNeedInfoContent").replace(/\n/g, "<br /><br />")}</div>
+            </div>
+          </body>
+          </html>
+        `,
+      showConfirmButton: true,
+      confirmButtonText: t("close"),
+      background: "#eeebe3",
+    });
   };
 
   return (
@@ -155,15 +189,47 @@ export default function BloodDonationFormInputs(props: InputProps) {
         helperText={phoneError ? t("requiredText") : ""}
       />
 
-      <LabeledTextField
-        type="date"
-        label={t("date")}
-        name="date"
-        value={props.donationInfo.date}
-        onChange={props.handleDonationInfoChange}
-        error={dateError}
-        helperText={dateError ? t("requiredText") : ""}
-      />
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box sx={{ flex: 1 }}>
+          <LabeledTextField
+            type="date"
+            name="date"
+            label={t("date")}
+            value={props.donationInfo.date}
+            onChange={props.handleDonationInfoDateChange}
+            error={dateError}
+            helperText={dateError ? t("requiredText") : ""}
+          />
+        </Box>
+
+        <FormControlLabel
+          name="regularNeedDate"
+          label={t("regularNeedDate")}
+          labelPlacement="end"
+          sx={{ whiteSpace: "nowrap", ml: 1, }}
+          control={
+            <Checkbox
+              checked={props.donationInfo.isRegularNeed}
+              onChange={props.handleDonationInfoDateChange}
+            />
+          }
+        />
+
+        <ButtonGroup
+          size="small"
+          color="inherit"
+          variant="text"
+          aria-label={t("regularNeedButtonGroup")}
+        >
+          <Button
+            title={t("regularNeedInfoButton")}
+            aria-label={t("regularNeedInfoButton")}
+            onClick={handleInfoClick}
+          >
+            <Info />
+          </Button>
+        </ButtonGroup>
+      </Box>
 
       <LabeledTextField
         label={t("hospitalName")}
