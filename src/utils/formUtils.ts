@@ -1,8 +1,7 @@
 import type { DonationInfo } from "../entities/DonationInfo";
 
 export function hashData(data: DonationInfo): string {
-  const values = Object.values(data).map((field: any) => {
-    const val = field?.value;
+  const values = Object.values(data).map((val: any) => {
     if (Array.isArray(val)) {      
       return val.map((v: any) => (typeof v === "string" ? v.trim() : String(v))).join(",");
     }
