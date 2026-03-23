@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, type RefObject } from "react";
 import { useTheme } from "@mui/material/styles";
 import { useTranslation } from "react-i18next";
 import LabeledTextField from "./LabeledTextField";
@@ -24,9 +24,11 @@ import { getTemplateList } from "../templates";
 interface InputProps {
   donationInfo: DonationInfo;
   selectedTemplate: number;
+  bloodGroupSelectRef: RefObject<HTMLSelectElement | null>;
   handleDonationInfoChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent | SelectChangeEvent<string[]>) => void;
   handleDonationInfoPhoneChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleDonationInfoDateChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleBloodGroupChange: (e: SelectChangeEvent<string[]>) => void;
   downloadImageAndUpdateCounter: () => void;
   handleTemplateChange: (index: number) => void;
 }
@@ -34,8 +36,12 @@ interface InputProps {
 export default function BloodDonationFormInputs(props: InputProps) {
   const theme = useTheme();
   const { t, i18n } = useTranslation();
+  
   const [showErrors, setShowErrors] = useState(false);
 
+  const bloodGroupSelectRef = useRef<HTMLSelectElement>(null);
+
+  const selectedBloodGroups = Array.isArray(props.donationInfo.bloodGroup) ? props.donationInfo.bloodGroup : props.donationInfo.bloodGroup ? [props.donationInfo.bloodGroup]: [];
   const selectedBloodTypes = Array.isArray(props.donationInfo.bloodType) ? props.donationInfo.bloodType : props.donationInfo.bloodType ? [props.donationInfo.bloodType] : [];
 
   const isEmpty = (val: any) => {
@@ -45,7 +51,7 @@ export default function BloodDonationFormInputs(props: InputProps) {
     return !val;
   };
 
-  const bloodGroupError = showErrors && isEmpty(props.donationInfo.bloodGroup);
+  const bloodGroupError = showErrors && selectedBloodGroups.length === 0;
   const bloodTypeError = showErrors && selectedBloodTypes.length === 0;
   const fullNameError = showErrors && isEmpty(props.donationInfo.fullName);
   const phoneError = showErrors && isEmpty(props.donationInfo.phone);
@@ -55,7 +61,7 @@ export default function BloodDonationFormInputs(props: InputProps) {
 
   const validate = () => {
     return (
-      !isEmpty(props.donationInfo.bloodGroup) &&
+      selectedBloodGroups.length > 0 &&
       selectedBloodTypes.length > 0 &&
       !isEmpty(props.donationInfo.fullName) &&
       !isEmpty(props.donationInfo.phone) &&
@@ -109,23 +115,57 @@ export default function BloodDonationFormInputs(props: InputProps) {
       >
         <InputLabel id="blood-group-label">{t("bloodGroup")}</InputLabel>
         <Select
-          labelId="blood-group-label"
+          multiple
           name="bloodGroup"
+          labelId="blood-group-label"
           label={t("bloodGroup")}
           aria-label={t("bloodGroup")}
-          value={props.donationInfo.bloodGroup}
-          onChange={props.handleDonationInfoChange}
+          value={selectedBloodGroups}
+          inputRef={bloodGroupSelectRef}
+          onChange={props.handleBloodGroupChange}
+          renderValue={(selected) =>
+            Array.isArray(selected) ? selected.join(", ") : String(selected)
+          }
         >
-          <MenuItem value="A RH (+)">A RH (+)</MenuItem>
-          <MenuItem value="A RH (-)">A RH (-)</MenuItem>
-          <MenuItem value="B RH (+)">B RH (+)</MenuItem>
-          <MenuItem value="B RH (-)">B RH (-)</MenuItem>
-          <MenuItem value="AB RH (+)">AB RH (+)</MenuItem>
-          <MenuItem value="AB RH (-)">AB RH (-)</MenuItem>
-          <MenuItem value="0 RH (+)">0 RH (+)</MenuItem>
-          <MenuItem value="0 RH (-)">0 RH (-)</MenuItem>
+          <MenuItem value="A RH (+)">
+            <Checkbox checked={selectedBloodGroups.indexOf("A RH (+)") > -1} />
+            <ListItemText primary="A RH (+)" />
+          </MenuItem>
+          <MenuItem value="A RH (-)">
+            <Checkbox checked={selectedBloodGroups.indexOf("A RH (-)") > -1} />
+            <ListItemText primary="A RH (-)" />
+          </MenuItem>
+          <MenuItem value="B RH (+)">
+            <Checkbox checked={selectedBloodGroups.indexOf("B RH (+)") > -1} />
+            <ListItemText primary="B RH (+)" />
+          </MenuItem>
+          <MenuItem value="B RH (-)">
+            <Checkbox checked={selectedBloodGroups.indexOf("B RH (-)") > -1} />
+            <ListItemText primary="B RH (-)" />
+          </MenuItem>
+          <MenuItem value="AB RH (+)">
+            <Checkbox checked={selectedBloodGroups.indexOf("AB RH (+)") > -1} />
+            <ListItemText primary="AB RH (+)" />
+          </MenuItem>
+          <MenuItem value="AB RH (-)">
+            <Checkbox checked={selectedBloodGroups.indexOf("AB RH (-)") > -1} />
+            <ListItemText primary="AB RH (-)" />
+          </MenuItem>
+          <MenuItem value="0 RH (+)">
+            <Checkbox checked={selectedBloodGroups.indexOf("0 RH (+)") > -1} />
+            <ListItemText primary="0 RH (+)" />
+          </MenuItem>
+          <MenuItem value="0 RH (-)">
+            <Checkbox checked={selectedBloodGroups.indexOf("0 RH (-)") > -1} />
+            <ListItemText primary="0 RH (-)" />
+          </MenuItem>
           <MenuItem value="Kan Grubu Fark Etmeksizin">
-            {t("regardlessOfBloodType")}
+            <Checkbox
+              checked={
+                selectedBloodGroups.indexOf("Kan Grubu Fark Etmeksizin") > -1
+              }
+            />
+            <ListItemText primary={t("regardlessOfBloodType")} />{t("regardlessOfBloodType")}
           </MenuItem>
         </Select>
         {bloodGroupError && <FormHelperText>{t("requiredText")}</FormHelperText>}

@@ -20,35 +20,20 @@ export function BaseTemplateComponent({ donationInfo, imageRef, config }: BaseTe
                 src={templatePath}
             />
 
-            {/* KAN GRUBU */}
-            {donationInfo.bloodGroup !== "Kan Grubu Fark Etmeksizin" ? (
-                <div
-                    className="text-item blood-group"
-                    style={{
-                        top: `${styles.bloodGroup.coord.top}px`,
-                        left: `${styles.bloodGroup.coord.left}px`,
-                        fontSize: `${styles.bloodGroup.font.size}px`,
-                        color: styles.bloodGroup.font.color,
-                    }}
-                >
-                    {donationInfo.bloodGroup}
-                </div>
-            ) : (
-                <div
-                    className="text-item blood-group regardless-blood-group"
-                    style={{
-                        top: `${styles.regardlessBloodGroup.coord.top}px`,
-                        left: `${styles.regardlessBloodGroup.coord.left}px`,
-                        fontSize: `${styles.regardlessBloodGroup.font.size}px`,
-                        color: styles.regardlessBloodGroup.font.color,
-                    }}
-                >
-                    Kan Grubu
-                    <br />
-                    Fark Etmeksizin
-                </div>
-            )}
-
+            {/* KAN GRUBU */}                
+            <div
+                className="text-item blood-group"
+                style={{
+                    top: `${styles.bloodGroup.coord.top}px`,
+                    left: `${styles.bloodGroup.coord.left}px`,
+                    fontSize: `${styles.bloodGroup.font.size}px`,
+                    color: styles.bloodGroup.font.color,
+                }}
+            >
+                {Array.isArray(donationInfo.bloodGroup)
+                    ? donationInfo.bloodGroup.join(", ")
+                    : String(donationInfo.bloodGroup)}
+            </div>
             {/* KAN TÜRÜ */}
             <div
                 className="text-item"

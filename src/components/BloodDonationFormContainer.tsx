@@ -12,12 +12,28 @@ import { getTemplateByIndex } from "../templates";
 export default function BloodDonationFormContainer() {
   const { t, i18n } = useTranslation();
   const imageRef = useRef<HTMLDivElement | null>(null);
+  const bloodGroupSelectRef = useRef<HTMLSelectElement>(null);
 
   const [selectedTemplateIndex, setSelectedTemplateIndex] = useState<number>(0);
   const [donationInfo, setDonationInfo] = useState<DonationInfo>(initialDonationInfo);
 
   const selectedTemplate = getTemplateByIndex(selectedTemplateIndex);
   const TemplateComponent = selectedTemplate?.Component;
+
+  useEffect(() => {
+    if (donationInfo.isRegularNeed) {
+      setDonationInfo((prev) => ({
+        ...prev,
+        dateFormatted: buildRegularNeedDateString(formatDateToTurkish(prev.date)),
+      }));
+    }
+    else {
+      setDonationInfo((prev) => ({
+        ...prev,
+        dateFormatted: formatDateToTurkish(prev.date),
+      }));
+    }
+  }, [i18n.language]);
 
   const handleDonationInfoChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent | SelectChangeEvent<string[]>) => {
     const { name, value } = e.target;
@@ -36,20 +52,23 @@ export default function BloodDonationFormContainer() {
     }));
   };
 
-  useEffect(() => {
-    if (donationInfo.isRegularNeed) {
-      setDonationInfo((prev) => ({
-        ...prev,
-        dateFormatted: buildRegularNeedDateString(formatDateToTurkish(prev.date)),
-      }));
+  const handleBloodGroupChange = (e: SelectChangeEvent<string[]>) => {
+    const { name, value } = e.target;
+
+    if (value.length > 4) {
+      Swal.fire({
+        icon: "warning",
+        confirmButtonText: t("close"),
+        html: t("maxBloodGroupSelection", "En fazla 4 kan grubu seçebilirsiniz."),
+      });      
+      return;
     }
-    else {
-      setDonationInfo((prev) => ({
-        ...prev,
-        dateFormatted: formatDateToTurkish(prev.date),
-      }));
-    }
-  }, [i18n.language]);
+
+    setDonationInfo((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   const handleDonationInfoDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -163,9 +182,11 @@ export default function BloodDonationFormContainer() {
       <BloodDonationFormInputs
         donationInfo={donationInfo}
         selectedTemplate={selectedTemplateIndex}
+        bloodGroupSelectRef={bloodGroupSelectRef}
         handleDonationInfoChange={handleDonationInfoChange}
         handleDonationInfoPhoneChange={handleDonationInfoPhoneChange}
         handleDonationInfoDateChange={handleDonationInfoDateChange}
+        handleBloodGroupChange={handleBloodGroupChange}
         downloadImageAndUpdateCounter={downloadImage}
         handleTemplateChange={handleTemplateChange}
       />
