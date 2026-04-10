@@ -2,6 +2,7 @@ import { useRef } from "react";
 import type { TemplateProps } from "../types";
 import { BaseTemplateComponent } from "../BaseTemplateComponent";
 import { config } from "./config";
+import { REGARDLESS_BLOOD_GROUP } from "../../entities/DonationInfo";
 
 /**
  * Template 4 - Turuncu-Kırmızı tema
@@ -17,6 +18,11 @@ export function Template4Component(props: TemplateProps) {
                 ...config.styles.bloodGroup,
                 coord: { ...config.styles.bloodGroup.coord },
                 font: { ...config.styles.bloodGroup.font },
+            },
+            regardlessBloodGroup: {
+                ...config.styles.regardlessBloodGroup,
+                coord: { ...config.styles.regardlessBloodGroup.coord },
+                font: { ...config.styles.regardlessBloodGroup.font },
             },
             bloodType: {
                 ...config.styles.bloodType,
@@ -38,29 +44,49 @@ export function Template4Component(props: TemplateProps) {
 
     // Dinamik olarak kan grubu konumunu ayarla
     const originalBloodGroupLeft = useRef(localConfig.styles.bloodGroup.coord.left);
-    const originalBloodGroupFontSize = useRef(localConfig.styles.bloodGroup.font.size);
-    const originalBloodGroupTop = useRef(localConfig.styles.bloodGroup.coord.top);
 
-    // if (donationInfo.bloodGroup.startsWith("AB")) {
-    //     localConfig.styles.bloodGroup.font.size = 65;
-    //     localConfig.styles.bloodGroup.coord.left = 50;
-    //     localConfig.styles.bloodGroup.coord.top = 91;
-    // } else {
-    //     localConfig.styles.bloodGroup.coord.left = originalBloodGroupLeft.current;
-    //     localConfig.styles.bloodGroup.font.size = originalBloodGroupFontSize.current;
-    //     localConfig.styles.bloodGroup.coord.top = originalBloodGroupTop.current;
-    // }
+    const hasRegardless = donationInfo.bloodGroup.includes(REGARDLESS_BLOOD_GROUP);
+    const regularGroupCount = donationInfo.bloodGroup.filter(g => g !== REGARDLESS_BLOOD_GROUP).length;
 
-    // Dinamik olarak kan tipi font boyutunu ve konumunu ayarla
-    const originalBloodTypeTop = useRef(localConfig.styles.bloodType.coord.top);
-    const originalBloodTypeFontSize = useRef(localConfig.styles.bloodType.font.size);
+    if (hasRegardless == false) {
+        if (regularGroupCount == 1) {
+            if (donationInfo.bloodGroup.at(0)?.startsWith("AB")) {
+                localConfig.styles.bloodGroup.coord.left = 20;
+            } else {
+                localConfig.styles.bloodGroup.coord.left = originalBloodGroupLeft.current;
+            }
+        } else if (regularGroupCount == 2) {
+            localConfig.styles.bloodGroup.coord.top = 110;
+            localConfig.styles.bloodGroup.coord.left = 10;
+            localConfig.styles.bloodGroup.font.size = 39;
+        } else if (regularGroupCount == 3) {
+            localConfig.styles.bloodGroup.coord.top = 73;
+            localConfig.styles.bloodGroup.coord.left = 10;
+            localConfig.styles.bloodGroup.font.size = 41;
+        } else if (regularGroupCount == 4) {
+            localConfig.styles.bloodGroup.coord.top = 73;
+            localConfig.styles.bloodGroup.coord.left = 10;
+            localConfig.styles.bloodGroup.font.size = 37;
+        }
+    }
 
-    if (donationInfo.bloodType.length > 3) {
-        localConfig.styles.bloodType.coord.top = 211;
-        localConfig.styles.bloodType.font.size = 15;
-    } else {
-        localConfig.styles.bloodType.coord.top = originalBloodTypeTop.current;
-        localConfig.styles.bloodType.font.size = originalBloodTypeFontSize.current;
+    if (hasRegardless == true) {
+        if (regularGroupCount == 0) {
+            localConfig.styles.bloodGroup.coord.left = localConfig.styles.regardlessBloodGroup.coord.left;
+            localConfig.styles.bloodGroup.font.size = localConfig.styles.regardlessBloodGroup.font.size;
+        } else if (regularGroupCount == 1) {
+            localConfig.styles.bloodGroup.coord.top = 80;
+            localConfig.styles.bloodGroup.coord.left = 10;
+            localConfig.styles.bloodGroup.font.size = 34;
+        } else if (regularGroupCount == 2) {
+            localConfig.styles.bloodGroup.coord.top = 85;
+            localConfig.styles.bloodGroup.coord.left = 10;
+            localConfig.styles.bloodGroup.font.size = 29;
+        } else if (regularGroupCount == 3) {
+            localConfig.styles.bloodGroup.coord.top = 90;
+            localConfig.styles.bloodGroup.coord.left = 10;
+            localConfig.styles.bloodGroup.font.size = 27;
+        }
     }
 
     // Dinamik olarak isim font boyutunu ve konumunu ayarla

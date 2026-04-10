@@ -2,6 +2,7 @@ import { useRef } from "react";
 import type { TemplateProps } from "../types";
 import { BaseTemplateComponent } from "../BaseTemplateComponent";
 import { config } from "./config";
+import { REGARDLESS_BLOOD_GROUP } from "../../entities/DonationInfo";
 
 export function Template1Component(props: TemplateProps) {
     const { donationInfo } = props;
@@ -14,6 +15,11 @@ export function Template1Component(props: TemplateProps) {
                 ...config.styles.bloodGroup,
                 coord: { ...config.styles.bloodGroup.coord },
                 font: { ...config.styles.bloodGroup.font },
+            },
+            regardlessBloodGroup: {
+                ...config.styles.regardlessBloodGroup,
+                coord: { ...config.styles.regardlessBloodGroup.coord },
+                font: { ...config.styles.regardlessBloodGroup.font },
             },
             bloodType: {
                 ...config.styles.bloodType,
@@ -36,10 +42,48 @@ export function Template1Component(props: TemplateProps) {
     // Dinamik olarak kan grubu konumunu ayarla
     const originalBloodGroupLeft = useRef(localConfig.styles.bloodGroup.coord.left);
 
-    if (donationInfo.bloodGroup.startsWith("AB")) {
-        localConfig.styles.bloodGroup.coord.left = 20;
-    } else {
-        localConfig.styles.bloodGroup.coord.left = originalBloodGroupLeft.current;
+    const hasRegardless = donationInfo.bloodGroup.includes(REGARDLESS_BLOOD_GROUP);
+    const regularGroupCount = donationInfo.bloodGroup.filter(g => g !== REGARDLESS_BLOOD_GROUP).length;
+
+    if (hasRegardless == false) {
+        if (regularGroupCount == 1) {
+            if (donationInfo.bloodGroup.at(0)?.startsWith("AB")) {
+                localConfig.styles.bloodGroup.coord.left = 20;
+            } else {
+                localConfig.styles.bloodGroup.coord.left = originalBloodGroupLeft.current;
+            }
+        } else if (regularGroupCount == 2) {
+            localConfig.styles.bloodGroup.coord.top = 110;
+            localConfig.styles.bloodGroup.coord.left = 10;
+            localConfig.styles.bloodGroup.font.size = 39;
+        } else if (regularGroupCount == 3) {
+            localConfig.styles.bloodGroup.coord.top = 73;
+            localConfig.styles.bloodGroup.coord.left = 10;
+            localConfig.styles.bloodGroup.font.size = 41;
+        } else if (regularGroupCount == 4) {
+            localConfig.styles.bloodGroup.coord.top = 73;
+            localConfig.styles.bloodGroup.coord.left = 10;
+            localConfig.styles.bloodGroup.font.size = 37;
+        }
+    }
+
+    if (hasRegardless == true) {
+        if (regularGroupCount == 0) {
+            localConfig.styles.bloodGroup.coord.left = localConfig.styles.regardlessBloodGroup.coord.left;
+            localConfig.styles.bloodGroup.font.size = localConfig.styles.regardlessBloodGroup.font.size;
+        } else if (regularGroupCount == 1) {
+            localConfig.styles.bloodGroup.coord.top = 80;
+            localConfig.styles.bloodGroup.coord.left = 10;
+            localConfig.styles.bloodGroup.font.size = 34;
+        } else if (regularGroupCount == 2) {
+            localConfig.styles.bloodGroup.coord.top = 85;
+            localConfig.styles.bloodGroup.coord.left = 10;
+            localConfig.styles.bloodGroup.font.size = 29;
+        } else if (regularGroupCount == 3) {
+            localConfig.styles.bloodGroup.coord.top = 90;
+            localConfig.styles.bloodGroup.coord.left = 10;
+            localConfig.styles.bloodGroup.font.size = 27;
+        }
     }
 
     // Dinamik olarak kan tipi font boyutunu ve konumunu ayarla
