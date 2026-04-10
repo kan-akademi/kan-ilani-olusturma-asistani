@@ -50,7 +50,11 @@ export function Template6Component(props: TemplateProps) {
 
     if (hasRegardless == false) {
         if (regularGroupCount == 1) {
-            localConfig.styles.bloodGroup.coord.left = originalBloodGroupLeft.current;
+            if (donationInfo.bloodGroup.at(0)?.startsWith("AB")) {
+                localConfig.styles.bloodGroup.coord.left = 20;
+            } else {
+                localConfig.styles.bloodGroup.coord.left = originalBloodGroupLeft.current;
+            }
         } else if (regularGroupCount == 2) {
             localConfig.styles.bloodGroup.coord.top = 110;
             localConfig.styles.bloodGroup.coord.left = 10;
@@ -62,7 +66,7 @@ export function Template6Component(props: TemplateProps) {
         } else if (regularGroupCount == 4) {
             localConfig.styles.bloodGroup.coord.top = 73;
             localConfig.styles.bloodGroup.coord.left = 10;
-            localConfig.styles.bloodGroup.font.size = 39;
+            localConfig.styles.bloodGroup.font.size = 37;
         }
     }
 

@@ -41,15 +41,15 @@ export function Template4Component(props: TemplateProps) {
     const originalBloodGroupFontSize = useRef(localConfig.styles.bloodGroup.font.size);
     const originalBloodGroupTop = useRef(localConfig.styles.bloodGroup.coord.top);
 
-    if (donationInfo.bloodGroup.startsWith("AB")) {
-        localConfig.styles.bloodGroup.font.size = 65;
-        localConfig.styles.bloodGroup.coord.left = 50;
-        localConfig.styles.bloodGroup.coord.top = 91;
-    } else {
-        localConfig.styles.bloodGroup.coord.left = originalBloodGroupLeft.current;
-        localConfig.styles.bloodGroup.font.size = originalBloodGroupFontSize.current;
-        localConfig.styles.bloodGroup.coord.top = originalBloodGroupTop.current;
-    }
+    // if (donationInfo.bloodGroup.startsWith("AB")) {
+    //     localConfig.styles.bloodGroup.font.size = 65;
+    //     localConfig.styles.bloodGroup.coord.left = 50;
+    //     localConfig.styles.bloodGroup.coord.top = 91;
+    // } else {
+    //     localConfig.styles.bloodGroup.coord.left = originalBloodGroupLeft.current;
+    //     localConfig.styles.bloodGroup.font.size = originalBloodGroupFontSize.current;
+    //     localConfig.styles.bloodGroup.coord.top = originalBloodGroupTop.current;
+    // }
 
     // Dinamik olarak kan tipi font boyutunu ve konumunu ayarla
     const originalBloodTypeTop = useRef(localConfig.styles.bloodType.coord.top);
