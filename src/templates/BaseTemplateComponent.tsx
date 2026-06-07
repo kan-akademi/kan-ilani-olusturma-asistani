@@ -20,7 +20,7 @@ export function BaseTemplateComponent({ donationInfo, imageRef, config }: BaseTe
                 src={templatePath}
             />
 
-            {/* KAN GRUBU */}                
+            {/* KAN GRUBU 1. SATIR*/}
             <div
                 className="text-item blood-group"
                 style={{
@@ -30,10 +30,22 @@ export function BaseTemplateComponent({ donationInfo, imageRef, config }: BaseTe
                     color: styles.bloodGroup.font.color,
                 }}
             >
-                {Array.isArray(donationInfo.bloodGroup)
-                    ? donationInfo.bloodGroup.join(", ")
-                    : String(donationInfo.bloodGroup)}
+                {donationInfo.bloodGroup1}
             </div>
+            {/* KAN GRUBU 2. SATIR*/}
+            {donationInfo.bloodGroup2.length > 0 && (
+                <div
+                    className="text-item blood-group"
+                    style={{
+                        top: `${styles.bloodGroup2.coord.top}px`,
+                        left: `${styles.bloodGroup2.coord.left}px`,
+                        fontSize: `${styles.bloodGroup2.font.size}px`,
+                        color: styles.bloodGroup2.font.color,
+                }}
+                >
+                    {donationInfo.bloodGroup2}
+                </div>
+            )}
             {/* KAN TÜRÜ */}
             <div
                 className="text-item"

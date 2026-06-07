@@ -54,6 +54,7 @@ export default function BloodDonationFormContainer() {
 
   const handleBloodGroupChange = (e: SelectChangeEvent<string[]>) => {
     const { name, value } = e.target;
+    let bloodGroup1: string[] = [], bloodGroup2: string[] = [];
 
     if (value.length > 4) {
       Swal.fire({
@@ -64,9 +65,21 @@ export default function BloodDonationFormContainer() {
       return;
     }
 
+    if (value.length === 1) {
+      bloodGroup1.push(value[0]);
+    } else if (value.length === 2) {
+      bloodGroup1.push(value[0]);
+      bloodGroup2.push(value[1]);
+    } else {
+      bloodGroup1.push(...(value as string[]).slice(0, 2));
+      bloodGroup2.push(...(value as string[]).slice(2));
+    }
+console.log("handleBloodGroupChange", { value, bloodGroup1, bloodGroup2 });
     setDonationInfo((prev) => ({
       ...prev,
       [name]: value,
+      bloodGroup1: bloodGroup1,
+      bloodGroup2: bloodGroup2,
     }));
   };
 
@@ -101,7 +114,7 @@ export default function BloodDonationFormContainer() {
   const downloadImage = () => {
     if (!imageRef.current) return;
 
-    const fieldLabels: Record<keyof Omit<DonationInfo, "isRegularNeed" | "dateFormatted">, string> = {
+    const fieldLabels: Record<keyof Omit<DonationInfo, "bloodGroup1" | "bloodGroup2" | "isRegularNeed" | "dateFormatted">, string> = {
       bloodGroup: t("bloodGroup"),
       bloodType: t("bloodType"),
       fullName: t("fullName"),
