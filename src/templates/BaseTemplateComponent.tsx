@@ -30,7 +30,7 @@ export function BaseTemplateComponent({ donationInfo, imageRef, config }: BaseTe
                     color: styles.bloodGroup.font.color,
                 }}
             >
-                {donationInfo.bloodGroup1}
+                {donationInfo.bloodGroup1.join(", ")}
             </div>
             {/* KAN GRUBU 2. SATIR*/}
             {donationInfo.bloodGroup2.length > 0 && (
@@ -43,7 +43,7 @@ export function BaseTemplateComponent({ donationInfo, imageRef, config }: BaseTe
                         color: styles.bloodGroup2.font.color,
                 }}
                 >
-                    {donationInfo.bloodGroup2}
+                    {donationInfo.bloodGroup2.join(", ")}
                 </div>
             )}
             {/* KAN TÜRÜ */}
