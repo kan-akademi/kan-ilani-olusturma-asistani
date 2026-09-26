@@ -123,10 +123,10 @@ export function Template6Component(props: TemplateProps) {
     const originalFullNameFontSize = useRef(localConfig.styles.fullName.font.size);
 
     if (donationInfo.fullName.length >= 35) {
-        localConfig.styles.fullName.coord.top = 328;
+        localConfig.styles.fullName.coord.top = 365;
         localConfig.styles.fullName.font.size = 13;
     } else if (donationInfo.fullName.length >= 25) {
-        localConfig.styles.fullName.coord.top = 327;
+        localConfig.styles.fullName.coord.top = 365;
         localConfig.styles.fullName.font.size = 15;
     } else {
         localConfig.styles.fullName.coord.top = originalFullNameTop.current;
