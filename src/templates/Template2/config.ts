@@ -9,6 +9,7 @@ export const config: TemplateConfig = {
     templatePath: `./assets/templates/kan-akademi-ilan-template-2.png?v=${ASSET_VERSION}`,
     styles: {
         bloodGroup: { coord: { top: 60, left: 47 }, font: { size: 78, color: "#ff4550" } },
+        bloodGroup2: { coord: { top: 130, left: 10 }, font: { size: 40, color: "#ff4550" } },
         regardlessBloodGroup: { coord: { top: 68, left: 60 }, font: { size: 35, color: "#ff4550" } },
         bloodType: { coord: { top: 176, left: 85 }, font: { size: 17, color: "#000000" } },
         fullName: { coord: { top: 281, left: 78 }, font: { size: 17, color: "#000000" } },

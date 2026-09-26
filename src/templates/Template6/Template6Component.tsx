@@ -19,6 +19,11 @@ export function Template6Component(props: TemplateProps) {
                 coord: { ...config.styles.bloodGroup.coord },
                 font: { ...config.styles.bloodGroup.font },
             },
+            bloodGroup2: {
+                ...config.styles.bloodGroup2,
+                coord: { ...config.styles.bloodGroup2.coord },
+                font: { ...config.styles.bloodGroup2.font },
+            },
             regardlessBloodGroup: {
                 ...config.styles.regardlessBloodGroup,
                 coord: { ...config.styles.regardlessBloodGroup.coord },
@@ -56,17 +61,29 @@ export function Template6Component(props: TemplateProps) {
                 localConfig.styles.bloodGroup.coord.left = originalBloodGroupLeft.current;
             }
         } else if (regularGroupCount == 2) {
-            localConfig.styles.bloodGroup.coord.top = 110;
+            localConfig.styles.bloodGroup.coord.top = 60;
             localConfig.styles.bloodGroup.coord.left = 10;
-            localConfig.styles.bloodGroup.font.size = 39;
+            localConfig.styles.bloodGroup.font.size = 60;
+
+            localConfig.styles.bloodGroup2.coord.top = 130;
+            localConfig.styles.bloodGroup2.coord.left = 10;
+            localConfig.styles.bloodGroup2.font.size = 60;
         } else if (regularGroupCount == 3) {
-            localConfig.styles.bloodGroup.coord.top = 73;
+            localConfig.styles.bloodGroup.coord.top = 70;
             localConfig.styles.bloodGroup.coord.left = 10;
-            localConfig.styles.bloodGroup.font.size = 41;
+            localConfig.styles.bloodGroup.font.size = 40;
+
+            localConfig.styles.bloodGroup2.coord.top = 130;
+            localConfig.styles.bloodGroup2.coord.left = 10;
+            localConfig.styles.bloodGroup2.font.size = 40;
         } else if (regularGroupCount == 4) {
-            localConfig.styles.bloodGroup.coord.top = 73;
+            localConfig.styles.bloodGroup.coord.top = 70;
             localConfig.styles.bloodGroup.coord.left = 10;
-            localConfig.styles.bloodGroup.font.size = 37;
+            localConfig.styles.bloodGroup.font.size = 40;
+
+            localConfig.styles.bloodGroup2.coord.top = 130;
+            localConfig.styles.bloodGroup2.coord.left = 10;
+            localConfig.styles.bloodGroup2.font.size = 40;
         }
     }
 
