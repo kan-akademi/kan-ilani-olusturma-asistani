@@ -67,23 +67,12 @@ export function Template1Component(props: TemplateProps) {
         }
     }
 
+    // "Kan Grubu Fark Etmeksizin" seciliyken normal kan gruplari secilemez;
+    // handleBloodGroupChange bunu state seviyesinde zorunlu kildigi icin
+    // hasRegardless true iken regularGroupCount daima 0'dir.
     if (hasRegardless == true) {
-        if (regularGroupCount == 0) {
-            localConfig.styles.bloodGroup.coord.left = localConfig.styles.regardlessBloodGroup.coord.left;
-            localConfig.styles.bloodGroup.font.size = localConfig.styles.regardlessBloodGroup.font.size;
-        } else if (regularGroupCount == 1) {
-            localConfig.styles.bloodGroup.coord.top = 80;
-            localConfig.styles.bloodGroup.coord.left = 10;
-            localConfig.styles.bloodGroup.font.size = 34;
-        } else if (regularGroupCount == 2) {
-            localConfig.styles.bloodGroup.coord.top = 85;
-            localConfig.styles.bloodGroup.coord.left = 10;
-            localConfig.styles.bloodGroup.font.size = 29;
-        } else if (regularGroupCount == 3) {
-            localConfig.styles.bloodGroup.coord.top = 90;
-            localConfig.styles.bloodGroup.coord.left = 10;
-            localConfig.styles.bloodGroup.font.size = 27;
-        }
+        localConfig.styles.bloodGroup.coord.left = localConfig.styles.regardlessBloodGroup.coord.left;
+        localConfig.styles.bloodGroup.font.size = localConfig.styles.regardlessBloodGroup.font.size;
     }
 
     // Dinamik olarak kan tipi font boyutunu ve konumunu ayarla
