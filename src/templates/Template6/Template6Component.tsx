@@ -138,7 +138,7 @@ export function Template6Component(props: TemplateProps) {
     const originalLocationFontSize = useRef(localConfig.styles.location.font.size);
 
     if (donationInfo.location.length >= 260) {
-        localConfig.styles.location.coord.top = 450;
+        localConfig.styles.location.coord.top = 475;
         localConfig.styles.location.font.size = 14;
     } else {
         localConfig.styles.location.coord.top = originalLocationTop.current;
