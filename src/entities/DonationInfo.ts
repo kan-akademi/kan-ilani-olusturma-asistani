@@ -1,6 +1,7 @@
 import { formatDateToTurkish } from "../utils/formUtils";
 
 export const REGARDLESS_BLOOD_GROUP = "Kan Grubu Fark Etmeksizin" as const;
+export const MAX_BLOOD_GROUP_SELECTION = 4;
 
 export interface DonationInfo {
   bloodGroup: string[];

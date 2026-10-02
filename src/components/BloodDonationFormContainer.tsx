@@ -4,7 +4,7 @@ import html2canvas from "html2canvas";
 import { useTranslation } from "react-i18next";
 import "./BloodDonationFormContainer.css";
 import { formatDateToTurkish, formatPhoneNumber, hashData } from "../utils/formUtils";
-import { type DonationInfo, initialDonationInfo } from "../entities/DonationInfo";
+import { type DonationInfo, initialDonationInfo, REGARDLESS_BLOOD_GROUP, MAX_BLOOD_GROUP_SELECTION } from "../entities/DonationInfo";
 import { type SelectChangeEvent } from "@mui/material";
 import BloodDonationFormInputs from "./BloodDonationFormInputs";
 import { getTemplateByIndex } from "../templates";
@@ -53,10 +53,12 @@ export default function BloodDonationFormContainer() {
   };
 
   const handleBloodGroupChange = (e: SelectChangeEvent<string[]>) => {
-    const { name, value } = e.target;
+    const { name, value: selected } = e.target;
+    // "Kan Grubu Fark Etmeksizin" seçiliyse diğer kan grupları seçilemez
+    const value = selected.includes(REGARDLESS_BLOOD_GROUP) ? [REGARDLESS_BLOOD_GROUP] : selected;
     let bloodGroup1: string[] = [], bloodGroup2: string[] = [];
 
-    if (value.length > 4) {
+    if (value.length > MAX_BLOOD_GROUP_SELECTION) {
       Swal.fire({
         icon: "warning",
         confirmButtonText: t("close"),
@@ -71,10 +73,9 @@ export default function BloodDonationFormContainer() {
       bloodGroup1.push(value[0]);
       bloodGroup2.push(value[1]);
     } else {
-      bloodGroup1.push(...(value as string[]).slice(0, 2));
-      bloodGroup2.push(...(value as string[]).slice(2));
+      bloodGroup1.push(...value.slice(0, 2));
+      bloodGroup2.push(...value.slice(2));
     }
-console.log("handleBloodGroupChange", { value, bloodGroup1, bloodGroup2 });
     setDonationInfo((prev) => ({
       ...prev,
       [name]: value,

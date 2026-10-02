@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import { Info } from "@mui/icons-material";
 import Swal from "sweetalert2";
-import type { DonationInfo } from "../entities/DonationInfo";
+import { REGARDLESS_BLOOD_GROUP, MAX_BLOOD_GROUP_SELECTION, type DonationInfo } from "../entities/DonationInfo";
 import { getTemplateList } from "../templates";
 
 interface InputProps {
@@ -41,8 +41,17 @@ export default function BloodDonationFormInputs(props: InputProps) {
 
   const bloodGroupSelectRef = useRef<HTMLSelectElement>(null);
 
-  const selectedBloodGroups = Array.isArray(props.donationInfo.bloodGroup) ? props.donationInfo.bloodGroup : props.donationInfo.bloodGroup ? [props.donationInfo.bloodGroup]: [];
+  const selectedBloodGroups = Array.isArray(props.donationInfo.bloodGroup) ? props.donationInfo.bloodGroup : props.donationInfo.bloodGroup ? [props.donationInfo.bloodGroup] : [];
   const selectedBloodTypes = Array.isArray(props.donationInfo.bloodType) ? props.donationInfo.bloodType : props.donationInfo.bloodType ? [props.donationInfo.bloodType] : [];
+
+  // "Kan Grubu Fark Etmeksizin" seçiliyse ya da sınıra ulaşıldıysa
+  // kan grubu seçeneklerinin kalanı seçilemez hale gelir.
+  // Sınıra ulaşıldığında halen seçili olan gruplar tıklanabilir kalır,
+  // aksi halde kullanıcı seçiminden birini kaldırıp yerine başkasını seçemez.
+  const hasRegardlessBloodGroup = selectedBloodGroups.includes(REGARDLESS_BLOOD_GROUP);
+  const isBloodGroupLimitReached = selectedBloodGroups.length >= MAX_BLOOD_GROUP_SELECTION;
+
+  const isBloodGroupDisabled = (bloodGroup: string) => hasRegardlessBloodGroup || (isBloodGroupLimitReached && !selectedBloodGroups.includes(bloodGroup));
 
   const isEmpty = (val: any) => {
     if (val === null || val === undefined) return true;
@@ -127,39 +136,39 @@ export default function BloodDonationFormInputs(props: InputProps) {
             Array.isArray(selected) ? selected.join(", ") : String(selected)
           }
         >
-          <MenuItem value="A RH (+)">
+          <MenuItem value="A RH (+)" disabled={isBloodGroupDisabled("A RH (+)")}>
             <Checkbox checked={selectedBloodGroups.indexOf("A RH (+)") > -1} />
             <ListItemText primary="A RH (+)" />
           </MenuItem>
-          <MenuItem value="A RH (-)">
+          <MenuItem value="A RH (-)" disabled={isBloodGroupDisabled("A RH (-)")}>
             <Checkbox checked={selectedBloodGroups.indexOf("A RH (-)") > -1} />
             <ListItemText primary="A RH (-)" />
           </MenuItem>
-          <MenuItem value="B RH (+)">
+          <MenuItem value="B RH (+)" disabled={isBloodGroupDisabled("B RH (+)")}>
             <Checkbox checked={selectedBloodGroups.indexOf("B RH (+)") > -1} />
             <ListItemText primary="B RH (+)" />
           </MenuItem>
-          <MenuItem value="B RH (-)">
+          <MenuItem value="B RH (-)" disabled={isBloodGroupDisabled("B RH (-)")}>
             <Checkbox checked={selectedBloodGroups.indexOf("B RH (-)") > -1} />
             <ListItemText primary="B RH (-)" />
           </MenuItem>
-          <MenuItem value="AB RH (+)">
+          <MenuItem value="AB RH (+)" disabled={isBloodGroupDisabled("AB RH (+)")}>
             <Checkbox checked={selectedBloodGroups.indexOf("AB RH (+)") > -1} />
             <ListItemText primary="AB RH (+)" />
           </MenuItem>
-          <MenuItem value="AB RH (-)">
+          <MenuItem value="AB RH (-)" disabled={isBloodGroupDisabled("AB RH (-)")}>
             <Checkbox checked={selectedBloodGroups.indexOf("AB RH (-)") > -1} />
             <ListItemText primary="AB RH (-)" />
           </MenuItem>
-          <MenuItem value="0 RH (+)">
+          <MenuItem value="0 RH (+)" disabled={isBloodGroupDisabled("0 RH (+)")}>
             <Checkbox checked={selectedBloodGroups.indexOf("0 RH (+)") > -1} />
             <ListItemText primary="0 RH (+)" />
           </MenuItem>
-          <MenuItem value="0 RH (-)">
+          <MenuItem value="0 RH (-)" disabled={isBloodGroupDisabled("0 RH (-)")}>
             <Checkbox checked={selectedBloodGroups.indexOf("0 RH (-)") > -1} />
             <ListItemText primary="0 RH (-)" />
           </MenuItem>
-          <MenuItem value="Kan Grubu Fark Etmeksizin">
+          <MenuItem value="Kan Grubu Fark Etmeksizin" disabled={isBloodGroupLimitReached}>
             <Checkbox
               checked={
                 selectedBloodGroups.indexOf("Kan Grubu Fark Etmeksizin") > -1
