@@ -10,6 +10,9 @@
     "predeploy": "tsc -b && vite build",
     "deploy": "gh-pages -d dist",
     "lint": "eslint .",
+    "test": "node --test --test-concurrency=1 \"tests/e2e/*.test.mjs\"",
+    "test:selection": "node --test tests/e2e/blood-group-selection.test.mjs",
+    "test:poster": "node --test tests/e2e/poster-render.test.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -35,6 +38,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.3.0",
+    "playwright-core": "^1.63.0",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.35.1",
     "vite": "^7.0.4"
