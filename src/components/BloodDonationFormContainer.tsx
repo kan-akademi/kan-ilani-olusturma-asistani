@@ -111,7 +111,7 @@ console.log("handleBloodGroupChange", { value, bloodGroup1, bloodGroup2 });
     setSelectedTemplateIndex(index);
   };
 
-  const downloadImage = () => {
+  const downloadImage = async () => {
     if (!imageRef.current) return;
 
     const fieldLabels: Record<keyof Omit<DonationInfo, "bloodGroup1" | "bloodGroup2" | "isRegularNeed" | "dateFormatted">, string> = {
@@ -160,14 +160,55 @@ console.log("handleBloodGroupChange", { value, bloodGroup1, bloodGroup2 });
       return;
     }
 
-    html2canvas(imageRef.current).then((canvas) => {
+    try {
+      const canvas = await html2canvas(imageRef.current, {
+        //backgroundColor: "#ffffff",
+        //scale: 2,
+        useCORS: true,
+      });
+
+      const blob = await new Promise<Blob | null>((resolve) => {
+        canvas.toBlob((result) => resolve(result), "image/png");
+      });
+
+      if (!blob) {
+        throw new Error("Canvas export failed");
+      }
+
+      const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.download = "kan-bagis-ilani-formu.png";
-      link.href = canvas.toDataURL("image/png");
-      link.click();
+      link.href = url;
+      link.style.display = "none";
+      link.target = "_blank";
+      document.body.appendChild(link);
+
+      const isMobile = /Android|iPhone|iPad|iPod/i.test(window.navigator.userAgent);
+
+      if (isMobile) {
+        try {
+          link.click();
+        } catch {
+          window.open(url, "_blank", "noopener,noreferrer");
+        }
+      } else {
+        link.click();
+      }
+
+      setTimeout(() => {
+        link.remove();
+        URL.revokeObjectURL(url);
+      }, 1500);
 
       updateCounter();
-    });
+    } catch (error) {
+      console.error("Image export failed", error);
+      Swal.fire({
+        icon: "error",
+        confirmButtonText: t("close"),
+        html: "İşlem sırasında bir hata oluştu.",
+      });
+    }
   };
 
   const updateCounter = () => {
