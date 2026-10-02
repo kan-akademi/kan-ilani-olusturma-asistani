@@ -135,7 +135,7 @@ export function posterBloodGroupLines(page) {
  * sekilde dondurur. Iki satira bolunmus posterlerde satirlarin ust uste
  * binip binmedigi ancak olcumle dogrulanabilir; gozle bakmak yetersiz.
  *
- * @returns {{width:number, height:number, lines:Array<{text:string,top:number,bottom:number,left:number,right:number,fontSize:number}>}}
+ * @returns {{width:number, height:number, lines:Array<{text:string,top:number,bottom:number,left:number,right:number,fontSize:number,wrappedLines:number}>}}
  */
 export function measurePosterBloodGroups(page) {
   return page.evaluate(() => {
@@ -147,6 +147,7 @@ export function measurePosterBloodGroups(page) {
       .filter((el) => el.innerText.trim().length > 0)
       .map((el) => {
         const r = el.getBoundingClientRect();
+        const lineHeight = parseFloat(getComputedStyle(el).lineHeight);
         return {
           text: el.innerText.trim(),
           top: Math.round(r.top - wrapRect.top),
@@ -154,6 +155,11 @@ export function measurePosterBloodGroups(page) {
           left: Math.round(r.left - wrapRect.left),
           right: Math.round(r.right - wrapRect.left),
           fontSize: parseFloat(getComputedStyle(el).fontSize),
+          // Metin kac satira sarildi? Kan grubu metni tek satira sigmali;
+          // sarmak hem tasma hem de beklenmedik yerlestirme demektir.
+          wrappedLines: Number.isFinite(lineHeight)
+            ? Math.max(1, Math.round((r.height + 1) / lineHeight))
+            : 1,
         };
       });
 

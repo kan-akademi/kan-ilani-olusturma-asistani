@@ -27,7 +27,7 @@ npm run test:poster     # sadece poster önizleme
 | `helpers.mjs` | Paylaşılan yardımcılar: tarayıcı açma, dropdown aç/kapa, seçim yapma, `aria-disabled` okuma, poster satırlarını okuma, geometri ölçümü |
 | `blood-group-selection.test.mjs` | Kan grubu seçim kuralları (8 test) |
 | `poster-render.test.mjs` | Poster önizleme bütünlüğü (4 test) |
-| `poster-geometry.test.mjs` | Template 3 poster satır geometrisi (7 test) |
+| `poster-geometry.test.mjs` | Template 3 ve 4 poster satır geometrisi (15 test) |
 
 Test framework'ü olarak Node'un yerleşik `node:test` modülü kullanılıyor; tek
 bağımlılık `playwright-core` ve o da yalnızca tarayıcıyı sürmek için.
@@ -55,17 +55,18 @@ Playwright sürümü değişse bile yol elle ayarlanmaz. Farklı bir kurulum iç
 5. Devre dışı seçeneklere tıklamak hiçbir şeyi değiştirmez, uyarı modalı çıkmaz.
 6. Posterde 4 grup 2+2 olarak iki satıra bölünür.
 7. Altı şablonun tamamı seçimli kan grubuyla hatasız render olur.
-8. Template 3'te iki satırlı kan grupları üst üste binmez, `bloodType`
-   alanıyla çakışmaz ve çerçeve dışına taşmaz.
+8. Template 3 ve 4'te iki satırlı kan grupları üst üste binmez, tek
+   satıra sarmaz, `bloodType` alanıyla çakışmaz ve çerçeve dışına taşmaz.
 
 ## Poster geometrisi neden ölçülüyor?
 
 İki satıra bölünmüş posterlerde satırlar arası pay **3px**'e kadar
 düşüyor. Bu aralıkta gözle kontrol güvenilir değil; 5px'lik bir hata
 posterde fark edilmeden geçer. `poster-geometry.test.mjs` bu yüzden
-`getBoundingClientRect()` okuyup şu üçünü doğruluyor:
+`getBoundingClientRect()` okuyup şu dördünü doğruluyor:
 
 - ardışık satırlar üst üste binmiyor (`lines[i].bottom <= lines[i+1].top`)
+- kan grubu metni **tek satıra** sığıyor (`wrappedLines === 1`)
 - metin `bloodType` alanına girmiyor
 - metin `.image-wrapper` sınırları içinde kalıyor
 
@@ -75,9 +76,31 @@ değiştirilirken bu ilişkiyi korumak gerekiyor. `tests/e2e/`
 içindeki test, `regularGroupCount` dallarındaki değerlerden biri
 bozulursa yakalar.
 
-**Bilinen, henüz düzeltilmemiş durum:** Template 6'nın 2 gruplu hali
-ve Template 2 ile Template 5'in 2/3 gruplu hâlleri hâlâ çakışıyor.
-Bu testler yalnız Template 3'ü kapsıyor.
+Düzeltilmiş iki kusur bu testle yakalandı:
+
+- **Template 3**: 2/3/4 grupta satırlar 5px üst üste biniyordu.
+- **Template 4**: `bloodGroup2` config'te `{top: 170, size: 78}`
+  değerlerinde kalıyordu; 4 grupta ikinci satır 78px'de 2 satıra
+  sarıp çerçevenin sağ kenarına dayanıyordu, 2/3 grupta satır
+  boyutları asimetrikti (39px ↔ 78px).
+
+## Bilinen, henüz düzeltilmemiş durumlar
+
+Geometri testleri şu an yalnız **Template 3 ve 4**'ü kapsıyor. Ölçülmüş
+olarak tespit edilmiş, henüz dokunulmamış durumlar:
+
+| Şablon | Durum |
+|---|---|
+| Template 3 | 2 grupta satırlar **24px**, 3 ve 4 grupta **2px** üst üste biniyor. 2 gruplu font 60px iken iki satır 180px istiyor, ama `bloodType` 200px'de kalıyor. |
+| Template 6 | 2 grupta satırlar **20px** üst üste biniyor (`bloodType` ile de çakışıyor). |
+| Template 2, 5 | 2 ve 3 grupta satırlar üst üste biniyor; 4 grupta temiz. |
+
+Template 1 ve 4, `bloodGroup2` config'i `top: 170` olduğu için bu
+sorundan kurtulmuştu; Template 3 ve 4 artık iki satırı açıkça
+konumlandırıyor.
+
+Bu tabloyu `tests/e2e/` dışındaki geçici ölçüm betiğiyle ürettim;
+kalıcı test kapsamı genişletildiğinde buradaki satırlar silinmelidir.
 
 ## Dikkat: MUI'nin açık kalma davranışı
 
