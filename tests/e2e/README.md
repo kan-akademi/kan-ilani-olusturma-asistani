@@ -24,9 +24,10 @@ npm run test:poster     # sadece poster önizleme
 
 | Dosya | Kapsam |
 |---|---|
-| `helpers.mjs` | Paylaşılan yardımcılar: tarayıcı açma, dropdown aç/kapa, seçim yapma, `aria-disabled` okuma, poster satırlarını okuma |
+| `helpers.mjs` | Paylaşılan yardımcılar: tarayıcı açma, dropdown aç/kapa, seçim yapma, `aria-disabled` okuma, poster satırlarını okuma, geometri ölçümü |
 | `blood-group-selection.test.mjs` | Kan grubu seçim kuralları (8 test) |
 | `poster-render.test.mjs` | Poster önizleme bütünlüğü (4 test) |
+| `poster-geometry.test.mjs` | Template 3 poster satır geometrisi (7 test) |
 
 Test framework'ü olarak Node'un yerleşik `node:test` modülü kullanılıyor; tek
 bağımlılık `playwright-core` ve o da yalnızca tarayıcıyı sürmek için.
@@ -54,6 +55,29 @@ Playwright sürümü değişse bile yol elle ayarlanmaz. Farklı bir kurulum iç
 5. Devre dışı seçeneklere tıklamak hiçbir şeyi değiştirmez, uyarı modalı çıkmaz.
 6. Posterde 4 grup 2+2 olarak iki satıra bölünür.
 7. Altı şablonun tamamı seçimli kan grubuyla hatasız render olur.
+8. Template 3'te iki satırlı kan grupları üst üste binmez, `bloodType`
+   alanıyla çakışmaz ve çerçeve dışına taşmaz.
+
+## Poster geometrisi neden ölçülüyor?
+
+İki satıra bölünmüş posterlerde satırlar arası pay **3px**'e kadar
+düşüyor. Bu aralıkta gözle kontrol güvenilir değil; 5px'lik bir hata
+posterde fark edilmeden geçer. `poster-geometry.test.mjs` bu yüzden
+`getBoundingClientRect()` okuyup şu üçünü doğruluyor:
+
+- ardışık satırlar üst üste binmiyor (`lines[i].bottom <= lines[i+1].top`)
+- metin `bloodType` alanına girmiyor
+- metin `.image-wrapper` sınırları içinde kalıyor
+
+Kan grubu metninin render yüksekliği font boyutunun ~1.5 katı
+(League Spartan satır yüksekliği), dolayısıyla piksel değerleri
+değiştirilirken bu ilişkiyi korumak gerekiyor. `tests/e2e/`
+içindeki test, `regularGroupCount` dallarındaki değerlerden biri
+bozulursa yakalar.
+
+**Bilinen, henüz düzeltilmemiş durum:** Template 6'nın 2 gruplu hali
+ve Template 2 ile Template 5'in 2/3 gruplu hâlleri hâlâ çakışıyor.
+Bu testler yalnız Template 3'ü kapsıyor.
 
 ## Dikkat: MUI'nin açık kalma davranışı
 

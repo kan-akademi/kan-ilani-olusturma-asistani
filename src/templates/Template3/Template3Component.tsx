@@ -19,6 +19,11 @@ export function Template3Component(props: TemplateProps) {
                 coord: { ...config.styles.bloodGroup.coord },
                 font: { ...config.styles.bloodGroup.font },
             },
+            bloodGroup2: {
+                ...config.styles.bloodGroup2,
+                coord: { ...config.styles.bloodGroup2.coord },
+                font: { ...config.styles.bloodGroup2.font },
+            },
             regardlessBloodGroup: {
                 ...config.styles.regardlessBloodGroup,
                 coord: { ...config.styles.regardlessBloodGroup.coord },
@@ -56,17 +61,31 @@ export function Template3Component(props: TemplateProps) {
                 localConfig.styles.bloodGroup.coord.left = originalBloodGroupLeft.current;
             }
         } else if (regularGroupCount == 2) {
-            localConfig.styles.bloodGroup.coord.top = 110;
+            // Iki satira bolunmus halde iki kan grubu sigiyor. Satir yuksekligi
+            // fontun ~1.5 kati oldugu icin 45 + 2 * (41 * 1.5) = 168; bloodType
+            // en yakin konumunda 172'de oldugu icin ust uste binmez.
+            localConfig.styles.bloodGroup.coord.top = 59;
             localConfig.styles.bloodGroup.coord.left = 10;
-            localConfig.styles.bloodGroup.font.size = 39;
+            localConfig.styles.bloodGroup.font.size = 60;
+            localConfig.styles.bloodGroup2.coord.top = 125;
+            localConfig.styles.bloodGroup2.coord.left = 10;
+            localConfig.styles.bloodGroup2.font.size = 60;
         } else if (regularGroupCount == 3) {
-            localConfig.styles.bloodGroup.coord.top = 73;
+            // Ilk satira iki, ikinci satira bir grup sigiyor.
+            localConfig.styles.bloodGroup.coord.top = 70;
             localConfig.styles.bloodGroup.coord.left = 10;
-            localConfig.styles.bloodGroup.font.size = 41;
+            localConfig.styles.bloodGroup.font.size = 38;
+            localConfig.styles.bloodGroup2.coord.top = 125;
+            localConfig.styles.bloodGroup2.coord.left = 10;
+            localConfig.styles.bloodGroup2.font.size = 38;
         } else if (regularGroupCount == 4) {
-            localConfig.styles.bloodGroup.coord.top = 73;
+            // Her satira iki grup sigiyor.
+            localConfig.styles.bloodGroup.coord.top = 70;
             localConfig.styles.bloodGroup.coord.left = 10;
-            localConfig.styles.bloodGroup.font.size = 39;
+            localConfig.styles.bloodGroup.font.size = 38;
+            localConfig.styles.bloodGroup2.coord.top = 125;
+            localConfig.styles.bloodGroup2.coord.left = 10;
+            localConfig.styles.bloodGroup2.font.size = 38;
         }
     }
 
@@ -94,7 +113,7 @@ export function Template3Component(props: TemplateProps) {
     const originalBloodTypeFontSize = useRef(localConfig.styles.bloodType.font.size);
 
     if (donationInfo.bloodType.length > 3) {
-        localConfig.styles.bloodType.coord.top = 172;
+        localConfig.styles.bloodType.coord.top = 200;
         localConfig.styles.bloodType.font.size = 15;
     } else {
         localConfig.styles.bloodType.coord.top = originalBloodTypeTop.current;
@@ -106,11 +125,11 @@ export function Template3Component(props: TemplateProps) {
     const originalFullNameFontSize = useRef(localConfig.styles.fullName.font.size);
 
     if (donationInfo.fullName.length >= 35) {
-        localConfig.styles.fullName.coord.top = 352;
+        localConfig.styles.fullName.coord.top = 365;
         localConfig.styles.fullName.font.size = 13;
     } else if (donationInfo.fullName.length >= 25) {
-        localConfig.styles.fullName.coord.top = 350;
-        localConfig.styles.fullName.font.size = 15;
+        localConfig.styles.fullName.coord.top = 365;
+        localConfig.styles.fullName.font.size = 13;
     } else {
         localConfig.styles.fullName.coord.top = originalFullNameTop.current;
         localConfig.styles.fullName.font.size = originalFullNameFontSize.current;
@@ -122,7 +141,7 @@ export function Template3Component(props: TemplateProps) {
 
     if (donationInfo.location.length >= 260) {
         localConfig.styles.location.coord.top = 470;
-        localConfig.styles.location.font.size = 14;
+        localConfig.styles.location.font.size = 13;
     } else {
         localConfig.styles.location.coord.top = originalLocationTop.current;
         localConfig.styles.location.font.size = originalLocationFontSize.current;

@@ -129,3 +129,65 @@ export function isModalOpen(page) {
 export function posterBloodGroupLines(page) {
   return page.locator(".image-wrapper .text-item.blood-group").allInnerTexts();
 }
+
+/**
+ * Posterin kan grubu satirlarini, arka plan kutusuna gore olculmus
+ * sekilde dondurur. Iki satira bolunmus posterlerde satirlarin ust uste
+ * binip binmedigi ancak olcumle dogrulanabilir; gozle bakmak yetersiz.
+ *
+ * @returns {{width:number, height:number, lines:Array<{text:string,top:number,bottom:number,left:number,right:number,fontSize:number}>}}
+ */
+export function measurePosterBloodGroups(page) {
+  return page.evaluate(() => {
+    const wrap = document.querySelector(".image-wrapper");
+    if (!wrap) throw new Error(".image-wrapper bulunamadi; poster render edilmemis.");
+    const wrapRect = wrap.getBoundingClientRect();
+
+    const lines = [...wrap.querySelectorAll(".text-item.blood-group")]
+      .filter((el) => el.innerText.trim().length > 0)
+      .map((el) => {
+        const r = el.getBoundingClientRect();
+        return {
+          text: el.innerText.trim(),
+          top: Math.round(r.top - wrapRect.top),
+          bottom: Math.round(r.bottom - wrapRect.top),
+          left: Math.round(r.left - wrapRect.left),
+          right: Math.round(r.right - wrapRect.left),
+          fontSize: parseFloat(getComputedStyle(el).fontSize),
+        };
+      });
+
+    return {
+      width: Math.round(wrapRect.width),
+      height: Math.round(wrapRect.height),
+      lines,
+    };
+  });
+}
+
+/** bloodType alanindaki gercek MenuItem degerleri. */
+export const BLOOD_TYPES = ["Kırmızı Kan", "Trombosit", "Granülosit", "Plazma", "Kök Hücre"];
+
+const BLOOD_TYPE_SELECT = "#mui-component-select-bloodType";
+
+/**
+ * bloodType'a 4+ secenek yazar. Templates bu durumda kan grubu metnini
+ * asagi iter, yani iki satira bolunmus posterler icin en kotu dikey senaryo.
+ */
+export async function fillLongBloodType(page) {
+  const select = page.locator(BLOOD_TYPE_SELECT);
+  await select.click();
+  await page.waitForSelector("ul[role=listbox]", { timeout: 5000 });
+  for (const t of BLOOD_TYPES.slice(0, 4)) {
+    await page.locator(`li[data-value="${t}"]`).click({ force: true });
+    await page.waitForTimeout(60);
+  }
+  await page.keyboard.press("Escape");
+  await page.waitForSelector("ul[role=listbox]", { state: "detached", timeout: 5000 });
+  await page.waitForTimeout(150);
+}
+
+/** Sablon degistirici butonlari, DOM sirasinda. */
+export async function templateButtons(page) {
+  return page.locator('[title^="Template "]').all();
+}
