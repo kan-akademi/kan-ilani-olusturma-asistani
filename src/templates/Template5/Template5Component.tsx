@@ -19,6 +19,11 @@ export function Template5Component(props: TemplateProps) {
                 coord: { ...config.styles.bloodGroup.coord },
                 font: { ...config.styles.bloodGroup.font },
             },
+            bloodGroup2: {
+                ...config.styles.bloodGroup2,
+                coord: { ...config.styles.bloodGroup2.coord },
+                font: { ...config.styles.bloodGroup2.font },
+            },
             regardlessBloodGroup: {
                 ...config.styles.regardlessBloodGroup,
                 coord: { ...config.styles.regardlessBloodGroup.coord },
@@ -56,17 +61,31 @@ export function Template5Component(props: TemplateProps) {
                 localConfig.styles.bloodGroup.coord.left = originalBloodGroupLeft.current;
             }
         } else if (regularGroupCount == 2) {
-            localConfig.styles.bloodGroup.coord.top = 110;
+            // Her satira bir grup. bloodType bu sablonde sabit 218'de
+            // oldugu icin 75 + 2 * (46 * 1.5) = 214 ile rahatca sigiyor.
+            localConfig.styles.bloodGroup.coord.top = 75;
             localConfig.styles.bloodGroup.coord.left = 10;
-            localConfig.styles.bloodGroup.font.size = 39;
+            localConfig.styles.bloodGroup.font.size = 46;
+            localConfig.styles.bloodGroup2.coord.top = 139;
+            localConfig.styles.bloodGroup2.coord.left = 10;
+            localConfig.styles.bloodGroup2.font.size = 46;
         } else if (regularGroupCount == 3) {
-            localConfig.styles.bloodGroup.coord.top = 73;
+            // Ilk satira iki, ikinci satira bir grup. Ilk satir genis oldugu
+            // icin 3 ve 4 gruplu hallerle ayni boyut kullanilir.
+            localConfig.styles.bloodGroup.coord.top = 75;
             localConfig.styles.bloodGroup.coord.left = 10;
-            localConfig.styles.bloodGroup.font.size = 41;
+            localConfig.styles.bloodGroup.font.size = 40;
+            localConfig.styles.bloodGroup2.coord.top = 130;
+            localConfig.styles.bloodGroup2.coord.left = 10;
+            localConfig.styles.bloodGroup2.font.size = 40;
         } else if (regularGroupCount == 4) {
-            localConfig.styles.bloodGroup.coord.top = 73;
+            // Her satira iki grup.
+            localConfig.styles.bloodGroup.coord.top = 75;
             localConfig.styles.bloodGroup.coord.left = 10;
-            localConfig.styles.bloodGroup.font.size = 37;
+            localConfig.styles.bloodGroup.font.size = 40;
+            localConfig.styles.bloodGroup2.coord.top = 130;
+            localConfig.styles.bloodGroup2.coord.left = 10;
+            localConfig.styles.bloodGroup2.font.size = 40;
         }
     }
 
@@ -97,10 +116,10 @@ export function Template5Component(props: TemplateProps) {
     const originalFullNameFontSize = useRef(localConfig.styles.fullName.font.size);
 
     if (donationInfo.fullName.length >= 35) {
-        localConfig.styles.fullName.coord.top = 275;
-        localConfig.styles.fullName.font.size = 13;
+        localConfig.styles.fullName.coord.top = 350;
+        localConfig.styles.fullName.font.size = 14;
     } else if (donationInfo.fullName.length >= 25) {
-        localConfig.styles.fullName.coord.top = 275;
+        localConfig.styles.fullName.coord.top = 350;
         localConfig.styles.fullName.font.size = 15;
     } else {
         localConfig.styles.fullName.coord.top = originalFullNameTop.current;
@@ -112,7 +131,7 @@ export function Template5Component(props: TemplateProps) {
     const originalLocationFontSize = useRef(localConfig.styles.location.font.size);
 
     if (donationInfo.location.length >= 240) {
-        localConfig.styles.location.coord.top = 508;
+        localConfig.styles.location.coord.top = 483;
         localConfig.styles.location.font.size = 14;
     } else {
         localConfig.styles.location.coord.top = originalLocationTop.current;
