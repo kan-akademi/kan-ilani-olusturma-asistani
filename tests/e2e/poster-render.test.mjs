@@ -18,6 +18,8 @@ import {
   pick,
   selectedGroups,
   posterBloodGroupLines,
+  templateButtons,
+  expectedTemplateCount,
 } from "./helpers.mjs";
 
 let browser;
@@ -68,8 +70,12 @@ describe("poster onizleme", () => {
     await pick(page, "AB RH (-)");
     await closeDropdown(page);
 
-    const selectors = await page.locator('[title^="Template "]').all();
-    assert.equal(selectors.length, 6, "6 sablon secici bekleniyor");
+    const selectors = await templateButtons(page);
+    assert.equal(
+      selectors.length,
+      expectedTemplateCount(),
+      "registry'deki sablon sayisi kadar secici olmali",
+    );
 
     for (let i = 0; i < selectors.length; i++) {
       await selectors[i].click();

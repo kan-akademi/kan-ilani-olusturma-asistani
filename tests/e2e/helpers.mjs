@@ -217,3 +217,52 @@ export async function fillLongBloodType(page) {
 export async function templateButtons(page) {
   return page.locator('[title^="Template "]').all();
 }
+
+const REPO_ROOT = path.resolve(new URL("../..", import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "$1"));
+
+/**
+ * Registry'de kayitli sablon sayisi.
+ *
+ * `getTemplateCount()` TypeScript oldugu icin .mjs testlerinden import
+ * edilemez; bu yuzden `templates` dizisinin govdesinden sayilir. Sablon
+ * eklemek registry'ye import + diziye eklemekten ibaret oldugu icin, test
+ * sayiyi elle yazmak yerine buradan turetir - boyce yeni sablon eklendiginde
+ * test kirilmaz, ama secici DOM'dan kaybolursa yine kirilir.
+ */
+export function expectedTemplateCount() {
+  const src = fs.readFileSync(path.join(REPO_ROOT, "src", "templates", "index.ts"), "utf8");
+  const body = src.match(/export const templates[^=]*=\s*\[([\s\S]*?)\];/);
+  if (!body) throw new Error("src/templates/index.ts icinde `templates` dizisi bulunamadi.");
+  const entries = body[1].split(",").map((s) => s.trim()).filter((s) => s.length > 0);
+  return entries.length;
+}
+
+/**
+ * Template secim satiri: her butonun olculmus kutusu.
+ *
+ * Kritik alan `isSquare`. flex satiri bir butonu yalnizca YATAYDA
+ * kucultebilir (yukseklik sabittir), boylece daire sessizce elipse
+ * donusur. Genisligin kendisi degismedigi icin ancak olcerek yakalanir.
+ */
+export function templateSelectorBoxes(page) {
+  return page.evaluate(() => {
+    const els = [...document.querySelectorAll('[title^="Template "]')];
+    const parent = els[0]?.parentElement ?? null;
+    return {
+      containerWidth: parent ? Math.round(parent.getBoundingClientRect().width) : 0,
+      gap: parent ? getComputedStyle(parent).gap : "normal",
+      boxes: els.map((el) => {
+        const r = el.getBoundingClientRect();
+        const cs = getComputedStyle(el);
+        return {
+          title: el.getAttribute("title"),
+          width: Math.round(r.width * 100) / 100,
+          height: Math.round(r.height * 100) / 100,
+          top: Math.round(r.top),
+          flexShrink: cs.flexShrink,
+          isSquare: Math.abs(r.width - r.height) < 0.5,
+        };
+      }),
+    };
+  });
+}

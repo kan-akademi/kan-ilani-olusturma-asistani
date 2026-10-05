@@ -309,7 +309,10 @@ export default function BloodDonationFormInputs(props: InputProps) {
         <div style={{ fontSize: "1rem", fontWeight: "400", color: theme.palette.mode === "dark" ? "#ffffffb3" : "#555" }}>
           {t("templateSelection")}
         </div>
-        <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mt: 1, }}>
+        {/* Sarmalı: 360px'lik form 7 daireye ancak 348px ile sigar
+            (7*36 + 6*16). Daha dar ekranda flexShrink yerine alt satira
+            gecsin ki daireler yatayda ezilip elips olmasin. */}
+        <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 2, mt: 1, }}>
           {getTemplateList().map((template, index) => {
             const isSelected = props.selectedTemplate === index;
             const isDark = theme.palette.mode === "dark";
@@ -320,8 +323,11 @@ export default function BloodDonationFormInputs(props: InputProps) {
                 title={`Template ${index + 1}`}
                 onClick={() => props.handleTemplateChange(index)}
                 sx={{
-                  width: 46,
-                  height: 46,
+                  // flexShrink: 0 olmadan flex yalnizca genisligi kucultur,
+                  // yukseklik sabit kalir ve daire elipse donusur.
+                  flexShrink: 0,
+                  width: 36,
+                  height: 36,
                   borderRadius: "50%",
                   background: template.selectorColor,
                   border: `3px solid ${borderColor}`,
