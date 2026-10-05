@@ -61,21 +61,17 @@ export function Template5Component(props: TemplateProps) {
                 localConfig.styles.bloodGroup.coord.left = originalBloodGroupLeft.current;
             }
         } else if (regularGroupCount == 2) {
-            // Her satira bir grup. bloodType bu sablonde sabit 218'de
-            // oldugu icin 75 + 2 * (46 * 1.5) = 214 ile rahatca sigiyor.
             localConfig.styles.bloodGroup.coord.top = 75;
             localConfig.styles.bloodGroup.coord.left = 10;
-            localConfig.styles.bloodGroup.font.size = 46;
+            localConfig.styles.bloodGroup.font.size = 42;
             localConfig.styles.bloodGroup2.coord.top = 139;
             localConfig.styles.bloodGroup2.coord.left = 10;
-            localConfig.styles.bloodGroup2.font.size = 46;
+            localConfig.styles.bloodGroup2.font.size = 42;
         } else if (regularGroupCount == 3) {
-            // Ilk satira iki, ikinci satira bir grup. Ilk satir genis oldugu
-            // icin 3 ve 4 gruplu hallerle ayni boyut kullanilir.
             localConfig.styles.bloodGroup.coord.top = 75;
             localConfig.styles.bloodGroup.coord.left = 10;
             localConfig.styles.bloodGroup.font.size = 40;
-            localConfig.styles.bloodGroup2.coord.top = 130;
+            localConfig.styles.bloodGroup2.coord.top = 137;
             localConfig.styles.bloodGroup2.coord.left = 10;
             localConfig.styles.bloodGroup2.font.size = 40;
         } else if (regularGroupCount == 4) {
@@ -83,7 +79,7 @@ export function Template5Component(props: TemplateProps) {
             localConfig.styles.bloodGroup.coord.top = 75;
             localConfig.styles.bloodGroup.coord.left = 10;
             localConfig.styles.bloodGroup.font.size = 40;
-            localConfig.styles.bloodGroup2.coord.top = 130;
+            localConfig.styles.bloodGroup2.coord.top = 137;
             localConfig.styles.bloodGroup2.coord.left = 10;
             localConfig.styles.bloodGroup2.font.size = 40;
         }

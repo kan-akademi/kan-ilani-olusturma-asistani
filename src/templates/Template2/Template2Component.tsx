@@ -62,31 +62,26 @@ export function Template2Component(props: TemplateProps) {
                 localConfig.styles.bloodGroup.coord.left = originalBloodGroupLeft.current;
             }
         } else if (regularGroupCount == 2) {
-            // Her satira bir grup. bloodType bu sablonde sabit 218'de
-            // oldugu icin 70 + 2 * (46 * 1.5) = 208 ile rahatca sigiyor.
             localConfig.styles.bloodGroup.coord.top = 65;
             localConfig.styles.bloodGroup.coord.left = 10;
-            localConfig.styles.bloodGroup.font.size = 46;
-            localConfig.styles.bloodGroup2.coord.top = 120;
+            localConfig.styles.bloodGroup.font.size = 32;
+            localConfig.styles.bloodGroup2.coord.top = 114;
             localConfig.styles.bloodGroup2.coord.left = 10;
-            localConfig.styles.bloodGroup2.font.size = 46;
+            localConfig.styles.bloodGroup2.font.size = 32;
         } else if (regularGroupCount == 3) {
-            // Ilk satira iki, ikinci satira bir grup. Ilk satir genis oldugu
-            // icin 3 ve 4 gruplu hallerle ayni boyut kullanilir.
             localConfig.styles.bloodGroup.coord.top = 65;
             localConfig.styles.bloodGroup.coord.left = 10;
-            localConfig.styles.bloodGroup.font.size = 40;
-            localConfig.styles.bloodGroup2.coord.top = 120;
+            localConfig.styles.bloodGroup.font.size = 32;
+            localConfig.styles.bloodGroup2.coord.top = 114;
             localConfig.styles.bloodGroup2.coord.left = 10;
-            localConfig.styles.bloodGroup2.font.size = 40;
+            localConfig.styles.bloodGroup2.font.size = 32;
         } else if (regularGroupCount == 4) {
-            // Her satira iki grup.
             localConfig.styles.bloodGroup.coord.top = 65;
             localConfig.styles.bloodGroup.coord.left = 10;
-            localConfig.styles.bloodGroup.font.size = 40;
-            localConfig.styles.bloodGroup2.coord.top = 120;
+            localConfig.styles.bloodGroup.font.size = 32;
+            localConfig.styles.bloodGroup2.coord.top = 114;
             localConfig.styles.bloodGroup2.coord.left = 10;
-            localConfig.styles.bloodGroup2.font.size = 40;
+            localConfig.styles.bloodGroup2.font.size = 32;
         }
     }
 

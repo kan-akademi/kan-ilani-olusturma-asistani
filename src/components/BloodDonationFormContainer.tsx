@@ -4,7 +4,14 @@ import html2canvas from "html2canvas";
 import { useTranslation } from "react-i18next";
 import "./BloodDonationFormContainer.css";
 import { formatDateToTurkish, formatPhoneNumber, hashData } from "../utils/formUtils";
-import { type DonationInfo, initialDonationInfo, REGARDLESS_BLOOD_GROUP, MAX_BLOOD_GROUP_SELECTION } from "../entities/DonationInfo";
+import {
+  type DonationInfo,
+  initialDonationInfo,
+  REGARDLESS_BLOOD_GROUP,
+  MAX_BLOOD_GROUP_SELECTION,
+  MIN_PHONE_LENGTH,
+  missingRequiredFields,
+} from "../entities/DonationInfo";
 import { type SelectChangeEvent } from "@mui/material";
 import BloodDonationFormInputs from "./BloodDonationFormInputs";
 import { getTemplateByIndex } from "../templates";
@@ -125,17 +132,9 @@ export default function BloodDonationFormContainer() {
       location: t("location"),
     };
 
-    const missingFields: string[] = [];
-
-    (Object.keys(fieldLabels) as Array<keyof typeof fieldLabels>).forEach((key) => {
-      const val = donationInfo[key];
-      const filled = Array.isArray(val)
-        ? val.length > 0
-        : typeof val === "string"
-          ? val.trim() !== ""
-          : val != null;
-      if (!filled) missingFields.push(fieldLabels[key]);
-    });
+    // Eksik alanlari TEK kuraldan aliyoruz; ok da ayni kurali kullaniyor
+    // (`isDonationInfoComplete`). Burada sadece eksik alanin ADINI ceviriyoruz.
+    const missingFields = missingRequiredFields(donationInfo).map((key) => fieldLabels[key]);
 
     if (missingFields.length > 0) {
       const nounKey = missingFields.length === 1 ? "fillAllFieldsSingleNoun" : "fillAllFieldsMultipleNoun";
@@ -152,7 +151,7 @@ export default function BloodDonationFormContainer() {
       return;
     }
 
-    if (donationInfo.phone.length < 11) {
+    if (donationInfo.phone.length < MIN_PHONE_LENGTH) {
       Swal.fire({
         icon: "warning",
         confirmButtonText: t("close"),

@@ -18,7 +18,12 @@ import {
 } from "@mui/material";
 import { Info } from "@mui/icons-material";
 import Swal from "sweetalert2";
-import { REGARDLESS_BLOOD_GROUP, MAX_BLOOD_GROUP_SELECTION, type DonationInfo } from "../entities/DonationInfo";
+import {
+  REGARDLESS_BLOOD_GROUP,
+  MAX_BLOOD_GROUP_SELECTION,
+  isDonationInfoComplete,
+  type DonationInfo,
+} from "../entities/DonationInfo";
 import { getTemplateList } from "../templates";
 
 interface InputProps {
@@ -68,17 +73,9 @@ export default function BloodDonationFormInputs(props: InputProps) {
   const hospitalError = showErrors && isEmpty(props.donationInfo.hospital);
   const locationError = showErrors && isEmpty(props.donationInfo.location);
 
-  const validate = () => {
-    return (
-      selectedBloodGroups.length > 0 &&
-      selectedBloodTypes.length > 0 &&
-      !isEmpty(props.donationInfo.fullName) &&
-      !isEmpty(props.donationInfo.phone) &&
-      !isEmpty(props.donationInfo.date) &&
-      !isEmpty(props.donationInfo.hospital) &&
-      !isEmpty(props.donationInfo.location)
-    );
-  };
+  // "Galerine kaydet" okunun gorunurlugu. Indirme yoluyla AYNI kurali
+  // paylasir; `isDonationInfoComplete` tek dogrulama noktasi.
+  const validate = () => isDonationInfoComplete(props.donationInfo);
 
   const handleDownloadClick = () => {
     setShowErrors(true);

@@ -15,9 +15,14 @@ import assert from "node:assert/strict";
 import {
   launchApp,
   isSaveHintVisible,
+  waitForSaveHint,
+  waitForAppReady,
   fillField,
   fillWholeForm,
   isModalOpen,
+  waitForModal,
+  modalText,
+  closeModal,
 } from "./helpers.mjs";
 
 let browser;
@@ -33,8 +38,13 @@ after(async () => {
   assert.deepEqual(pageErrors, [], "sayfada yari calismamis kod olmamali");
 });
 
+// `reload` + `networkidle` tek basina yetmiyor: aglar durdu ama React'in
+// ilk render'i bitmemis olabilir ve hemen yapilan `fill()` cagrilari
+// kayboluyor. Indirme butonu ancak handler'lar baglandiktan sonra DOM'a
+// girdigi icin onu bekliyoruz.
 const reset = async () => {
   await page.reload({ waitUntil: "networkidle" });
+  await waitForAppReady(page);
 };
 
 describe("galeriye kaydet yonlendirmesi", () => {
@@ -46,27 +56,54 @@ describe("galeriye kaydet yonlendirmesi", () => {
   test("eksik alan varken ok cikmaz", async () => {
     await reset();
     await fillWholeForm(page);
-    assert.equal(await isSaveHintVisible(page), true);
+    await waitForSaveHint(page, true);
 
     // Son alani bosalt: ok kaybolmali.
     await fillField(page, "location", "");
-    assert.equal(await isSaveHintVisible(page), false, "eksik alan varken ok cikmamali");
+    await waitForSaveHint(page, false);
 
-    // Kan grubu bosaltmak da ayni sonucu vermeli.
+    // Konumu geri doldurunca ok geri gelmeli.
     await fillField(page, "location", "Çankaya");
-    assert.equal(await isSaveHintVisible(page), true);
+    await waitForSaveHint(page, true);
+  });
+
+  test("kisa telefon oku gostermez", async () => {
+    // Indirme yolu 11 karakterden kisa telefonu REDDEDIYOR; ok da ayni kurali
+    // kullanmali. Once iki ayri kural vardi: ok yalnizca "alanlar dolu mu"
+    // diye bakiyordu. Sonuc: 6 haneli telefon yazan kullanici oku goruyor,
+    // butona basinca "gecersiz telefon" uyarisi aliyordu - ok yalan soyluyordu.
+    await reset();
+    await fillWholeForm(page);
+    await waitForSaveHint(page, true);
+
+    await fillField(page, "phone", "0532123");
+    await waitForSaveHint(page, false);
+
+    // Bunu gizlemek yanlis olurdu: buton gercekten engelliyor mu? Yoksa oku
+    // kaldirmak yerine indirme kuralini gevsetmemiz gerekirdi.
+    await page.locator(".download-image-button").click();
+    await waitForModal(page);
+    const modal = await modalText(page);
+
+    assert.match(modal.icon, /warning/, "kisa telefon uyarisi vermeli");
+    assert.ok(
+      modal.body.length > 0,
+      "kisa telefon icin gerekce dolu bir uyari govdesi olmali; " +
+        `icon="${modal.icon}" title="${modal.title}" body="${modal.body}"`,
+    );
+    await closeModal(page);
   });
 
   test("tum alanlar dolunca ok gorunur", async () => {
     await reset();
     await fillWholeForm(page);
-    assert.equal(await isSaveHintVisible(page), true);
+    await waitForSaveHint(page, true);
   });
 
   test("ok varken buton hata vermez", async () => {
     await reset();
     await fillWholeForm(page);
-    assert.equal(await isSaveHintVisible(page), true, "once okun gorunmesi gerekir");
+    await waitForSaveHint(page, true);
 
     await page.locator(".download-image-button").click();
     await page.waitForTimeout(400);
@@ -77,6 +114,7 @@ describe("galeriye kaydet yonlendirmesi", () => {
   test("ok indirme butonunun ustunde durur", async () => {
     await reset();
     await fillWholeForm(page);
+    await waitForSaveHint(page, true);
 
     const { hintBottom, buttonTop } = await page.evaluate(() => {
       const hint = document.querySelector(".save-gallery-hint");
@@ -97,6 +135,7 @@ describe("galeriye kaydet yonlendirmesi", () => {
   test("ok aşağıyı gösterir", async () => {
     await reset();
     await fillWholeForm(page);
+    await waitForSaveHint(page, true);
 
     // Okun gövdesi yukarıda, başı aşağıda olmalı: başın alt ucu gövdenin
     // alt ucundan büyükse aşağı bakıyor demektir.

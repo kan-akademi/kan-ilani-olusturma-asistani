@@ -61,29 +61,24 @@ export function Template3Component(props: TemplateProps) {
                 localConfig.styles.bloodGroup.coord.left = originalBloodGroupLeft.current;
             }
         } else if (regularGroupCount == 2) {
-            // Iki satira bolunmus halde iki kan grubu sigiyor. Satir yuksekligi
-            // fontun ~1.5 kati oldugu icin 45 + 2 * (41 * 1.5) = 168; bloodType
-            // en yakin konumunda 172'de oldugu icin ust uste binmez.
-            localConfig.styles.bloodGroup.coord.top = 59;
+            localConfig.styles.bloodGroup.coord.top = 70;
             localConfig.styles.bloodGroup.coord.left = 10;
-            localConfig.styles.bloodGroup.font.size = 60;
-            localConfig.styles.bloodGroup2.coord.top = 125;
+            localConfig.styles.bloodGroup.font.size = 42;
+            localConfig.styles.bloodGroup2.coord.top = 134;
             localConfig.styles.bloodGroup2.coord.left = 10;
-            localConfig.styles.bloodGroup2.font.size = 60;
+            localConfig.styles.bloodGroup2.font.size = 42;
         } else if (regularGroupCount == 3) {
-            // Ilk satira iki, ikinci satira bir grup sigiyor.
             localConfig.styles.bloodGroup.coord.top = 70;
             localConfig.styles.bloodGroup.coord.left = 10;
             localConfig.styles.bloodGroup.font.size = 38;
-            localConfig.styles.bloodGroup2.coord.top = 125;
+            localConfig.styles.bloodGroup2.coord.top = 130;
             localConfig.styles.bloodGroup2.coord.left = 10;
             localConfig.styles.bloodGroup2.font.size = 38;
         } else if (regularGroupCount == 4) {
-            // Her satira iki grup sigiyor.
             localConfig.styles.bloodGroup.coord.top = 70;
             localConfig.styles.bloodGroup.coord.left = 10;
             localConfig.styles.bloodGroup.font.size = 38;
-            localConfig.styles.bloodGroup2.coord.top = 125;
+            localConfig.styles.bloodGroup2.coord.top = 130;
             localConfig.styles.bloodGroup2.coord.left = 10;
             localConfig.styles.bloodGroup2.font.size = 38;
         }

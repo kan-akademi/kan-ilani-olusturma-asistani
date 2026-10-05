@@ -63,17 +63,17 @@ export function Template6Component(props: TemplateProps) {
         } else if (regularGroupCount == 2) {
             localConfig.styles.bloodGroup.coord.top = 60;
             localConfig.styles.bloodGroup.coord.left = 10;
-            localConfig.styles.bloodGroup.font.size = 60;
+            localConfig.styles.bloodGroup.font.size = 44;
 
-            localConfig.styles.bloodGroup2.coord.top = 130;
+            localConfig.styles.bloodGroup2.coord.top = 127;
             localConfig.styles.bloodGroup2.coord.left = 10;
-            localConfig.styles.bloodGroup2.font.size = 60;
+            localConfig.styles.bloodGroup2.font.size = 44;
         } else if (regularGroupCount == 3) {
             localConfig.styles.bloodGroup.coord.top = 70;
             localConfig.styles.bloodGroup.coord.left = 10;
             localConfig.styles.bloodGroup.font.size = 40;
 
-            localConfig.styles.bloodGroup2.coord.top = 130;
+            localConfig.styles.bloodGroup2.coord.top = 132;
             localConfig.styles.bloodGroup2.coord.left = 10;
             localConfig.styles.bloodGroup2.font.size = 40;
         } else if (regularGroupCount == 4) {
@@ -81,7 +81,7 @@ export function Template6Component(props: TemplateProps) {
             localConfig.styles.bloodGroup.coord.left = 10;
             localConfig.styles.bloodGroup.font.size = 40;
 
-            localConfig.styles.bloodGroup2.coord.top = 130;
+            localConfig.styles.bloodGroup2.coord.top = 132;
             localConfig.styles.bloodGroup2.coord.left = 10;
             localConfig.styles.bloodGroup2.font.size = 40;
         }
@@ -126,7 +126,7 @@ export function Template6Component(props: TemplateProps) {
     const originalLocationTop = useRef(localConfig.styles.location.coord.top);
     const originalLocationFontSize = useRef(localConfig.styles.location.font.size);
 
-    if (donationInfo.location.length >= 260) {
+    if (donationInfo.location.length >= 240) {
         localConfig.styles.location.coord.top = 475;
         localConfig.styles.location.font.size = 14;
     } else {
