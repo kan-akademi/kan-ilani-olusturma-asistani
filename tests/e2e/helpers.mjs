@@ -125,6 +125,48 @@ export function isModalOpen(page) {
   return page.locator(".swal2-popup").count().then((c) => c > 0);
 }
 
+/** Metin veya textarea alanina deger yazar. */
+export async function fillField(page, name, value) {
+  await page.locator(`input[name="${name}"], textarea[name="${name}"]`).first().fill(value);
+  await page.waitForTimeout(120);
+}
+
+/** Tek secimli bir Select'ten bir deger secer ve listeyi kapatir. */
+export async function pickFrom(page, selectName, value) {
+  await page.locator(`#mui-component-select-${selectName}`).click();
+  await page.waitForSelector("ul[role=listbox]", { timeout: 5000 });
+  await page.locator(`li[data-value="${value}"]`).click({ force: true });
+  await page.waitForTimeout(120);
+  await page.keyboard.press("Escape");
+  await page.waitForSelector("ul[role=listbox]", { state: "detached", timeout: 5000 });
+  await page.waitForTimeout(120);
+}
+
+/**
+ * Formun butonu hedefleyen yonlendirme oku ekranda mi?
+ *
+ * `save-gallery-hint` sinifini kullanir; bu sinif yalnizca okun bulundugu
+ * konteynerde vardir, dolayisiyla ikon sayisi yerine dogrudan sinfi
+ * hedeflemek yanlislik yakalamaz.
+ */
+export function isSaveHintVisible(page) {
+  return page
+    .locator(".save-gallery-hint")
+    .count()
+    .then((c) => c > 0);
+}
+
+/** Formun zorunlu alanlarini tek tek doldurur. */
+export async function fillWholeForm(page) {
+  await pickFrom(page, "bloodGroup", "0 RH (+)");
+  await pickFrom(page, "bloodType", "Kırmızı Kan");
+  await fillField(page, "fullName", "Ali Veli");
+  await fillField(page, "phone", "05321234567");
+  await fillField(page, "hospital", "Ankara Hastanesi");
+  await fillField(page, "location", "Çankaya");
+  await page.waitForTimeout(150);
+}
+
 /**
  * Acik listbox'taki her secenegin DOM yapisi.
  *

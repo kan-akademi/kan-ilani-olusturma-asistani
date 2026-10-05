@@ -29,6 +29,7 @@ npm run test:poster     # sadece poster önizleme
 | `poster-render.test.mjs` | Poster önizleme bütünlüğü (4 test) |
 | `poster-geometry.test.mjs` | Template 3 ve 4 poster satır geometrisi (15 test) |
 | `template-selectors.test.mjs` | Template seçim dairelerinin kare (yuvarlak) kalması (4 test) |
+| `save-hint.test.mjs` | "Galerine kaydet" yönlendirme oku (6 test) |
 
 Test framework'ü olarak Node'un yerleşik `node:test` modülü kullanılıyor; tek
 bağımlılık `playwright-core` ve o da yalnızca tarayıcıyı sürmek için.
@@ -62,6 +63,8 @@ Playwright sürümü değişse bile yol elle ayarlanmaz. Farklı bir kurulum iç
 9. Hiçbir dropdown seçeneği etiketini iki kez basmaz.
 10. Template seçim daireleri **kare** kalır — flex satırı onları yatayda
     ezip elipse çeviremez.
+11. Form tamamlandığında "Galerine kaydet" yönlendirme oku belirir, eksik alan
+    kalınca kaybolur ve ok varken buton hata vermez.
 
 ## Poster geometrisi neden ölçülüyor?
 

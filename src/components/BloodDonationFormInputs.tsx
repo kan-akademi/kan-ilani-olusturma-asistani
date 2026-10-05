@@ -350,6 +350,55 @@ export default function BloodDonationFormInputs(props: InputProps) {
 
       <Box sx={{ mb: 2 }} />
 
+      {/* FORM TAMAMLANDIĞINDA: indirme butonuna yönlendiren ok.
+          validate() butona basildiginda hata vermeyecek anı olcup olmadığını
+          söylediği için aynı olcüt burada da geçerli; iki yer ayri kural
+          koyarsa kullanici oku gorup yine hata alabilir. */}
+      {validate() && (
+        <Box
+          className="save-gallery-hint"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            mb: 1,
+            color: theme.palette.mode === "dark" ? "#ff8a80" : "#e3240d",
+          }}
+        >
+          <Box
+            component="svg"
+            viewBox="0 0 48 34"
+            role="img"
+            aria-label={t("saveToGalleryHint")}
+            sx={{ width: 56, height: 40 }}
+          >
+            {/* Dikey gövde: aşağı doğru akan çizgi */}
+            <path
+              d="M24 2 V26"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="5"
+              strokeLinecap="round"
+            />
+            {/* Ok başı */}
+            <path
+              d="M12 18 L24 31 L36 18"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </Box>
+          <Box
+            component="span"
+            sx={{ fontSize: "0.95rem", fontWeight: 500, textAlign: "center", mt: 0.5 }}
+          >
+            {t("saveToGalleryHint")}
+          </Box>
+        </Box>
+      )}
+
       {/* İNDİRME BUTONU */}
       <img
         src={
@@ -360,6 +409,13 @@ export default function BloodDonationFormInputs(props: InputProps) {
         alt={t("downloadButtonAlt")}
         className="download-image-button"
         onClick={handleDownloadClick}
+        // Ok butonu hedefliyor; form tamamlandığında buton hafifçe
+        // vurgulanır ki yönlendirme boşluğa kaybolmasın.
+        style={
+          validate()
+            ? { boxShadow: `0 0 0 4px ${theme.palette.mode === "dark" ? "#ff8a80" : "#e3240d"}55` }
+            : undefined
+        }
       />
     </form>
   );
