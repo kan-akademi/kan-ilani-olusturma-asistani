@@ -232,6 +232,8 @@ export default function BloodDonationFormInputs(props: InputProps) {
         type="tel"
         label={t("phone")}
         name="phone"
+        placeholder="0000 000 00 00"
+        InputLabelProps={{ shrink: true }}
         value={props.donationInfo.phone}
         onChange={props.handleDonationInfoPhoneChange}
         error={phoneError}
