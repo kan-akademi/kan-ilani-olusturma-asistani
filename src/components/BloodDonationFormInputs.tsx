@@ -168,13 +168,13 @@ export default function BloodDonationFormInputs(props: InputProps) {
             <Checkbox checked={selectedBloodGroups.indexOf("0 RH (-)") > -1} />
             <ListItemText primary="0 RH (-)" />
           </MenuItem>
-          <MenuItem value="Kan Grubu Fark Etmeksizin" disabled={isBloodGroupLimitReached}>
+          <MenuItem value={REGARDLESS_BLOOD_GROUP} disabled={isBloodGroupLimitReached}>
             <Checkbox
               checked={
-                selectedBloodGroups.indexOf("Kan Grubu Fark Etmeksizin") > -1
+                selectedBloodGroups.indexOf(REGARDLESS_BLOOD_GROUP) > -1
               }
             />
-            <ListItemText primary={t("regardlessOfBloodType")} />{t("regardlessOfBloodType")}
+            <ListItemText primary={t("regardlessOfBloodType")} />
           </MenuItem>
         </Select>
         {bloodGroupError && <FormHelperText>{t("requiredText")}</FormHelperText>}

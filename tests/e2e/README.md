@@ -24,8 +24,8 @@ npm run test:poster     # sadece poster önizleme
 
 | Dosya | Kapsam |
 |---|---|
-| `helpers.mjs` | Paylaşılan yardımcılar: tarayıcı açma, dropdown aç/kapa, seçim yapma, `aria-disabled` okuma, poster satırlarını okuma, geometri ölçümü |
-| `blood-group-selection.test.mjs` | Kan grubu seçim kuralları (8 test) |
+| `helpers.mjs` | Paylaşılan yardımcılar: tarayıcı açma, dropdown aç/kapa, seçim yapma, `aria-disabled` okuma, dropdown seçenek denetimi, poster satırlarını okuma, geometri ölçümü |
+| `blood-group-selection.test.mjs` | Kan grubu seçim kuralları (10 test) |
 | `poster-render.test.mjs` | Poster önizleme bütünlüğü (4 test) |
 | `poster-geometry.test.mjs` | Template 3 ve 4 poster satır geometrisi (15 test) |
 
@@ -57,6 +57,7 @@ Playwright sürümü değişse bile yol elle ayarlanmaz. Farklı bir kurulum iç
 7. Altı şablonun tamamı seçimli kan grubuyla hatasız render olur.
 8. Template 3 ve 4'te iki satırlı kan grupları üst üste binmez, tek
    satıra sarmaz, `bloodType` alanıyla çakışmaz ve çerçeve dışına taşmaz.
+9. Hiçbir dropdown seçeneği etiketini iki kez basmaz.
 
 ## Poster geometrisi neden ölçülüyor?
 

@@ -24,6 +24,7 @@ import {
   isDisabled,
   disabledGroups,
   isModalOpen,
+  dropdownOptions,
 } from "./helpers.mjs";
 
 let browser;
@@ -47,6 +48,31 @@ async function reset() {
 }
 
 describe("kan grubu secim kurallari", () => {
+  test("hicbir secenek etiketini iki kez basmaz", async () => {
+    await reset();
+    const options = await dropdownOptions(page);
+    assert.equal(options.length, BLOOD_GROUPS.length + 1, "9 secenek olmali");
+
+    for (const o of options) {
+      assert.deepEqual(
+        o.bareText,
+        [],
+        `"${o.value}" etiketi iki kez basiliyor: ListItemText zaten ciziyor, ` +
+          `ayrica ${JSON.stringify(o.bareText)} metin dugumu var.`,
+      );
+    }
+  });
+
+  test("REGARDLESS secenegi digerleriyle ayni yapiyi paylasir", async () => {
+    await reset();
+    const options = await dropdownOptions(page);
+    const regardless = options.find((o) => o.value === REGARDLESS);
+    assert.ok(regardless, "REGARDLESS secenegi bulunamadi");
+    // Etiket bos olmamali ve tek kaynaktan gelmeli.
+    assert.notEqual(regardless.label, "");
+    assert.deepEqual(regardless.bareText, []);
+  });
+
   test("hicbir secim yokken tum secenekler aciktir", async () => {
     await reset();
     assert.deepEqual(await disabledGroups(page), []);

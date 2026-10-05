@@ -125,6 +125,26 @@ export function isModalOpen(page) {
   return page.locator(".swal2-popup").count().then((c) => c > 0);
 }
 
+/**
+ * Acik listbox'taki her secenegin DOM yapisi.
+ *
+ * `bareText` alani, MenuItem'in dogrudan cocuklari arasindaki bosluk disi
+ * metin dugumlerini dondurur. Etiket ListItemText tarafindan cizilmeli;
+ * ek bir metin dugumu varsa etiket iki kez basilmis olur. Bu kontrol
+ * dil bagimsizdir, bu yuzden etiketin hangi dile cevrildiginin onemi yoktur.
+ */
+export function dropdownOptions(page) {
+  return page.evaluate(() =>
+    [...document.querySelectorAll('ul[role=listbox] li[data-value]')].map((li) => ({
+      value: li.getAttribute("data-value"),
+      label: li.querySelector(".MuiListItemText-primary")?.innerText.trim() ?? "",
+      bareText: [...li.childNodes]
+        .filter((n) => n.nodeType === Node.TEXT_NODE && n.textContent.trim().length > 0)
+        .map((n) => n.textContent.trim()),
+    })),
+  );
+}
+
 /** BaseTemplateComponent'in poster uzerine yerlestirdigi kan grubu satirlari. */
 export function posterBloodGroupLines(page) {
   return page.locator(".image-wrapper .text-item.blood-group").allInnerTexts();
