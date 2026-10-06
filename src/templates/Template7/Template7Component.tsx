@@ -93,7 +93,7 @@ export function Template7Component(props: TemplateProps) {
     const originalBloodTypeTop = useRef(localConfig.styles.bloodType.coord.top);
     const originalBloodTypeFontSize = useRef(localConfig.styles.bloodType.font.size);
 
-    if (donationInfo.bloodType.length > 3) {
+    if (donationInfo.bloodType.length > 1) {
         localConfig.styles.bloodType.coord.top = 225;
         localConfig.styles.bloodType.font.size = 15;
     } else {

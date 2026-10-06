@@ -11,7 +11,7 @@ export const config: TemplateConfig = {
     bloodGroup: { coord: { top: 83, left: 47 }, font: { size: 78, color: "#000000" } },
     bloodGroup2: { coord: { top: 170, left: 47 }, font: { size: 78, color: "#000000" } },
     regardlessBloodGroup: { coord: { top: 68, left: 25 }, font: { size: 47, color: "#000000" } },
-    bloodType: { coord: { top: 232, left: 85 }, font: { size: 17, color: "#000000" } },
+    bloodType: { width: 155, coord: { top: 232, left: 85 }, font: { size: 17, color: "#000000" } },
     fullName: { coord: { top: 362, left: 6 }, font: { size: 16, color: "#000000" } },
     phone: { coord: { top: 305, left: 65 }, font: { size: 17, color: "#000000" } },
     date: { coord: { top: 270, left: 50 }, font: { size: 17, color: "#000000" } },

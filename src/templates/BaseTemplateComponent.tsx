@@ -54,6 +54,7 @@ export function BaseTemplateComponent({ donationInfo, imageRef, config }: BaseTe
                     left: `${styles.bloodType.coord.left}px`,
                     fontSize: `${styles.bloodType.font.size}px`,
                     color: styles.bloodType.font.color,
+                    width: `${styles.bloodType.width ?? null}px`,
                 }}
             >
                 {Array.isArray(donationInfo.bloodType)
