@@ -13,6 +13,10 @@
     "test": "node --test --test-concurrency=1 \"tests/e2e/*.test.mjs\"",
     "test:selection": "node --test tests/e2e/blood-group-selection.test.mjs",
     "test:poster": "node --test tests/e2e/poster-render.test.mjs",
+    "measure:all": "node tests/measure/scan-all.mjs",
+    "measure:fields": "node tests/measure/scan-fields.mjs",
+    "measure:ink": "node tests/measure/measure-ink-gap.mjs",
+    "measure:arrow": "node tests/measure/check-arrow.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

@@ -29,7 +29,11 @@ npm run test:poster     # sadece poster önizleme
 | `poster-render.test.mjs` | Poster önizleme bütünlüğü (4 test) |
 | `poster-geometry.test.mjs` | 7 şablonun tamamında poster satır geometrisi (92 test) |
 | `template-selectors.test.mjs` | Template seçim dairelerinin kare (yuvarlak) kalması (4 test) |
-| `save-hint.test.mjs` | "Galerine kaydet" yönlendirme oku (6 test) |
+| `save-hint.test.mjs` | "Galerine kaydet" yönlendirme oku (7 test) |
+
+Bu klasör **testtir**: geçer/kırılır. Geometriyi gözle değil sayılarla
+görmek için yazılmış, konsola tablo basan **ölçüm betikleri** ayrı yerde
+duruyor: [`../measure/`](../measure/) — `npm test` onları koşmaz.
 
 Test framework'ü olarak Node'un yerleşik `node:test` modülü kullanılıyor; tek
 bağımlılık `playwright-core` ve o da yalnızca tarayıcıyı sürmek için.
