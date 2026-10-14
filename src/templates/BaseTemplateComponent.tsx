@@ -20,35 +20,32 @@ export function BaseTemplateComponent({ donationInfo, imageRef, config }: BaseTe
                 src={templatePath}
             />
 
-            {/* KAN GRUBU */}
-            {donationInfo.bloodGroup !== "Kan Grubu Fark Etmeksizin" ? (
+            {/* KAN GRUBU 1. SATIR*/}
+            <div
+                className="text-item blood-group"
+                style={{
+                    top: `${styles.bloodGroup.coord.top}px`,
+                    left: `${styles.bloodGroup.coord.left}px`,
+                    fontSize: `${styles.bloodGroup.font.size}px`,
+                    color: styles.bloodGroup.font.color,
+                }}
+            >
+                {donationInfo.bloodGroup1.join(", ")}
+            </div>
+            {/* KAN GRUBU 2. SATIR*/}
+            {donationInfo.bloodGroup2.length > 0 && (
                 <div
                     className="text-item blood-group"
                     style={{
-                        top: `${styles.bloodGroup.coord.top}px`,
-                        left: `${styles.bloodGroup.coord.left}px`,
-                        fontSize: `${styles.bloodGroup.font.size}px`,
-                        color: styles.bloodGroup.font.color,
-                    }}
+                        top: `${styles.bloodGroup2.coord.top}px`,
+                        left: `${styles.bloodGroup2.coord.left}px`,
+                        fontSize: `${styles.bloodGroup2.font.size}px`,
+                        color: styles.bloodGroup2.font.color,
+                }}
                 >
-                    {donationInfo.bloodGroup}
-                </div>
-            ) : (
-                <div
-                    className="text-item blood-group regardless-blood-group"
-                    style={{
-                        top: `${styles.regardlessBloodGroup.coord.top}px`,
-                        left: `${styles.regardlessBloodGroup.coord.left}px`,
-                        fontSize: `${styles.regardlessBloodGroup.font.size}px`,
-                        color: styles.regardlessBloodGroup.font.color,
-                    }}
-                >
-                    Kan Grubu
-                    <br />
-                    Fark Etmeksizin
+                    {donationInfo.bloodGroup2.join(", ")}
                 </div>
             )}
-
             {/* KAN TÜRÜ */}
             <div
                 className="text-item"
@@ -57,6 +54,7 @@ export function BaseTemplateComponent({ donationInfo, imageRef, config }: BaseTe
                     left: `${styles.bloodType.coord.left}px`,
                     fontSize: `${styles.bloodType.font.size}px`,
                     color: styles.bloodType.font.color,
+                    width: `${styles.bloodType.width ?? null}px`,
                 }}
             >
                 {Array.isArray(donationInfo.bloodType)

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, type RefObject } from "react";
 import { useTheme } from "@mui/material/styles";
 import { useTranslation } from "react-i18next";
 import LabeledTextField from "./LabeledTextField";
@@ -18,15 +18,22 @@ import {
 } from "@mui/material";
 import { Info } from "@mui/icons-material";
 import Swal from "sweetalert2";
-import type { DonationInfo } from "../entities/DonationInfo";
+import {
+  REGARDLESS_BLOOD_GROUP,
+  MAX_BLOOD_GROUP_SELECTION,
+  isDonationInfoComplete,
+  type DonationInfo,
+} from "../entities/DonationInfo";
 import { getTemplateList } from "../templates";
 
 interface InputProps {
   donationInfo: DonationInfo;
   selectedTemplate: number;
+  bloodGroupSelectRef: RefObject<HTMLSelectElement | null>;
   handleDonationInfoChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent | SelectChangeEvent<string[]>) => void;
   handleDonationInfoPhoneChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleDonationInfoDateChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleBloodGroupChange: (e: SelectChangeEvent<string[]>) => void;
   downloadImageAndUpdateCounter: () => void;
   handleTemplateChange: (index: number) => void;
 }
@@ -34,9 +41,22 @@ interface InputProps {
 export default function BloodDonationFormInputs(props: InputProps) {
   const theme = useTheme();
   const { t, i18n } = useTranslation();
+  
   const [showErrors, setShowErrors] = useState(false);
 
+  const bloodGroupSelectRef = useRef<HTMLSelectElement>(null);
+
+  const selectedBloodGroups = Array.isArray(props.donationInfo.bloodGroup) ? props.donationInfo.bloodGroup : props.donationInfo.bloodGroup ? [props.donationInfo.bloodGroup] : [];
   const selectedBloodTypes = Array.isArray(props.donationInfo.bloodType) ? props.donationInfo.bloodType : props.donationInfo.bloodType ? [props.donationInfo.bloodType] : [];
+
+  // "Kan Grubu Fark Etmeksizin" seçiliyse ya da sınıra ulaşıldıysa
+  // kan grubu seçeneklerinin kalanı seçilemez hale gelir.
+  // Sınıra ulaşıldığında halen seçili olan gruplar tıklanabilir kalır,
+  // aksi halde kullanıcı seçiminden birini kaldırıp yerine başkasını seçemez.
+  const hasRegardlessBloodGroup = selectedBloodGroups.includes(REGARDLESS_BLOOD_GROUP);
+  const isBloodGroupLimitReached = selectedBloodGroups.length >= MAX_BLOOD_GROUP_SELECTION;
+
+  const isBloodGroupDisabled = (bloodGroup: string) => hasRegardlessBloodGroup || (isBloodGroupLimitReached && !selectedBloodGroups.includes(bloodGroup));
 
   const isEmpty = (val: any) => {
     if (val === null || val === undefined) return true;
@@ -45,7 +65,7 @@ export default function BloodDonationFormInputs(props: InputProps) {
     return !val;
   };
 
-  const bloodGroupError = showErrors && isEmpty(props.donationInfo.bloodGroup);
+  const bloodGroupError = showErrors && selectedBloodGroups.length === 0;
   const bloodTypeError = showErrors && selectedBloodTypes.length === 0;
   const fullNameError = showErrors && isEmpty(props.donationInfo.fullName);
   const phoneError = showErrors && isEmpty(props.donationInfo.phone);
@@ -53,17 +73,9 @@ export default function BloodDonationFormInputs(props: InputProps) {
   const hospitalError = showErrors && isEmpty(props.donationInfo.hospital);
   const locationError = showErrors && isEmpty(props.donationInfo.location);
 
-  const validate = () => {
-    return (
-      !isEmpty(props.donationInfo.bloodGroup) &&
-      selectedBloodTypes.length > 0 &&
-      !isEmpty(props.donationInfo.fullName) &&
-      !isEmpty(props.donationInfo.phone) &&
-      !isEmpty(props.donationInfo.date) &&
-      !isEmpty(props.donationInfo.hospital) &&
-      !isEmpty(props.donationInfo.location)
-    );
-  };
+  // "Galerine kaydet" okunun gorunurlugu. Indirme yoluyla AYNI kurali
+  // paylasir; `isDonationInfoComplete` tek dogrulama noktasi.
+  const validate = () => isDonationInfoComplete(props.donationInfo);
 
   const handleDownloadClick = () => {
     setShowErrors(true);
@@ -109,23 +121,57 @@ export default function BloodDonationFormInputs(props: InputProps) {
       >
         <InputLabel id="blood-group-label">{t("bloodGroup")}</InputLabel>
         <Select
-          labelId="blood-group-label"
+          multiple
           name="bloodGroup"
+          labelId="blood-group-label"
           label={t("bloodGroup")}
           aria-label={t("bloodGroup")}
-          value={props.donationInfo.bloodGroup}
-          onChange={props.handleDonationInfoChange}
+          value={selectedBloodGroups}
+          inputRef={bloodGroupSelectRef}
+          onChange={props.handleBloodGroupChange}
+          renderValue={(selected) =>
+            Array.isArray(selected) ? selected.join(", ") : String(selected)
+          }
         >
-          <MenuItem value="A RH (+)">A RH (+)</MenuItem>
-          <MenuItem value="A RH (-)">A RH (-)</MenuItem>
-          <MenuItem value="B RH (+)">B RH (+)</MenuItem>
-          <MenuItem value="B RH (-)">B RH (-)</MenuItem>
-          <MenuItem value="AB RH (+)">AB RH (+)</MenuItem>
-          <MenuItem value="AB RH (-)">AB RH (-)</MenuItem>
-          <MenuItem value="0 RH (+)">0 RH (+)</MenuItem>
-          <MenuItem value="0 RH (-)">0 RH (-)</MenuItem>
-          <MenuItem value="Kan Grubu Fark Etmeksizin">
-            {t("regardlessOfBloodType")}
+          <MenuItem value="A RH (+)" disabled={isBloodGroupDisabled("A RH (+)")}>
+            <Checkbox checked={selectedBloodGroups.indexOf("A RH (+)") > -1} />
+            <ListItemText primary="A RH (+)" />
+          </MenuItem>
+          <MenuItem value="A RH (-)" disabled={isBloodGroupDisabled("A RH (-)")}>
+            <Checkbox checked={selectedBloodGroups.indexOf("A RH (-)") > -1} />
+            <ListItemText primary="A RH (-)" />
+          </MenuItem>
+          <MenuItem value="B RH (+)" disabled={isBloodGroupDisabled("B RH (+)")}>
+            <Checkbox checked={selectedBloodGroups.indexOf("B RH (+)") > -1} />
+            <ListItemText primary="B RH (+)" />
+          </MenuItem>
+          <MenuItem value="B RH (-)" disabled={isBloodGroupDisabled("B RH (-)")}>
+            <Checkbox checked={selectedBloodGroups.indexOf("B RH (-)") > -1} />
+            <ListItemText primary="B RH (-)" />
+          </MenuItem>
+          <MenuItem value="AB RH (+)" disabled={isBloodGroupDisabled("AB RH (+)")}>
+            <Checkbox checked={selectedBloodGroups.indexOf("AB RH (+)") > -1} />
+            <ListItemText primary="AB RH (+)" />
+          </MenuItem>
+          <MenuItem value="AB RH (-)" disabled={isBloodGroupDisabled("AB RH (-)")}>
+            <Checkbox checked={selectedBloodGroups.indexOf("AB RH (-)") > -1} />
+            <ListItemText primary="AB RH (-)" />
+          </MenuItem>
+          <MenuItem value="0 RH (+)" disabled={isBloodGroupDisabled("0 RH (+)")}>
+            <Checkbox checked={selectedBloodGroups.indexOf("0 RH (+)") > -1} />
+            <ListItemText primary="0 RH (+)" />
+          </MenuItem>
+          <MenuItem value="0 RH (-)" disabled={isBloodGroupDisabled("0 RH (-)")}>
+            <Checkbox checked={selectedBloodGroups.indexOf("0 RH (-)") > -1} />
+            <ListItemText primary="0 RH (-)" />
+          </MenuItem>
+          <MenuItem value={REGARDLESS_BLOOD_GROUP} disabled={isBloodGroupLimitReached}>
+            <Checkbox
+              checked={
+                selectedBloodGroups.indexOf(REGARDLESS_BLOOD_GROUP) > -1
+              }
+            />
+            <ListItemText primary={t("regardlessOfBloodType")} />
           </MenuItem>
         </Select>
         {bloodGroupError && <FormHelperText>{t("requiredText")}</FormHelperText>}
@@ -183,6 +229,8 @@ export default function BloodDonationFormInputs(props: InputProps) {
         type="tel"
         label={t("phone")}
         name="phone"
+        placeholder="0000 000 00 00"
+        InputLabelProps={{ shrink: true }}
         value={props.donationInfo.phone}
         onChange={props.handleDonationInfoPhoneChange}
         error={phoneError}
@@ -260,7 +308,10 @@ export default function BloodDonationFormInputs(props: InputProps) {
         <div style={{ fontSize: "1rem", fontWeight: "400", color: theme.palette.mode === "dark" ? "#ffffffb3" : "#555" }}>
           {t("templateSelection")}
         </div>
-        <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mt: 1, }}>
+        {/* Sarmalı: 360px'lik form 7 daireye ancak 348px ile sigar
+            (7*36 + 6*16). Daha dar ekranda flexShrink yerine alt satira
+            gecsin ki daireler yatayda ezilip elips olmasin. */}
+        <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 2, mt: 1, }}>
           {getTemplateList().map((template, index) => {
             const isSelected = props.selectedTemplate === index;
             const isDark = theme.palette.mode === "dark";
@@ -271,8 +322,11 @@ export default function BloodDonationFormInputs(props: InputProps) {
                 title={`Template ${index + 1}`}
                 onClick={() => props.handleTemplateChange(index)}
                 sx={{
-                  width: 46,
-                  height: 46,
+                  // flexShrink: 0 olmadan flex yalnizca genisligi kucultur,
+                  // yukseklik sabit kalir ve daire elipse donusur.
+                  flexShrink: 0,
+                  width: 36,
+                  height: 36,
                   borderRadius: "50%",
                   background: template.selectorColor,
                   border: `3px solid ${borderColor}`,
@@ -293,6 +347,55 @@ export default function BloodDonationFormInputs(props: InputProps) {
 
       <Box sx={{ mb: 2 }} />
 
+      {/* FORM TAMAMLANDIĞINDA: indirme butonuna yönlendiren ok.
+          validate() butona basildiginda hata vermeyecek anı olcup olmadığını
+          söylediği için aynı olcüt burada da geçerli; iki yer ayri kural
+          koyarsa kullanici oku gorup yine hata alabilir. */}
+      {validate() && (
+        <Box
+          className="save-gallery-hint"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            mb: 1,
+            color: theme.palette.mode === "dark" ? "#ff8a80" : "#e3240d",
+          }}
+        >
+          <Box
+            component="svg"
+            viewBox="0 0 48 34"
+            role="img"
+            aria-label={t("saveToGalleryHint")}
+            sx={{ width: 56, height: 40 }}
+          >
+            {/* Dikey gövde: aşağı doğru akan çizgi */}
+            <path
+              d="M24 2 V26"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="5"
+              strokeLinecap="round"
+            />
+            {/* Ok başı */}
+            <path
+              d="M12 18 L24 31 L36 18"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </Box>
+          <Box
+            component="span"
+            sx={{ fontSize: "0.95rem", fontWeight: 500, textAlign: "center", mt: 0.5 }}
+          >
+            {t("saveToGalleryHint")}
+          </Box>
+        </Box>
+      )}
+
       {/* İNDİRME BUTONU */}
       <img
         src={
@@ -303,6 +406,13 @@ export default function BloodDonationFormInputs(props: InputProps) {
         alt={t("downloadButtonAlt")}
         className="download-image-button"
         onClick={handleDownloadClick}
+        // Ok butonu hedefliyor; form tamamlandığında buton hafifçe
+        // vurgulanır ki yönlendirme boşluğa kaybolmasın.
+        style={
+          validate()
+            ? { boxShadow: `0 0 0 4px ${theme.palette.mode === "dark" ? "#ff8a80" : "#e3240d"}55` }
+            : undefined
+        }
       />
     </form>
   );

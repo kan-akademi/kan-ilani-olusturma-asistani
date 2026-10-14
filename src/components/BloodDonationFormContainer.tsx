@@ -4,7 +4,14 @@ import html2canvas from "html2canvas";
 import { useTranslation } from "react-i18next";
 import "./BloodDonationFormContainer.css";
 import { formatDateToTurkish, formatPhoneNumber, hashData } from "../utils/formUtils";
-import { type DonationInfo, initialDonationInfo } from "../entities/DonationInfo";
+import {
+  type DonationInfo,
+  initialDonationInfo,
+  REGARDLESS_BLOOD_GROUP,
+  MAX_BLOOD_GROUP_SELECTION,
+  MIN_PHONE_LENGTH,
+  missingRequiredFields,
+} from "../entities/DonationInfo";
 import { type SelectChangeEvent } from "@mui/material";
 import BloodDonationFormInputs from "./BloodDonationFormInputs";
 import { getTemplateByIndex } from "../templates";
@@ -12,12 +19,28 @@ import { getTemplateByIndex } from "../templates";
 export default function BloodDonationFormContainer() {
   const { t, i18n } = useTranslation();
   const imageRef = useRef<HTMLDivElement | null>(null);
+  const bloodGroupSelectRef = useRef<HTMLSelectElement>(null);
 
   const [selectedTemplateIndex, setSelectedTemplateIndex] = useState<number>(0);
   const [donationInfo, setDonationInfo] = useState<DonationInfo>(initialDonationInfo);
 
   const selectedTemplate = getTemplateByIndex(selectedTemplateIndex);
   const TemplateComponent = selectedTemplate?.Component;
+
+  useEffect(() => {
+    if (donationInfo.isRegularNeed) {
+      setDonationInfo((prev) => ({
+        ...prev,
+        dateFormatted: buildRegularNeedDateString(formatDateToTurkish(prev.date)),
+      }));
+    }
+    else {
+      setDonationInfo((prev) => ({
+        ...prev,
+        dateFormatted: formatDateToTurkish(prev.date),
+      }));
+    }
+  }, [i18n.language]);
 
   const handleDonationInfoChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent | SelectChangeEvent<string[]>) => {
     const { name, value } = e.target;
@@ -36,20 +59,37 @@ export default function BloodDonationFormContainer() {
     }));
   };
 
-  useEffect(() => {
-    if (donationInfo.isRegularNeed) {
-      setDonationInfo((prev) => ({
-        ...prev,
-        dateFormatted: buildRegularNeedDateString(formatDateToTurkish(prev.date)),
-      }));
+  const handleBloodGroupChange = (e: SelectChangeEvent<string[]>) => {
+    const { name, value: selected } = e.target;
+    // "Kan Grubu Fark Etmeksizin" seçiliyse diğer kan grupları seçilemez
+    const value = selected.includes(REGARDLESS_BLOOD_GROUP) ? [REGARDLESS_BLOOD_GROUP] : selected;
+    let bloodGroup1: string[] = [], bloodGroup2: string[] = [];
+
+    if (value.length > MAX_BLOOD_GROUP_SELECTION) {
+      Swal.fire({
+        icon: "warning",
+        confirmButtonText: t("close"),
+        html: t("maxBloodGroupSelection", "En fazla 4 kan grubu seçebilirsiniz."),
+      });      
+      return;
     }
-    else {
-      setDonationInfo((prev) => ({
-        ...prev,
-        dateFormatted: formatDateToTurkish(prev.date),
-      }));
+
+    if (value.length === 1) {
+      bloodGroup1.push(value[0]);
+    } else if (value.length === 2) {
+      bloodGroup1.push(value[0]);
+      bloodGroup2.push(value[1]);
+    } else {
+      bloodGroup1.push(...value.slice(0, 2));
+      bloodGroup2.push(...value.slice(2));
     }
-  }, [i18n.language]);
+    setDonationInfo((prev) => ({
+      ...prev,
+      [name]: value,
+      bloodGroup1: bloodGroup1,
+      bloodGroup2: bloodGroup2,
+    }));
+  };
 
   const handleDonationInfoDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -82,7 +122,7 @@ export default function BloodDonationFormContainer() {
   const downloadImage = async () => {
     if (!imageRef.current) return;
 
-    const fieldLabels: Record<keyof Omit<DonationInfo, "isRegularNeed" | "dateFormatted">, string> = {
+    const fieldLabels: Record<keyof Omit<DonationInfo, "bloodGroup1" | "bloodGroup2" | "isRegularNeed" | "dateFormatted">, string> = {
       bloodGroup: t("bloodGroup"),
       bloodType: t("bloodType"),
       fullName: t("fullName"),
@@ -92,17 +132,9 @@ export default function BloodDonationFormContainer() {
       location: t("location"),
     };
 
-    const missingFields: string[] = [];
-
-    (Object.keys(fieldLabels) as Array<keyof typeof fieldLabels>).forEach((key) => {
-      const val = donationInfo[key];
-      const filled = Array.isArray(val)
-        ? val.length > 0
-        : typeof val === "string"
-          ? val.trim() !== ""
-          : val != null;
-      if (!filled) missingFields.push(fieldLabels[key]);
-    });
+    // Eksik alanlari TEK kuraldan aliyoruz; ok da ayni kurali kullaniyor
+    // (`isDonationInfoComplete`). Burada sadece eksik alanin ADINI ceviriyoruz.
+    const missingFields = missingRequiredFields(donationInfo).map((key) => fieldLabels[key]);
 
     if (missingFields.length > 0) {
       const nounKey = missingFields.length === 1 ? "fillAllFieldsSingleNoun" : "fillAllFieldsMultipleNoun";
@@ -119,7 +151,7 @@ export default function BloodDonationFormContainer() {
       return;
     }
 
-    if (donationInfo.phone.length < 11) {
+    if (donationInfo.phone.length < MIN_PHONE_LENGTH) {
       Swal.fire({
         icon: "warning",
         confirmButtonText: t("close"),
@@ -204,9 +236,11 @@ export default function BloodDonationFormContainer() {
       <BloodDonationFormInputs
         donationInfo={donationInfo}
         selectedTemplate={selectedTemplateIndex}
+        bloodGroupSelectRef={bloodGroupSelectRef}
         handleDonationInfoChange={handleDonationInfoChange}
         handleDonationInfoPhoneChange={handleDonationInfoPhoneChange}
         handleDonationInfoDateChange={handleDonationInfoDateChange}
+        handleBloodGroupChange={handleBloodGroupChange}
         downloadImageAndUpdateCounter={downloadImage}
         handleTemplateChange={handleTemplateChange}
       />

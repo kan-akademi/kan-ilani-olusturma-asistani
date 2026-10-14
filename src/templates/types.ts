@@ -26,6 +26,7 @@ export interface TemplateConfig {
     selectorIcon: React.ComponentType<any>;
     styles: {
         bloodGroup: FieldStyle;
+        bloodGroup2: FieldStyle;
         regardlessBloodGroup: FieldStyle;
         bloodType: FieldStyle;
         fullName: FieldStyle;

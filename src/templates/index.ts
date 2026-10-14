@@ -5,6 +5,7 @@ import { Template3 } from "./Template3";
 import { Template4 } from "./Template4";
 import { Template5 } from "./Template5";
 import { Template6 } from "./Template6";
+import { Template7 } from "./Template7";
 
 /**
  * Template Registry - Tüm template'leri merkezi olarak yönetir
@@ -21,6 +22,7 @@ export const templates: TemplateModule[] = [
     Template5,
     Template2,
     Template1,
+    Template7,
 ];
 
 // ID bazlı erişim için Map

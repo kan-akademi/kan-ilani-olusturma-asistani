@@ -2,6 +2,7 @@ import { useRef } from "react";
 import type { TemplateProps } from "../types";
 import { BaseTemplateComponent } from "../BaseTemplateComponent";
 import { config } from "./config";
+import { REGARDLESS_BLOOD_GROUP } from "../../entities/DonationInfo";
 
 /**
  * Template 3 - Turkuaz tema
@@ -17,6 +18,16 @@ export function Template3Component(props: TemplateProps) {
                 ...config.styles.bloodGroup,
                 coord: { ...config.styles.bloodGroup.coord },
                 font: { ...config.styles.bloodGroup.font },
+            },
+            bloodGroup2: {
+                ...config.styles.bloodGroup2,
+                coord: { ...config.styles.bloodGroup2.coord },
+                font: { ...config.styles.bloodGroup2.font },
+            },
+            regardlessBloodGroup: {
+                ...config.styles.regardlessBloodGroup,
+                coord: { ...config.styles.regardlessBloodGroup.coord },
+                font: { ...config.styles.regardlessBloodGroup.font },
             },
             bloodType: {
                 ...config.styles.bloodType,
@@ -38,14 +49,47 @@ export function Template3Component(props: TemplateProps) {
 
     // Dinamik olarak kan grubu konumunu ayarla
     const originalBloodGroupLeft = useRef(localConfig.styles.bloodGroup.coord.left);
-    const originalBloodGroupFontSize = useRef(localConfig.styles.bloodGroup.font.size);
 
-    if (donationInfo.bloodGroup.startsWith("AB")) {
-        localConfig.styles.bloodGroup.font.size = 75;
-        localConfig.styles.bloodGroup.coord.left = 20;
-    } else {
-        localConfig.styles.bloodGroup.coord.left = originalBloodGroupLeft.current;
-        localConfig.styles.bloodGroup.font.size = originalBloodGroupFontSize.current;
+    const hasRegardless = donationInfo.bloodGroup.includes(REGARDLESS_BLOOD_GROUP);
+    const regularGroupCount = donationInfo.bloodGroup.filter(g => g !== REGARDLESS_BLOOD_GROUP).length;
+
+    if (hasRegardless == false) {
+        if (regularGroupCount == 1) {
+            if (donationInfo.bloodGroup.at(0)?.startsWith("AB")) {
+                localConfig.styles.bloodGroup.coord.left = 20;
+            } else {
+                localConfig.styles.bloodGroup.coord.left = originalBloodGroupLeft.current;
+            }
+        } else if (regularGroupCount == 2) {
+            localConfig.styles.bloodGroup.coord.top = 70;
+            localConfig.styles.bloodGroup.coord.left = 10;
+            localConfig.styles.bloodGroup.font.size = 42;
+            localConfig.styles.bloodGroup2.coord.top = 134;
+            localConfig.styles.bloodGroup2.coord.left = 10;
+            localConfig.styles.bloodGroup2.font.size = 42;
+        } else if (regularGroupCount == 3) {
+            localConfig.styles.bloodGroup.coord.top = 70;
+            localConfig.styles.bloodGroup.coord.left = 10;
+            localConfig.styles.bloodGroup.font.size = 38;
+            localConfig.styles.bloodGroup2.coord.top = 130;
+            localConfig.styles.bloodGroup2.coord.left = 10;
+            localConfig.styles.bloodGroup2.font.size = 38;
+        } else if (regularGroupCount == 4) {
+            localConfig.styles.bloodGroup.coord.top = 70;
+            localConfig.styles.bloodGroup.coord.left = 10;
+            localConfig.styles.bloodGroup.font.size = 38;
+            localConfig.styles.bloodGroup2.coord.top = 130;
+            localConfig.styles.bloodGroup2.coord.left = 10;
+            localConfig.styles.bloodGroup2.font.size = 38;
+        }
+    }
+
+    // "Kan Grubu Fark Etmeksizin" seciliyken normal kan gruplari secilemez;
+    // handleBloodGroupChange bunu state seviyesinde zorunlu kildigi icin
+    // hasRegardless true iken regularGroupCount daima 0'dir.
+    if (hasRegardless == true) {
+        localConfig.styles.bloodGroup.coord.left = localConfig.styles.regardlessBloodGroup.coord.left;
+        localConfig.styles.bloodGroup.font.size = localConfig.styles.regardlessBloodGroup.font.size;
     }
 
     // Dinamik olarak kan tipi font boyutunu ve konumunu ayarla
@@ -53,7 +97,7 @@ export function Template3Component(props: TemplateProps) {
     const originalBloodTypeFontSize = useRef(localConfig.styles.bloodType.font.size);
 
     if (donationInfo.bloodType.length > 3) {
-        localConfig.styles.bloodType.coord.top = 172;
+        localConfig.styles.bloodType.coord.top = 200;
         localConfig.styles.bloodType.font.size = 15;
     } else {
         localConfig.styles.bloodType.coord.top = originalBloodTypeTop.current;
@@ -65,11 +109,11 @@ export function Template3Component(props: TemplateProps) {
     const originalFullNameFontSize = useRef(localConfig.styles.fullName.font.size);
 
     if (donationInfo.fullName.length >= 35) {
-        localConfig.styles.fullName.coord.top = 352;
+        localConfig.styles.fullName.coord.top = 365;
         localConfig.styles.fullName.font.size = 13;
     } else if (donationInfo.fullName.length >= 25) {
-        localConfig.styles.fullName.coord.top = 350;
-        localConfig.styles.fullName.font.size = 15;
+        localConfig.styles.fullName.coord.top = 365;
+        localConfig.styles.fullName.font.size = 13;
     } else {
         localConfig.styles.fullName.coord.top = originalFullNameTop.current;
         localConfig.styles.fullName.font.size = originalFullNameFontSize.current;
@@ -81,7 +125,7 @@ export function Template3Component(props: TemplateProps) {
 
     if (donationInfo.location.length >= 260) {
         localConfig.styles.location.coord.top = 470;
-        localConfig.styles.location.font.size = 14;
+        localConfig.styles.location.font.size = 13;
     } else {
         localConfig.styles.location.coord.top = originalLocationTop.current;
         localConfig.styles.location.font.size = originalLocationFontSize.current;

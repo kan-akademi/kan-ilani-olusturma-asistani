@@ -2,6 +2,7 @@ import { useRef } from "react";
 import type { TemplateProps } from "../types";
 import { BaseTemplateComponent } from "../BaseTemplateComponent";
 import { config } from "./config";
+import { REGARDLESS_BLOOD_GROUP } from "../../entities/DonationInfo";
 
 export function Template1Component(props: TemplateProps) {
     const { donationInfo } = props;
@@ -14,6 +15,16 @@ export function Template1Component(props: TemplateProps) {
                 ...config.styles.bloodGroup,
                 coord: { ...config.styles.bloodGroup.coord },
                 font: { ...config.styles.bloodGroup.font },
+            },
+            bloodGroup2: {
+                ...config.styles.bloodGroup2,
+                coord: { ...config.styles.bloodGroup2.coord },
+                font: { ...config.styles.bloodGroup2.font },
+            },
+            regardlessBloodGroup: {
+                ...config.styles.regardlessBloodGroup,
+                coord: { ...config.styles.regardlessBloodGroup.coord },
+                font: { ...config.styles.regardlessBloodGroup.font },
             },
             bloodType: {
                 ...config.styles.bloodType,
@@ -36,10 +47,47 @@ export function Template1Component(props: TemplateProps) {
     // Dinamik olarak kan grubu konumunu ayarla
     const originalBloodGroupLeft = useRef(localConfig.styles.bloodGroup.coord.left);
 
-    if (donationInfo.bloodGroup.startsWith("AB")) {
-        localConfig.styles.bloodGroup.coord.left = 20;
-    } else {
-        localConfig.styles.bloodGroup.coord.left = originalBloodGroupLeft.current;
+    const hasRegardless = donationInfo.bloodGroup.includes(REGARDLESS_BLOOD_GROUP);
+    const regularGroupCount = donationInfo.bloodGroup.filter(g => g !== REGARDLESS_BLOOD_GROUP).length;
+
+    if (hasRegardless == false) {
+        if (regularGroupCount == 1) {
+            if (donationInfo.bloodGroup.at(0)?.startsWith("AB")) {
+                localConfig.styles.bloodGroup.coord.left = 20;
+            } else {
+                localConfig.styles.bloodGroup.coord.left = originalBloodGroupLeft.current;
+            }
+        } else if (regularGroupCount == 2) {
+            localConfig.styles.bloodGroup.coord.top = 70;
+            localConfig.styles.bloodGroup.coord.left = 10;
+            localConfig.styles.bloodGroup.font.size = 42;
+            localConfig.styles.bloodGroup2.coord.top = 135;
+            localConfig.styles.bloodGroup2.coord.left = 10;
+            localConfig.styles.bloodGroup2.font.size = 42;
+        } else if (regularGroupCount == 3) {
+            localConfig.styles.bloodGroup.coord.top = 70;
+            localConfig.styles.bloodGroup.coord.left = 10;
+            localConfig.styles.bloodGroup.font.size = 40;
+            localConfig.styles.bloodGroup2.coord.top = 132;
+            localConfig.styles.bloodGroup2.coord.left = 10;
+            localConfig.styles.bloodGroup2.font.size = 40;
+        } else if (regularGroupCount == 4) {
+            // Her satira iki grup.
+            localConfig.styles.bloodGroup.coord.top = 70;
+            localConfig.styles.bloodGroup.coord.left = 10;
+            localConfig.styles.bloodGroup.font.size = 40;
+            localConfig.styles.bloodGroup2.coord.top = 132;
+            localConfig.styles.bloodGroup2.coord.left = 10;
+            localConfig.styles.bloodGroup2.font.size = 40;
+        }
+    }
+
+    // "Kan Grubu Fark Etmeksizin" seciliyken normal kan gruplari secilemez;
+    // handleBloodGroupChange bunu state seviyesinde zorunlu kildigi icin
+    // hasRegardless true iken regularGroupCount daima 0'dir.
+    if (hasRegardless == true) {
+        localConfig.styles.bloodGroup.coord.left = localConfig.styles.regardlessBloodGroup.coord.left;
+        localConfig.styles.bloodGroup.font.size = localConfig.styles.regardlessBloodGroup.font.size;
     }
 
     // Dinamik olarak kan tipi font boyutunu ve konumunu ayarla
